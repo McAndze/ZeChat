@@ -1,5 +1,5 @@
-name: NaviaChat
-main: com.landsofnavia.mcandze.naviachat.NaviaChat
+name: DanAndChat
+main: com.gmail.andreasmartinmoerch.danandchat.DanAndChat
 version: 1.0.1
 commands:
   ch:
