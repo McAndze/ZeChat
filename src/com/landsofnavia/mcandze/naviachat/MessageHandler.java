@@ -8,7 +8,6 @@ import java.util.Random;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.navia.java.plugins.mcandze.CharHandler;
 
 import com.landsofnavia.mcandze.naviachat.channel.Channel;
 import com.landsofnavia.mcandze.naviachat.chmarkup.ChInterpreter;
@@ -75,21 +74,22 @@ public class MessageHandler {
 		
 		if (ic){
 			if (ExtensionManager.isUsingNaviaChar){
-				if (CharHandler.playerHasACharacter(player)){
-					name = CharHandler.getCharacterByPlayerName(player.getName()).getCharacterName().split(" ")[0];
-				} else {
-					name = player.getDisplayName();
-				}
+				
+//				if (CharHandler.playerHasACharacter(player)){
+//					name = CharHandler.getCharacterByPlayerName(player.getName()).getCharacterName().split(" ")[0];
+//				} else {
+//					name = player.getDisplayName();
+//				}
 			} else {
 				name = player.getDisplayName();
 			}
 		} else {
 			if (ExtensionManager.isUsingNaviaChar){
-				if (CharHandler.playerHasACharacter(player)){
-					name = player.getDisplayName() + ChatColor.GOLD + "(" + CharHandler.getCharacterByPlayerName(player.getName()).getCharacterName().split(" ")[0] + ")" + ChatColor.WHITE + "[OOC]";
-				} else {
-					name = player.getDisplayName();
-				}
+//				if (CharHandler.playerHasACharacter(player)){
+//					name = player.getDisplayName() + ChatColor.GOLD + "(" + CharHandler.getCharacterByPlayerName(player.getName()).getCharacterName().split(" ")[0] + ")" + ChatColor.WHITE + "[OOC]";
+//				} else {
+//					name = player.getDisplayName();
+//				}
 			} else {
 				name = player.getDisplayName() + "[OOC]";
 			}
@@ -128,14 +128,14 @@ public class MessageHandler {
 	}
 	
 	public static String getIcEmote(Player sender, String action){
-		String name;
+		String name = "";
 		
 		if (ExtensionManager.isUsingNaviaChar){
-			if (CharHandler.playerHasACharacter(sender)){
-				name = CharHandler.getCharacterByPlayerName(sender.getName()).getCharacterName().split(" ")[0];
-			} else {
-				name = sender.getDisplayName();
-			}
+//			if (CharHandler.playerHasACharacter(sender)){
+//				name = CharHandler.getCharacterByPlayerName(sender.getName()).getCharacterName().split(" ")[0];
+//			} else {
+//				name = sender.getDisplayName();
+//			}
 		} else {
 			name = sender.getDisplayName();
 		}

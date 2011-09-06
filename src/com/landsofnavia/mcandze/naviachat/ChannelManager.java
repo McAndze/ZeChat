@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 
 import com.landsofnavia.mcandze.naviachat.channel.Channel;
 import com.landsofnavia.mcandze.naviachat.plugins.ExtensionManager;
-import com.landsofnavia.mcandze.naviacore.LogIt;
 public class ChannelManager {
 	public static HashMap<Player, List<Channel>> playerChannels;
 	

@@ -15,7 +15,6 @@ import org.bukkit.util.config.Configuration;
 
 import com.landsofnavia.mcandze.naviachat.command.CommandHandler;
 import com.landsofnavia.mcandze.naviachat.plugins.ExtensionManager;
-import com.landsofnavia.mcandze.naviacore.LogIt;
 
 /**
  * This program is free software. It comes without any warranty, to
@@ -51,11 +50,13 @@ import com.landsofnavia.mcandze.naviacore.LogIt;
  *
  */
 public class NaviaChat extends JavaPlugin{
-	public static final String sPlugin = "Chat";
+	
+	public static final Logger log = Logger.getLogger("Minecraft");
+	
+	public static final String sPlugin = "DanAndChat";
+	public static final String sfPlugin = "[" + sPlugin + "]";
 	// Player Listener
 	private final NaviaChatPlayerListener playerListener = new NaviaChatPlayerListener(this);
-	// The Logger
-	private Logger log;
 	// Handles channels, and the players that are in them.
 	
 	public Settings settings;
@@ -65,7 +66,7 @@ public class NaviaChat extends JavaPlugin{
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args){
 		String commandName = command.getName();
 		
-		if (!sender.isPlayer()){
+		if (!(sender instanceof Player)){
 			return true;
 		}
 		Player player = (Player)sender;
@@ -81,7 +82,7 @@ public class NaviaChat extends JavaPlugin{
 		
 		initializeStuff();
 		PluginDescriptionFile pdfFile = getDescription();
-		LogIt.logInfo(sPlugin, pdfFile.getName() + " " + pdfFile.getVersion() + " by Mcandze, is enabled.");	
+		log.info(sfPlugin + " Version: " + pdfFile.getVersion() + " by Mcandze, is enabled.");	
 		
 		for (Player p: getServer().getOnlinePlayers()){
 			ChannelManager.initializePlayerChannels(p);
