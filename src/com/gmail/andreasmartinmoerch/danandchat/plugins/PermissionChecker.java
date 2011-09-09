@@ -19,6 +19,8 @@ public class PermissionChecker {
 		public static final String tell = ".tell";
 		public static final String me = ".me";
 		
+	//TODO: Write one function that covers all of these functions instead. (Move permission nodes to the CommandHandler, maybe)	
+	
 	public static boolean playerCanChangeChannel(Player player){	
 		if (!ExtensionManager.isUsingPermissions()){
 			return true;

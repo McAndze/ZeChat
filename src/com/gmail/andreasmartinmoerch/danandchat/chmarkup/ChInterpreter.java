@@ -8,13 +8,13 @@ import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 public class ChInterpreter {
 	public static String interpretString(String format, final Channel channel, final Player player, final String message){
 		
-		if (format.contains(ChKey.CHANNEL.toString())){
+		if (format.contains("{" + ChKey.CHANNEL.toString() + ".")){
 			format = channelKey(format, channel);
 		}
-		if (format.contains(ChKey.COLOR.toString())){
+		if (format.contains("{" + ChKey.COLOR.toString() + ".")){
 			format = colorKey(format);
 		}
-		if (format.contains(ChKey.PLAYER.toString())){
+		if (format.contains("{" + ChKey.PLAYER.toString() + ".")){
 			format = playerKey(format, player);
 		}
 		format.replaceAll("{Message}", message);

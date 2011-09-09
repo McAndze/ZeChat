@@ -3,19 +3,18 @@ package com.gmail.andreasmartinmoerch.danandchat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
-import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
 public class ChannelManager {
+	// TODO: Make this channel-specific.
 	public static HashMap<Player, List<Channel>> playerChannels;
 	
+	// TODO: Make this channel-specific.
 	private static HashMap<Player, Channel> playerFocused;
+	
 	
 	public static List<Channel> channels;
 	

@@ -45,7 +45,10 @@ public class Channel {
 		for (String s: Settings.channelsConfig.getKeys("global-channels" + "." + this.getName() + ".worlds")){
 			World world = DanAndChat.server.getWorld(s);
 			if (s != null && !s.isEmpty()){
-				worlds.add(world);
+				if (DanAndChat.server.getWorlds().contains(world)){
+					worlds.add(world);
+				}
+				
 			}
 		}
 		if (worlds.isEmpty()){
@@ -80,19 +83,19 @@ public class Channel {
 			this.setColor(ChatColor.WHITE);
 		}
 		
-		// Allowed groups
-		List<String> groups = new ArrayList<String>();
-		for (String s: Settings.channelsConfig.getKeys("global-channels" + "." + this.getName() + ".allowed-groups")){
-			groups.add(s);
-		}
-		this.setAllowedGroups(groups);
-		
-		// Allowed players
-		List<String> players = new ArrayList<String>();
-		for (String s: Settings.channelsConfig.getKeys("global-channels" + "." + this.getName() + ".exempted-players")){
-			players.add(s);
-		}
-		this.setAllowedPlayers(players);
+//		// Allowed groups
+//		List<String> groups = new ArrayList<String>();
+//		for (String s: Settings.channelsConfig.getKeys("global-channels" + "." + this.getName() + ".allowed-groups")){
+//			groups.add(s);
+//		}
+//		this.setAllowedGroups(groups);
+//		
+//		// Allowed players
+//		List<String> players = new ArrayList<String>();
+//		for (String s: Settings.channelsConfig.getKeys("global-channels" + "." + this.getName() + ".exempted-players")){
+//			players.add(s);
+//		}
+//		this.setAllowedPlayers(players);
 		
 		// In Character
 		this.setIc(Settings.channelsConfig.getBoolean("global-channels" + "." + this.getName() + ".in-character-focused", false));

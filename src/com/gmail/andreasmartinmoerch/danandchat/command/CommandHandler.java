@@ -84,8 +84,7 @@ public class CommandHandler {
 	}
 	// /LEAVECHANNEL
 	
-	// START CHANNEL
-	
+	// CHANNEL
 	public static boolean doChannelCommand(Player player, String[] args){
 		if (args.length < 1){
 			return false;
