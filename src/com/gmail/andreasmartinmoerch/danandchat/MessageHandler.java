@@ -1,6 +1,7 @@
 package com.gmail.andreasmartinmoerch.danandchat;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Random;
@@ -22,36 +23,18 @@ public class MessageHandler {
 	private static final int LINEBREAK = 53;
 	
 	public static ArrayList<String> formatMessage(Channel c, Player sender, String originalMessage){
-		String format = Settings.channelsConfig.getString(c.getName() + ".format");
 		
-		return breakMessage(ChInterpreter.interpretString(format, c, sender, originalMessage));
-	}
-	
-	public static void sendIndependentLocalMessage(Location sender, String message, int range){
-		for (Player p: DanAndChat.server.getOnlinePlayers()){
-			if (isPlayerInDistanceOf(p,sender,range)){
-				p.sendMessage(message);
-			}
-		}
-	}
-	
-	public static boolean isPlayerInDistanceOf(Player receiver, Location sender, int range){
-		double xP = 
-			Math.pow(sender.getX() - receiver.getLocation().getX(), 2);
-		double yP = 
-			Math.pow(sender.getY() - receiver.getLocation().getY(), 2);
-		double zP = 
-			Math.pow(sender.getZ() - receiver.getLocation().getZ(), 2);
-		if (Math.sqrt(xP + yP + zP) <= range){
-			return true;
-		}
-		return false;
+		return breakMessage(ChInterpreter.interpretString(c.getFormatting(), c, sender, originalMessage));
 	}
 	
 	public void noOneIsNear(Player p){
 		ArrayList<String> messages = new ArrayList<String>();
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(Settings.mainDirectory + Settings.settingsDirectory + "messages.txt"));
+			File file = new File(Settings.mainDirectory + File.separator + "messages.txt");
+			if (!file.exists()){
+				file.createNewFile();
+			}
+			BufferedReader br = new BufferedReader(new FileReader(file));
 			String sCurLine;
 			while ((sCurLine = br.readLine()) != null){
 				messages.add(sCurLine);
@@ -67,14 +50,6 @@ public class MessageHandler {
 			p.sendMessage(ChatColor.GREEN + "No one is in range.");
 		}
 		
-	}
-	
-	public static String getLocalMessage(Player player, String message, Channel channel, boolean ic){
-		String name;
-		
-		name = player.getDisplayName() + "[OOC]";
-		
-		return name + ": " + message; 
 	}
 	
 //	public static String encodeGlobalMessage(Player player, String message, Channel channel){

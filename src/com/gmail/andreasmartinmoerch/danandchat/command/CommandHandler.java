@@ -209,7 +209,14 @@ public class CommandHandler {
 		for (String s: args){
 			action += s + " ";
 		}
-		if (ChannelManager.playerChannels.get(player).isEmpty()){
+		boolean inAChannel = false;
+		for (Channel c: ChannelManager.channels){
+			if (c.playerIsInChannel(player)){
+				inAChannel = true;
+				break;
+			}
+		}
+		if (!inAChannel){
 			player.sendMessage(ChatColor.RED + "You are not in a channel.");
 			return true;
 		}

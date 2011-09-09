@@ -2,10 +2,17 @@ package com.gmail.andreasmartinmoerch.danandchat.channel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.logging.Logger;
 
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.util.config.ConfigurationNode;
 
+import com.gmail.andreasmartinmoerch.danandchat.ChannelManager;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
+import com.gmail.andreasmartinmoerch.danandchat.MessageHandler;
 import com.gmail.andreasmartinmoerch.danandchat.Settings;
 import com.gmail.andreasmartinmoerch.danandchat.chmarkup.ChatColor;
 
@@ -27,9 +34,18 @@ public class Channel {
 	private List<String> allowedPlayers;
 	private boolean ic;
 	private boolean hidden;
+	private boolean global;
+	private boolean bPrivate;
+	private ConfigurationNode chNode;;
+	private int localRange;
+	private String formatting = "[&CHANNEL.COLOR&CHANNEL.NAME]&COLOR.WHITE<&PLAYER.NAME>: &MESSAGE";
 	
-	
-	
+	private List<Player> players;
+
+	public void setPlayers(List<Player> players) {
+		this.players = players;
+	}
+
 	public Channel(String name) {
 		this.name = name;
 		
@@ -37,18 +53,22 @@ public class Channel {
 		this.banned = new ArrayList<String>();
 		this.allowedGroups = new ArrayList<String>();
 		this.allowedPlayers = new ArrayList<String>();
+		this.chNode = Settings.channelsConfig.getNode("channels" + "." + this.getName());
+		this.players = new ArrayList<Player>();
 	}
+
 
 	public void loadFromConfig(){
 		// Worlds
 		List<World> worlds = new ArrayList<World>();
-		for (String s: Settings.channelsConfig.getKeys("global-channels" + "." + this.getName() + ".worlds")){
+		List<String> defWorlds = new ArrayList<String>();
+		defWorlds.add(DanAndChat.server.getWorlds().get(0).getName());
+		
+		for (String s: chNode.getStringList("worlds", defWorlds)){
 			World world = DanAndChat.server.getWorld(s);
-			if (s != null && !s.isEmpty()){
-				if (DanAndChat.server.getWorlds().contains(world)){
-					worlds.add(world);
-				}
-				
+			DanAndChat.log.info("Found world: " + world.getName());
+			if (world != null){
+				worlds.add(world);
 			}
 		}
 		if (worlds.isEmpty()){
@@ -58,23 +78,36 @@ public class Channel {
 		
 		// Banned players
 		List<String> banned = new ArrayList<String>();
-		for (String s: Settings.channelsConfig.getKeys("global-channels" + "." + this.getName() + ".banned-players")){
+		for (String s: chNode.getStringList("banned-players", banned)){
 			banned.add(s);
-		}
-		this.setMuted(muted);
-		
-		// Muted players
-		List<String> muted = new ArrayList<String>();
-		for (String s: Settings.channelsConfig.getKeys("global-channels" + "." + this.getName() + ".muted-players")){
-			muted.add(s);
 		}
 		this.setBanned(banned);
 		
+		// Muted players
+		List<String> muted = new ArrayList<String>();
+		
+		for (String s: chNode.getStringList("muted-players", muted)){
+			muted.add(s);
+		}
+		this.setMuted(muted);
+		
 		// ShortName
-		this.setShortName(Settings.channelsConfig.getString("global-channels" + "." + this.getName() + ".short-name"));
+		String shortName;
+		shortName = chNode.getString("short-name");
+		if (shortName == null){
+			this.setShortName(this.getName());
+		} else {
+			this.setShortName(shortName);
+		}
 		
 		// Shortcut
-		this.setShortCut(Settings.channelsConfig.getString("global-channels" + "." + this.getName() + ".shortcut"));
+		String shortcut;
+		shortcut = chNode.getString("shortcut");
+		if (shortcut == null){
+			this.setShortCut(this.getName());
+		} else {
+			this.setShortCut(shortcut);
+		}
 		
 		// Color
 		try {
@@ -85,27 +118,142 @@ public class Channel {
 		
 //		// Allowed groups
 //		List<String> groups = new ArrayList<String>();
-//		for (String s: Settings.channelsConfig.getKeys("global-channels" + "." + this.getName() + ".allowed-groups")){
+//		for (String s: Settings.channelsConfig.getKeys("channels" + "." + this.getName() + ".allowed-groups")){
 //			groups.add(s);
 //		}
 //		this.setAllowedGroups(groups);
 //		
 //		// Allowed players
 //		List<String> players = new ArrayList<String>();
-//		for (String s: Settings.channelsConfig.getKeys("global-channels" + "." + this.getName() + ".exempted-players")){
+//		for (String s: Settings.channelsConfig.getKeys("channels" + "." + this.getName() + ".exempted-players")){
 //			players.add(s);
 //		}
 //		this.setAllowedPlayers(players);
 		
 		// In Character
-		this.setIc(Settings.channelsConfig.getBoolean("global-channels" + "." + this.getName() + ".in-character-focused", false));
+		this.setIc(chNode.getBoolean("in-character-focused", false));
 		
 		// Hidden
-		this.setHidden(Settings.channelsConfig.getBoolean("global-channels" + "." + this.getName() + ".hidden", false));
+		this.setHidden(chNode.getBoolean("hidden", false));
+		
+		// Global?
+		this.setGlobal(chNode.getBoolean("global", true));
+		
+		if (!this.isGlobal()){
+			this.setLocalRange(chNode.getInt("range", 100));
+		}
+		String formatting;
+		if ((formatting = chNode.getString("formatting")) != null && !(formatting.isEmpty())){
+			this.setFormatting(this.formatting);
+		}
+		
 	}
 	
-	public void sendMessage(){
-		
+	public String getFormatting() {
+		return formatting;
+	}
+
+	public void setFormatting(String formatting) {
+		this.formatting = formatting;
+	}
+
+	public int getLocalRange() {
+		return localRange;
+	}
+
+	public void setLocalRange(int localRange) {
+		this.localRange = localRange;
+	}
+	
+	public boolean isGlobal() {
+		return global;
+	}
+
+	public void setGlobal(boolean global) {
+		this.global = global;
+	}
+
+	public boolean isbPrivate() {
+		return bPrivate;
+	}
+
+	public void setbPrivate(boolean bPrivate) {
+		this.bPrivate = bPrivate;
+	}
+
+	public ConfigurationNode getChNode() {
+		return chNode;
+	}
+
+	public void setChNode(ConfigurationNode chNode) {
+		this.chNode = chNode;
+	}
+
+	public void sendMessage(String message, Player sender){
+		boolean ic = false;
+		Logger log = DanAndChat.log;
+		if (!this.isGlobal()){
+//			String newMessage = MessageHandler.getLocalMessage(sender, message, this, ic);
+//			log.info("[DanAndChat] " + newMessage);
+//			int anyone = 0;
+//			for (Player p: DanAndChat.server.getOnlinePlayers()){
+//				if (isInDistance(p, sender.getLocation()) && ChannelManager.playerIsInChannel(p, this) && !isPlayerBanned(p) && isInWorld(p)){
+//					p.sendMessage(newMessage);
+//					anyone++;
+//				}
+//			}
+//			if (anyone == 1){
+//				noOneIsNear(sender);
+//			}
+		} else {
+			if (ChannelManager.playerIsInChannel(sender, this)){
+				ArrayList<String> newMessage = MessageHandler.formatMessage(this, sender, message);
+				for (String s: newMessage){
+					log.info("[NaviaChat]" + s);
+				}
+				
+				for (Player p: DanAndChat.server.getOnlinePlayers()){
+					if (!(this.getBanned().contains(p)) && this.playerIsInChannel(p) && isInWorld(p)){
+						for (String s: newMessage){
+							p.sendMessage(s);
+						}
+					}
+				}
+			}
+			
+		}
+	}
+		public boolean isInWorld(Player p){
+		for (World w: worlds){
+			if (p.getWorld().equals(w)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static ArrayList<String> messages = new ArrayList<String>();
+	
+	public static void noOneIsNear(Player p){
+		Random test = new Random();
+		if (messages.isEmpty()){
+			p.sendMessage(ChatColor.GREEN + "No one can hear you.");
+			return;
+		}
+		p.sendMessage(ChatColor.GREEN + messages.get(test.nextInt(messages.size())));
+	}
+	
+	public boolean isInDistance(Player receiver, Location sender){
+		double xP = 
+			Math.pow(sender.getX() - receiver.getLocation().getX(), 2);
+		double yP = 
+			Math.pow(sender.getY() - receiver.getLocation().getY(), 2);
+		double zP = 
+			Math.pow(sender.getZ() - receiver.getLocation().getZ(), 2);
+		if (Math.sqrt(xP + yP + zP) <= this.getLocalRange()){
+			return true;
+		}
+		return false;
 	}
 	
 	public List<String> getMuted() {
@@ -156,6 +304,18 @@ public class Channel {
 		this.banned = banned;
 	}
 
+	public boolean playerIsInChannel(Player p){
+		return players.contains(p);
+	}
+	
+	public void removePlayer(Player p){
+		this.players.remove(p);
+	}
+	
+	public void addPlayer(Player p){
+		this.players.add(p);
+	}
+	
 	public String getName() {
 		return name;
 	}

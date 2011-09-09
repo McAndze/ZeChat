@@ -26,10 +26,12 @@ public class DanAndChatPlayerListener extends PlayerListener{
 		String message;
 		
 		if (!PermissionChecker.playerCanTalk(event.getPlayer())){
-				event.setCancelled(true);
-				return;
+			event.setCancelled(true);
+			return;
 		}
 		
+		
+		// TODO: This is old. Do something about it. Lazy cunt. Talking to you McAndze.
 		if (event.getMessage().startsWith(".")){
 			message = event.getMessage().substring(1);
 			ChannelManager.setPlayerState(event.getPlayer(), false);
@@ -39,7 +41,7 @@ public class DanAndChatPlayerListener extends PlayerListener{
 		}
 		
 		if (c != null){
-//			c.sendMessage(message, event.getPlayer(), ChannelManager.playerIsIc(event.getPlayer()));
+			c.sendMessage(message, event.getPlayer());
 		} else {
 			event.getPlayer().sendMessage("Something went wrong - (Ask your Admin to report to McAndze)");
 		}

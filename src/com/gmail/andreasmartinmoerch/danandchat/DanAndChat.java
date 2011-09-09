@@ -98,7 +98,10 @@ public class DanAndChat extends JavaPlugin{
 	 * Default method
 	 */
 	public void onDisable(){
-		
+		Settings.config = null;
+		Settings.channelsConfig = null;
+		ChannelManager.channels = null;
+		ExtensionManager.permissions = null;
 	}
 	
 	public void initializeStuff(){

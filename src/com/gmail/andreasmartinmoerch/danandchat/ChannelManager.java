@@ -9,12 +9,9 @@ import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 public class ChannelManager {
-	// TODO: Make this channel-specific.
-	public static HashMap<Player, List<Channel>> playerChannels;
 	
-	// TODO: Make this channel-specific.
+	// TODO: This solution just sucks. Do something about it. Basically this whole class sucks. It's like a rotten scaffold. Just barely keeps you up.
 	private static HashMap<Player, Channel> playerFocused;
-	
 	
 	public static List<Channel> channels;
 	
@@ -35,19 +32,18 @@ public class ChannelManager {
 	
 	public static boolean playerChangeChannel(Channel channel, Player player){
 		if (!channelExists(channel)){
-			player.sendMessage(ChatColor.RED + "Channel does not exist: " + channel);
+			player.sendMessage(ChatColor.RED + "Channel does not exist: " + channel.getName());
 			return false;
 		}
 		
-		if (!playerIsInChannel(player, channel)){
-			playerAddChannel(channel, player);
+		if (!channel.playerIsInChannel(player)){
+			channel.addPlayer(player);
 		}
 		setFocusedChannel(channel, player);
 		return true;
 	}
 	
 	public static void initialize(){
-		playerChannels = new HashMap<Player, List<Channel>>();
 		playerFocused = new HashMap<Player, Channel>();
 		channels = new ArrayList<Channel>();
 		playerState = new HashMap<Player, Boolean>();
@@ -59,15 +55,14 @@ public class ChannelManager {
 	}
 	
 	public static void playerLeaveChannel(Channel c, Player p){
-		List<Channel> channels;
-		(channels = playerChannels.get(p)).remove(c);
-		playerChannels.remove(p);
-		playerChannels.put(p, channels);
-		if (playerChannels.get(p).isEmpty()){
-			p.sendMessage(ChatColor.RED + "Could not find any channels. You are muted, until you join another channel.");
-			return;
+		c.removePlayer(p);
+		for (Channel ch: channels){
+			if (ch.playerIsInChannel(p)){
+				playerChangeChannel(ch, p);
+				return;
+			}
 		}
-		playerChangeChannel(playerChannels.get(p).get(0), p);
+		p.sendMessage(ChatColor.RED + "Could not find any channels. You are muted, until you join another channel.");
 	}
 	
 	public static Channel getChannelWithShortcut(String name){
@@ -88,7 +83,7 @@ public class ChannelManager {
 //			playerChangeChannel(getChannelWithShortcut(strTok.nextToken()), player);
 //		}
 		
-		playerChangeChannel(getFirstFocusedChannel(player), player);
+		playerChangeChannel(channels.get(0), player);
 	}
 	
 	public static Channel getFirstFocusedChannel(Player player){
@@ -131,13 +126,7 @@ public class ChannelManager {
 	 * @return
 	 */
 	public static boolean playerIsInChannel(Player player, Channel channel){
-		if (!playerChannels.containsKey(player)){
-			return false;
-		}
-		if (playerChannels.get(player).contains(channel)){
-			return true;
-		}
-		return false;
+		return channel.playerIsInChannel(player);
 	}
 	
 	
@@ -147,10 +136,13 @@ public class ChannelManager {
 	 * @return
 	 */
 	public static Channel getFocusedChannel(Player player){
-		if (!playerChannels.containsKey(player))
-			return null;
-		if (!playerFocused.containsKey(player))
-			return null;
+		boolean ds;
+		for (Channel c: channels){
+			if (c.playerIsInChannel(player)){
+				ds = true;
+				break;
+			}
+		}
 		return playerFocused.get(player);
 	}
 	
@@ -163,14 +155,8 @@ public class ChannelManager {
 	}
 	
 	public static void playerAddChannel(Channel c, Player p){
-		if (!playerChannels.containsKey(p)){
-			List<Channel> tmpr = new ArrayList<Channel>();
-			tmpr.add(c);
-			playerChannels.put(p, tmpr);
-		} else {
-			if (!playerChannels.get(p).contains(c)){
-				playerChannels.get(p).add(c);
-			}
+		if (!c.playerIsInChannel(p)){
+			c.addPlayer(p);
 		}
 	}
 	
