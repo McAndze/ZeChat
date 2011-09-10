@@ -1,6 +1,6 @@
 name: DanAndChat
 main: com.gmail.andreasmartinmoerch.danandchat.DanAndChat
-version: 1.0.1
+version: 0.1
 commands:
   ch:
     description: Used for changing channels.
