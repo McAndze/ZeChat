@@ -3,8 +3,6 @@ package com.gmail.andreasmartinmoerch.danandchat;
 import java.util.logging.Logger;
 
 import org.bukkit.Server;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
@@ -12,7 +10,12 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.gmail.andreasmartinmoerch.danandchat.command.CommandHandler;
+import com.gmail.andreasmartinmoerch.danandchat.commands.ChCommand;
+import com.gmail.andreasmartinmoerch.danandchat.commands.ChannelCommand;
+import com.gmail.andreasmartinmoerch.danandchat.commands.Commands;
+import com.gmail.andreasmartinmoerch.danandchat.commands.LeavechannelCommand;
+import com.gmail.andreasmartinmoerch.danandchat.commands.MeCommand;
+import com.gmail.andreasmartinmoerch.danandchat.commands.TCommand;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
 
 /**
@@ -40,8 +43,7 @@ import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
  */
 
 /**
- * The above license applies to all classes, but iProperty.java
- * which is made by Nijikokun. The license is included in the class.
+ * The above license applies to all classes, unless stated otherwise in the individual class.
  */
 /**
  * 
@@ -61,18 +63,6 @@ public class DanAndChat extends JavaPlugin{
 	public Settings settings;
 	public static Server server;
 	
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args){
-		String commandName = command.getName();
-		
-		if (!(sender instanceof Player)){
-			return true;
-		}
-		Player player = (Player)sender;
-		
-		return CommandHandler.doCommand(commandName, player, args);
-	}
-	
 	/**
 	 * Default method
 	 */
@@ -91,6 +81,13 @@ public class DanAndChat extends JavaPlugin{
 		
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.High, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
+		
+		// Set commands!
+		this.getCommand(Commands.CH.toString()).setExecutor(new ChCommand());
+		this.getCommand(Commands.CHANNEL.toString()).setExecutor(new ChannelCommand());
+		this.getCommand(Commands.LEAVECHANNEL.toString()).setExecutor(new LeavechannelCommand());
+		this.getCommand(Commands.ME.toString()).setExecutor(new MeCommand());
+		this.getCommand(Commands.T.toString()).setExecutor(new TCommand());
 	}
 	
 

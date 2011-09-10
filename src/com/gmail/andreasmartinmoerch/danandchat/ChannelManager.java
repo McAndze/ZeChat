@@ -23,7 +23,7 @@ public class ChannelManager {
 		Channel c;
 		if (!channelExists((c = getChannelWithShortcut(channel)))){
 			player.sendMessage(ChatColor.RED + "Channel does not exist: " + channel);
-			return false;
+			return true;
 		}
 		setFocusedChannel(c, player);
 		playerAddChannel(c, player);

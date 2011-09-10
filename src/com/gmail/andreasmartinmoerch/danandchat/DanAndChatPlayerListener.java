@@ -2,6 +2,7 @@ package com.gmail.andreasmartinmoerch.danandchat;
 
 import java.util.StringTokenizer;
 
+import org.bukkit.ChatColor;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -27,11 +28,12 @@ public class DanAndChatPlayerListener extends PlayerListener{
 		
 		if (!PermissionChecker.playerCanTalk(event.getPlayer())){
 			event.setCancelled(true);
+			event.getPlayer().sendMessage(ChatColor.RED + "You are not allowed to talk. At all. Or rather; chat.");
 			return;
 		}
 		
 		
-		// TODO: This is old. Do something about it. Lazy cunt. Talking to you McAndze.
+		// TODO: This is old. Do something about it. Lazy cunt. Talking to you, McAndze.
 		if (event.getMessage().startsWith(".")){
 			message = event.getMessage().substring(1);
 			ChannelManager.setPlayerState(event.getPlayer(), false);
@@ -43,10 +45,8 @@ public class DanAndChatPlayerListener extends PlayerListener{
 		if (c != null){
 			c.sendMessage(message, event.getPlayer());
 		} else {
-			event.getPlayer().sendMessage("Something went wrong - (Ask your Admin to report to McAndze)");
+			event.getPlayer().sendMessage(ChatColor.RED + "You're in an invalid channel. Please try joining another.");
 		}
-		
-		ChannelManager.setPlayerState(event.getPlayer(), !ChannelManager.playerIsIc(event.getPlayer()));
 		event.setCancelled(true);
 		
 	}

@@ -34,7 +34,6 @@ public class Channel {
 	private List<String> allowedPlayers;
 	private boolean ic;
 	private boolean hidden;
-	private boolean global;
 	private boolean bPrivate;
 	private ConfigurationNode chNode;;
 	private int localRange;
@@ -136,15 +135,11 @@ public class Channel {
 		// Hidden
 		this.setHidden(chNode.getBoolean("hidden", false));
 		
-		// Global?
-		this.setGlobal(chNode.getBoolean("global", true));
-		
-		if (!this.isGlobal()){
-			this.setLocalRange(chNode.getInt("range", 100));
-		}
-		String formatting;
-		if ((formatting = chNode.getString("formatting")) != null && !(formatting.isEmpty())){
-			this.setFormatting(this.formatting);
+		// Range. -1 = Global
+		this.setLocalRange(chNode.getInt("range", -1));
+		String newformat;
+		if ((newformat = chNode.getString("formatting")) != null && !(newformat.isEmpty())){
+			this.setFormatting(newformat);
 		}
 		
 	}
@@ -163,14 +158,6 @@ public class Channel {
 
 	public void setLocalRange(int localRange) {
 		this.localRange = localRange;
-	}
-	
-	public boolean isGlobal() {
-		return global;
-	}
-
-	public void setGlobal(boolean global) {
-		this.global = global;
 	}
 
 	public boolean isbPrivate() {
@@ -192,26 +179,14 @@ public class Channel {
 	public void sendMessage(String message, Player sender){
 		boolean ic = false;
 		Logger log = DanAndChat.log;
-		if (!this.isGlobal()){
-//			String newMessage = MessageHandler.getLocalMessage(sender, message, this, ic);
-//			log.info("[DanAndChat] " + newMessage);
-//			int anyone = 0;
-//			for (Player p: DanAndChat.server.getOnlinePlayers()){
-//				if (isInDistance(p, sender.getLocation()) && ChannelManager.playerIsInChannel(p, this) && !isPlayerBanned(p) && isInWorld(p)){
-//					p.sendMessage(newMessage);
-//					anyone++;
-//				}
-//			}
-//			if (anyone == 1){
-//				noOneIsNear(sender);
-//			}
-		} else {
-			if (ChannelManager.playerIsInChannel(sender, this)){
-				ArrayList<String> newMessage = MessageHandler.formatMessage(this, sender, message);
-				for (String s: newMessage){
-					log.info("[NaviaChat]" + s);
-				}
-				
+		
+		if (ChannelManager.playerIsInChannel(sender, this)){
+			ArrayList<String> newMessage = MessageHandler.formatMessage(this, sender, message);
+			for (String s: newMessage){
+				log.info("[NaviaChat]" + s);
+			}
+			
+			if (this.getLocalRange() == -1){
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
 					if (!(this.getBanned().contains(p)) && this.playerIsInChannel(p) && isInWorld(p)){
 						for (String s: newMessage){
@@ -219,9 +194,19 @@ public class Channel {
 						}
 					}
 				}
+			} else {
+				Location loc = sender.getLocation();
+				for (Player p: DanAndChat.server.getOnlinePlayers()){
+					if (!(this.getBanned().contains(p)) && this.playerIsInChannel(p) && isInWorld(p) && isInDistance(p, loc)){
+						for (String s: newMessage){
+							p.sendMessage(s);
+						}
+					}
+				}
 			}
-			
+
 		}
+		
 	}
 		public boolean isInWorld(Player p){
 		for (World w: worlds){

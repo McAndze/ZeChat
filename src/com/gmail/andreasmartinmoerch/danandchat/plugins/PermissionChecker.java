@@ -21,72 +21,79 @@ public class PermissionChecker {
 		
 	//TODO: Write one function that covers all of these functions instead. (Move permission nodes to the CommandHandler, maybe)	
 	
-	public static boolean playerCanChangeChannel(Player player){	
-		if (!ExtensionManager.isUsingPermissions()){
+	public static boolean playerCanChangeChannel(Player player){
+		if (!player.hasPermission(plugin + all)){
+			return player.hasPermission(plugin + changeChannel);
+		} else {
 			return true;
 		}
-		return ExtensionManager.permissions.has(player, plugin + changeChannel);
+		
 	}
 	
 	public static boolean playerCanTalk(Player player){
-		if (!ExtensionManager.isUsingPermissions()){
+		if (!player.hasPermission(plugin + all)){
+			return player.hasPermission(plugin + canTalk);
+		} else {
 			return true;
 		}
-		return ExtensionManager.permissions.has(player, plugin + canTalk);
 	}
 	
 	public static boolean playerCanBan(Player player){
-		if (!ExtensionManager.isUsingPermissions()){
-			if (player.isOp()){
-				return true;
-			}
-			return false;
+		if (player.isOp()){
+			return true;
 		}
-		return ExtensionManager.permissions.has(player, plugin + ban);
+		if (!player.hasPermission(plugin + all)){
+			return player.hasPermission(plugin + ban);
+		} else {
+			return true;
+		}
 	}
 	
 	public static boolean playerCanUnban(Player player){
-		if (!ExtensionManager.isUsingPermissions()){
-			if (player.isOp()){
-				return true;
-			}
-			return false;
+		if (player.isOp()){
+			return true;
 		}
-		return ExtensionManager.permissions.has(player, plugin + unban);
+		if (!player.hasPermission(plugin + all)){
+			return player.hasPermission(plugin + unban);
+		} else {
+			return true;
+		}
 	}
 	
 	public static boolean playerCanList(Player player){
-		if (!ExtensionManager.isUsingPermissions()){
+		if (!player.hasPermission(plugin + all)){
+			return player.hasPermission(plugin + list);
+		} else {
 			return true;
 		}
-		return ExtensionManager.permissions.has(player, plugin + list);
 	}
 	
 	public static boolean playerCanTell(Player player){
-		if (!ExtensionManager.isUsingPermissions()){
+		if (!player.hasPermission(plugin + all)){
+			return player.hasPermission(plugin + tell);
+		} else {
 			return true;
 		}
-		return ExtensionManager.permissions.has(player, plugin + tell);
 	}
 	
 	public static boolean playerCanMe(Player player){
-		if (!ExtensionManager.isUsingPermissions()){
+		if (!player.hasPermission(plugin + all)){
+			return player.hasPermission(plugin + me);
+		} else {
 			return true;
 		}
-		return ExtensionManager.permissions.has(player, plugin + me);
 	}
 	
 	public static String getGroup(Player player){
-		if (!ExtensionManager.isUsingPermissions()){
-			return "";
-		}
-		return ExtensionManager.permissions.getGroup(player.getWorld().getName(), player.getName());
+//		return ExtensionManager.permissions.getGroup(player.getWorld().getName(), player.getName());
+		return "";
 	}
 	
 	public static String getPrefix(Player player){
-		if (!ExtensionManager.isUsingPermissions()){
-			return "";
-		}
-		return ExtensionManager.permissions.getGroup(player.getWorld().getName(), player.getName());
+//		if (!ExtensionManager.isUsingPermissions()){
+//			return "";
+//		}
+//		return ExtensionManager.permissions.getGroup(player.getWorld().getName(), player.getName());
+		return "";
 	}
 }

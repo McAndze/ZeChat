@@ -8,7 +8,6 @@ import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 public class ChInterpreter {
 	public static String interpretString(String format, final Channel channel, final Player player, final String message){
 		if (format.contains("&" + ChKey.CHANNEL.toString() + ".")){
-			player.sendMessage("So..");
 			format = channelKey(format, channel);
 		}
 		if (format.contains("&" + ChKey.COLOR.toString() + ".")){
@@ -19,7 +18,7 @@ public class ChInterpreter {
 		}
 		
 		format = format.replaceAll("&&", "&");
-		format = format.replaceAll("&MEASSGE", message);
+		format = format.replaceAll("&MESSAGE", message);
 		
 		return format;
 	}
