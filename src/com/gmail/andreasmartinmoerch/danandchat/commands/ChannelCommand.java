@@ -12,6 +12,11 @@ import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
 public class ChannelCommand implements CommandExecutor{
+	private DanAndChat plugin;
+	
+	public ChannelCommand(DanAndChat plugin){
+		this.plugin = plugin;
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
@@ -46,7 +51,7 @@ public class ChannelCommand implements CommandExecutor{
 	
 	// <CHANNEL BAN>
 	public boolean banPlayer(Player player, String[] args){
-		if (!PermissionChecker.playerCanBan(player)){
+		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.channel + PermissionChecker.ban)){
 			player.sendMessage(ChatColor.RED + "Unknown command.");
 			return true;
 		}
@@ -67,7 +72,7 @@ public class ChannelCommand implements CommandExecutor{
 	
 	// START <CHANNEL UNBAN>
 	public boolean unbanPlayer(Player player, String[] args){
-		if(!PermissionChecker.playerCanUnban(player)){
+		if(!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.channel + PermissionChecker.unban)){
 			player.sendMessage(ChatColor.RED + "Unknown command.");
 			return true;
 		}
@@ -88,7 +93,7 @@ public class ChannelCommand implements CommandExecutor{
 	// START <CHANNEL LIST>
 	public boolean listChannels(Player player){
 		
-		if (!PermissionChecker.playerCanList(player)){
+		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.channel + PermissionChecker.list)){
 			player.sendMessage(ChatColor.RED + "Unknown command.");
 			return true;
 		}

@@ -2,6 +2,7 @@ package com.gmail.andreasmartinmoerch.danandchat;
 
 import java.util.logging.Logger;
 
+import org.blockface.bukkitstats.CallHome;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -17,6 +18,7 @@ import com.gmail.andreasmartinmoerch.danandchat.commands.LeavechannelCommand;
 import com.gmail.andreasmartinmoerch.danandchat.commands.MeCommand;
 import com.gmail.andreasmartinmoerch.danandchat.commands.TCommand;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
+import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
 /**
  * This program is free software. It comes without any warranty, to
@@ -51,7 +53,6 @@ import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
  *
  */
 public class DanAndChat extends JavaPlugin{
-	
 	public static final Logger log = Logger.getLogger("Minecraft");
 	
 	public static final String sPlugin = "DanAndChat";
@@ -62,6 +63,7 @@ public class DanAndChat extends JavaPlugin{
 	
 	public Settings settings;
 	public static Server server;
+	public PermissionChecker perms;
 	
 	/**
 	 * Default method
@@ -81,13 +83,16 @@ public class DanAndChat extends JavaPlugin{
 		
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.High, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
 		
 		// Set commands!
-		this.getCommand(Commands.CH.toString()).setExecutor(new ChCommand());
-		this.getCommand(Commands.CHANNEL.toString()).setExecutor(new ChannelCommand());
-		this.getCommand(Commands.LEAVECHANNEL.toString()).setExecutor(new LeavechannelCommand());
-		this.getCommand(Commands.ME.toString()).setExecutor(new MeCommand());
-		this.getCommand(Commands.T.toString()).setExecutor(new TCommand());
+		this.getCommand(Commands.CH.toString()).setExecutor(new ChCommand(this));
+		this.getCommand(Commands.CHANNEL.toString()).setExecutor(new ChannelCommand(this));
+		this.getCommand(Commands.LEAVECHANNEL.toString()).setExecutor(new LeavechannelCommand(this));
+		this.getCommand(Commands.ME.toString()).setExecutor(new MeCommand(this));
+		this.getCommand(Commands.T.toString()).setExecutor(new TCommand(this));
+		
+		CallHome.load(this);
 	}
 	
 
@@ -99,12 +104,14 @@ public class DanAndChat extends JavaPlugin{
 		Settings.channelsConfig = null;
 		ChannelManager.channels = null;
 		ExtensionManager.permissions = null;
+		this.perms = null;
 	}
 	
 	public void initializeStuff(){
 		Settings.initialize();
 		ChannelManager.initialize();
 		ExtensionManager.loadNaviaChar();
+		perms = new PermissionChecker(this);
 		ExtensionManager.loadPermissions();
 	}
 	

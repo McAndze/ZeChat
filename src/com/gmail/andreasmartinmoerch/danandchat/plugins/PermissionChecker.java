@@ -1,6 +1,9 @@
 package com.gmail.andreasmartinmoerch.danandchat.plugins;
 
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+
+import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 
 public class PermissionChecker {
 	/**
@@ -9,8 +12,8 @@ public class PermissionChecker {
 	
 	public static final String all = ".*";
 	
-	public static final String plugin = "naviachat";
-		public static final String changeChannel = ".channel";
+	public static final String prefix = "danandchat";
+		public static final String channel = ".channel";
 			public static final String ban = ".ban";
 			public static final String unban = ".unban";
 			public static final String list = ".list";
@@ -18,70 +21,29 @@ public class PermissionChecker {
 		public static final String canTalk = ".cantalk";
 		public static final String tell = ".tell";
 		public static final String me = ".me";
-		
+		public static final String changeChannel = ".changechannel";
+	
+	private DanAndChat plugin;
 	//TODO: Write one function that covers all of these functions instead. (Move permission nodes to the CommandHandler, maybe)	
+		
+	public PermissionChecker(DanAndChat plugin){
+		this.plugin = plugin;
+	}
 	
-	public static boolean playerCanChangeChannel(Player player){
-		if (!player.hasPermission(plugin + all)){
-			return player.hasPermission(plugin + changeChannel);
-		} else {
-			return true;
+	//TODO: Still trying to think of a better way of doing this.
+	public boolean playerHasPermission(Player player, String perm){
+		
+		for (Permission p: plugin.getDescription().getPermissions()){
+			if (p.getName().equalsIgnoreCase(perm)){
+				if (player.hasPermission(p)){
+					return true;
+				} else {
+					break;
+				}
+			}
 		}
 		
-	}
-	
-	public static boolean playerCanTalk(Player player){
-		if (!player.hasPermission(plugin + all)){
-			return player.hasPermission(plugin + canTalk);
-		} else {
-			return true;
-		}
-	}
-	
-	public static boolean playerCanBan(Player player){
-		if (player.isOp()){
-			return true;
-		}
-		if (!player.hasPermission(plugin + all)){
-			return player.hasPermission(plugin + ban);
-		} else {
-			return true;
-		}
-	}
-	
-	public static boolean playerCanUnban(Player player){
-		if (player.isOp()){
-			return true;
-		}
-		if (!player.hasPermission(plugin + all)){
-			return player.hasPermission(plugin + unban);
-		} else {
-			return true;
-		}
-	}
-	
-	public static boolean playerCanList(Player player){
-		if (!player.hasPermission(plugin + all)){
-			return player.hasPermission(plugin + list);
-		} else {
-			return true;
-		}
-	}
-	
-	public static boolean playerCanTell(Player player){
-		if (!player.hasPermission(plugin + all)){
-			return player.hasPermission(plugin + tell);
-		} else {
-			return true;
-		}
-	}
-	
-	public static boolean playerCanMe(Player player){
-		if (!player.hasPermission(plugin + all)){
-			return player.hasPermission(plugin + me);
-		} else {
-			return true;
-		}
+		return false;
 	}
 	
 	public static String getGroup(Player player){

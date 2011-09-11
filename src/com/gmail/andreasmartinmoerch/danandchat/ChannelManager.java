@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 public class ChannelManager {
 	
-	// TODO: This solution just sucks. Do something about it. Basically this whole class sucks. It's like a rotten scaffold. Just barely keeps you up.
+	// TODO: This solution just sucks. Do something about it. Basically this whole class sucks. It's like a rotten scaffold. Just barely keeps you from falling to the ground.
 	private static HashMap<Player, Channel> playerFocused;
 	
 	public static List<Channel> channels;
@@ -136,14 +136,19 @@ public class ChannelManager {
 	 * @return
 	 */
 	public static Channel getFocusedChannel(Player player){
-		boolean ds;
+		boolean yes = false;
 		for (Channel c: channels){
 			if (c.playerIsInChannel(player)){
-				ds = true;
+				yes = true;
 				break;
 			}
 		}
-		return playerFocused.get(player);
+		if (yes){
+			return playerFocused.get(player);
+		} else {
+			return null;
+		}
+		
 	}
 	
 	public static void setFocusedChannel(Channel channel, Player player){

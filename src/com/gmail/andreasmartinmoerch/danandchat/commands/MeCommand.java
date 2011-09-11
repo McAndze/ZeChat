@@ -7,10 +7,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.ChannelManager;
+import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
 public class MeCommand implements CommandExecutor{
+	private DanAndChat plugin;
+	
+	public MeCommand(DanAndChat plugin){
+		this.plugin = plugin;
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
@@ -22,7 +28,7 @@ public class MeCommand implements CommandExecutor{
 		}
 		Player player = (Player)sender;
 		
-		if (!PermissionChecker.playerCanMe(player)){
+		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.me)){
 			player.sendMessage(ChatColor.RED + "You can not use that command.");
 			return true;
 		}

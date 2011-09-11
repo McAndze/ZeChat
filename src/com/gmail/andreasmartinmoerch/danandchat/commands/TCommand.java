@@ -10,6 +10,11 @@ import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
 public class TCommand implements CommandExecutor{
+	private DanAndChat plugin;
+	
+	public TCommand(DanAndChat plugin){
+		this.plugin = plugin;
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
@@ -21,7 +26,7 @@ public class TCommand implements CommandExecutor{
 		}
 		Player player = (Player)sender;
 		
-		if (!PermissionChecker.playerCanTell(player)){
+		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.tell)){
 			player.sendMessage(ChatColor.RED + "You can not use that command.");
 			return true;
 		}

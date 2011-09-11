@@ -7,10 +7,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.ChannelManager;
+import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
 public class LeavechannelCommand implements CommandExecutor{
+	private DanAndChat plugin;
+	
+	public LeavechannelCommand(DanAndChat plugin){
+		this.plugin = plugin;
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
@@ -22,8 +28,8 @@ public class LeavechannelCommand implements CommandExecutor{
 		}
 		Player player = (Player)sender;
 		// Start validation
-		if (!PermissionChecker.playerCanChangeChannel(player)){
-			player.sendMessage(ChatColor.RED + "Unknown command");
+		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.leaveChannel)){
+			player.sendMessage(ChatColor.RED + "You don't have permission to do that.");
 			return false;
 		}
 		
@@ -41,7 +47,7 @@ public class LeavechannelCommand implements CommandExecutor{
 			player.sendMessage(ChatColor.RED + "You are not in that channel!");
 		}
 		
-		ChannelManager.playerLeaveChannel(c, player);
+		c.removePlayer(player);
 		return true;
 	}
 	

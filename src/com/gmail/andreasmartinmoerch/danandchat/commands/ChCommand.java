@@ -7,9 +7,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.ChannelManager;
+import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
 public class ChCommand implements CommandExecutor{
+	private DanAndChat plugin;
+	
+	public ChCommand(DanAndChat plugin){
+		this.plugin = plugin;
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
@@ -21,7 +27,7 @@ public class ChCommand implements CommandExecutor{
 		}
 		Player player = (Player)sender;
 		
-		if (!PermissionChecker.playerCanChangeChannel(player)){
+		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.changeChannel)){
 			player.sendMessage(ChatColor.RED + "You haven't got the permission to do that.");
 			return true;
 		}

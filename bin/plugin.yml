@@ -1,6 +1,6 @@
 name: DanAndChat
 main: com.gmail.andreasmartinmoerch.danandchat.DanAndChat
-version: 0.1
+version: 0.1.3
 commands:
   ch:
     description: Used for changing channels.
@@ -24,3 +24,50 @@ commands:
   me:
     description: Used for making emotes.
     usage: /me <Action>
+permissions:
+    danandchat.*:
+        description: 'Gives access to everything DanAndChat related.'
+        children:
+            danandchat.channel.*: true
+            danandchat.leavechannel: true
+            danandchat.cantalk: true
+            danandchat.tell: true
+            danandchat.me: true
+            danandchat.changechannel: true
+        default: op
+    danandchat.moderator:
+        description: 'Gives access to moderator features.'
+        children:
+            danandchat.channel.ban: true
+            danandchat.channel.unban: true
+    danandchat.channel.*:
+        description: 'Gives access to everything in the /channel command.'
+        children:
+            danandchat.channel.ban: true
+            danandchat.channel.unban: true
+            danandchat.channel.list: true
+    danandchat.basic:
+        description: 'Everything you need for the regular chatter!'
+        children:
+            danandchat.leavechannel: true
+            danandchat.channel.list: true
+            danandchat.cantalk: true
+            danandchat.tell: true
+            danandchat.me: true
+            danandchat.changechannel: true
+    danandchat.channel.ban:
+        description: 'Gives the ability to ban players. Will elaborate soon.'
+    danandchat.channel.unban:
+        description: 'Gives the ability to unban players. Will elaborate soon.'
+    danandchat.channel.list:
+        description: 'Lists available channels.'
+    danandchat.cantalk:
+        description: 'Gives the ability to talk. Will be channel-specific soon.'
+    danandchat.tell:
+        description: 'Gives the ability to /t if enabled. NOT WORKING ATM.'
+    danandchat.me:
+        description: 'Gives the ability to emote. Will be channel-specific soon. NOT WORKING ATM.'
+    danandchat.leavechannel:
+        description: 'I do not think this will ever be needed, until I make it channel-specific. It just gives players access to leave channels for now.'
+    danandchat.changechannel:
+        description: 'I do not think this will ever be needed either, until I make it channel-specific. It just gives players access to change channels for now.'

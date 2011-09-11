@@ -37,7 +37,7 @@ public class Channel {
 	private boolean bPrivate;
 	private ConfigurationNode chNode;;
 	private int localRange;
-	private String formatting = "[&CHANNEL.COLOR&CHANNEL.NAME]&COLOR.WHITE<&PLAYER.NAME>: &MESSAGE";
+	private String formatting = "[&CHANNEL.COLOUR&CHANNEL.NAME]&COLOUR.WHITE<&PLAYER.NAME>: &MESSAGE";
 	
 	private List<Player> players;
 
@@ -102,7 +102,7 @@ public class Channel {
 		// Shortcut
 		String shortcut;
 		shortcut = chNode.getString("shortcut");
-		if (shortcut == null){
+		if (shortcut == null || shortcut.isEmpty()){
 			this.setShortCut(this.getName());
 		} else {
 			this.setShortCut(shortcut);
