@@ -32,22 +32,27 @@ public class MeCommand implements CommandExecutor{
 			player.sendMessage(ChatColor.RED + "You can not use that command.");
 			return true;
 		}
+		if (args.length == 0){
+			player.sendMessage(ChatColor.RED + "You can't emote \"nothing\" unless you don't have a heart. Let  out your feelings. It will feel so much better :)");
+			return true;
+		}
 		String action = "";
 		for (String s: args){
 			action += s + " ";
 		}
 		boolean inAChannel = false;
-		for (Channel c: ChannelManager.channels){
-			if (c.playerIsInChannel(player)){
-				inAChannel = true;
-				break;
-			}
+		Channel c = null;
+		if ((c = ChannelManager.playerFocused.get(player)) != null){
+			inAChannel = true;
+			
+		} else {
+			return true;
 		}
 		if (!inAChannel){
 			player.sendMessage(ChatColor.RED + "You are not in a channel.");
 			return true;
 		}
-		
+		c.sendMe(player, action);
 //  		if (ChannelManager.getFocusedChannel(player).isLocal()){
 //		    	MessageHandler.sendIndependentLocalMessage(
 //					player.getLocation(), 

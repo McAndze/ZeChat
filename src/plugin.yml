@@ -1,6 +1,7 @@
 name: DanAndChat
 main: com.gmail.andreasmartinmoerch.danandchat.DanAndChat
-version: 0.1.3
+version: 0.1.7
+softdepend: [PermissionsBukkit]
 commands:
   ch:
     description: Used for changing channels.
@@ -45,12 +46,17 @@ permissions:
         children:
             danandchat.channel.ban: true
             danandchat.channel.unban: true
-            danandchat.channel.list: true
+            danandchat.channel.list.*: true
+    danandchat.channel.list.*:
+        description: 'Gives access to both channel lists.'
+        children:
+            danandchat.channel.list.in: true
+            danandchat.channel.list.available: true
     danandchat.basic:
         description: 'Everything you need for the regular chatter!'
         children:
             danandchat.leavechannel: true
-            danandchat.channel.list: true
+            danandchat.channel.list.*: true
             danandchat.cantalk: true
             danandchat.tell: true
             danandchat.me: true
@@ -59,8 +65,10 @@ permissions:
         description: 'Gives the ability to ban players. Will elaborate soon.'
     danandchat.channel.unban:
         description: 'Gives the ability to unban players. Will elaborate soon.'
-    danandchat.channel.list:
-        description: 'Lists available channels.'
+    danandchat.channel.list.in:
+        description: 'Lists channels that the player is currently in.'
+    danandchat.channel.list.available:
+        description: 'Lists channels available to the player.'
     danandchat.cantalk:
         description: 'Gives the ability to talk. Will be channel-specific soon.'
     danandchat.tell:
@@ -68,6 +76,6 @@ permissions:
     danandchat.me:
         description: 'Gives the ability to emote. Will be channel-specific soon. NOT WORKING ATM.'
     danandchat.leavechannel:
-        description: 'I do not think this will ever be needed, until I make it channel-specific. It just gives players access to leave channels for now.'
+        description: 'I do not think this node will ever be needed as an individual node, until I make it channel-specific. It just gives players access to leave channels for now.'
     danandchat.changechannel:
-        description: 'I do not think this will ever be needed either, until I make it channel-specific. It just gives players access to change channels for now.'
+        description: 'I do not think this node will ever be needed as an individual node either, until I make it channel-specific. It just gives players access to change channels for now.'

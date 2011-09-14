@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -14,7 +15,7 @@ import com.gmail.andreasmartinmoerch.danandchat.ChannelManager;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.MessageHandler;
 import com.gmail.andreasmartinmoerch.danandchat.Settings;
-import com.gmail.andreasmartinmoerch.danandchat.chmarkup.ChatColor;
+import com.gmail.andreasmartinmoerch.danandchat.chmarkup.ChatColour;
 
 /**
  * This class represents a Channel.
@@ -26,10 +27,11 @@ public class Channel {
 	private List<World> worlds;
 	private List<String> banned;
 	private List<String> muted;
+	private List<Player> focused;
 	private String name;
 	private String shortName;
 	private String shortCut;
-	private ChatColor color;
+	private ChatColour colour;
 	private List<String> allowedGroups;
 	private List<String> allowedPlayers;
 	private boolean ic;
@@ -38,12 +40,11 @@ public class Channel {
 	private ConfigurationNode chNode;;
 	private int localRange;
 	private String formatting = "[&CHANNEL.COLOUR&CHANNEL.NAME]&COLOUR.WHITE<&PLAYER.NAME>: &MESSAGE";
-	
-	private List<Player> players;
+	private boolean usesMe;
+	private boolean autoJoin;
+	private boolean autoFocus;
 
-	public void setPlayers(List<Player> players) {
-		this.players = players;
-	}
+	private List<Player> players;
 
 	public Channel(String name) {
 		this.name = name;
@@ -54,6 +55,7 @@ public class Channel {
 		this.allowedPlayers = new ArrayList<String>();
 		this.chNode = Settings.channelsConfig.getNode("channels" + "." + this.getName());
 		this.players = new ArrayList<Player>();
+		this.focused = new ArrayList<Player>();
 	}
 
 
@@ -64,11 +66,13 @@ public class Channel {
 		defWorlds.add(DanAndChat.server.getWorlds().get(0).getName());
 		
 		for (String s: chNode.getStringList("worlds", defWorlds)){
-			World world = DanAndChat.server.getWorld(s);
-			DanAndChat.log.info("Found world: " + world.getName());
-			if (world != null){
-				worlds.add(world);
-			}
+				World world = DanAndChat.server.getWorld(s);
+				if (world != null){
+					DanAndChat.log.info("Found world: " + world.getName());
+					worlds.add(world);
+				} else {
+					DanAndChat.log.warning("[DanAndChat] Found invalid world specified: " + s + " - In channel: " + this.getName() + ". It may not work.");
+				}
 		}
 		if (worlds.isEmpty()){
 			worlds.add(DanAndChat.server.getWorlds().get(0));
@@ -108,11 +112,16 @@ public class Channel {
 			this.setShortCut(shortcut);
 		}
 		
-		// Color
+		// Colour
 		try {
-			this.setColor(ChatColor.valueOf(Settings.channelsConfig.getString(this.getName() + ".color").toUpperCase()));
+			this.setColor(ChatColour.valueOf(Settings.channelsConfig.getString(this.getName() + ".colour").toUpperCase()));
 		} catch (Exception e){
-			this.setColor(ChatColor.WHITE);
+			try {
+				this.setColor(ChatColour.valueOf(Settings.channelsConfig.getString(this.getName() + ".color").toUpperCase()));
+			} catch (Exception ex){
+				
+			}
+			this.setColor(ChatColour.WHITE);
 		}
 		
 //		// Allowed groups
@@ -132,6 +141,9 @@ public class Channel {
 		// In Character
 		this.setIc(chNode.getBoolean("in-character-focused", false));
 		
+		// Uses /me?
+		this.setUsesMe(chNode.getBoolean("uses-me", true));
+		
 		// Hidden
 		this.setHidden(chNode.getBoolean("hidden", false));
 		
@@ -141,6 +153,12 @@ public class Channel {
 		if ((newformat = chNode.getString("formatting")) != null && !(newformat.isEmpty())){
 			this.setFormatting(newformat);
 		}
+		
+		// Autojoin?
+		this.setAutoJoin(chNode.getBoolean("auto-join", true));
+		
+		// Autofocus?
+		this.setAutoFocus(chNode.getBoolean("auto-focus", false));
 		
 	}
 	
@@ -175,6 +193,31 @@ public class Channel {
 	public void setChNode(ConfigurationNode chNode) {
 		this.chNode = chNode;
 	}
+	
+	public void sendMe(Player sender, String emote){
+		if (!this.usesMe){
+			return;
+		}
+		
+		if (ChannelManager.playerIsInChannel(sender, this)){
+			
+			if (this.getLocalRange() == -1){
+				for (Player p: DanAndChat.server.getOnlinePlayers()){
+					if (!(this.getBanned().contains(p.getName())) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld())){
+						p.sendMessage(ChatColor.GOLD + "* " + sender.getDisplayName() + " " + emote);
+					}
+				}
+			} else {
+				Location loc = sender.getLocation();
+				for (Player p: DanAndChat.server.getOnlinePlayers()){
+					if (!(this.getBanned().contains(p.getName())) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld()) && isInDistance(p, loc)){
+						p.sendMessage(ChatColor.GOLD + "* " + sender.getDisplayName() + " " + emote);
+					}
+				}
+			}
+
+		}
+	}
 
 	public void sendMessage(String message, Player sender){
 		boolean ic = false;
@@ -183,12 +226,11 @@ public class Channel {
 		if (ChannelManager.playerIsInChannel(sender, this)){
 			ArrayList<String> newMessage = MessageHandler.formatMessage(this, sender, message);
 			for (String s: newMessage){
-				log.info("[NaviaChat]" + s);
+				log.info("[DanAndChat]" + s);
 			}
-			
 			if (this.getLocalRange() == -1){
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
-					if (!(this.getBanned().contains(p)) && this.playerIsInChannel(p) && isInWorld(p)){
+					if (!(this.getBanned().contains(p)) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld())){
 						for (String s: newMessage){
 							p.sendMessage(s);
 						}
@@ -197,7 +239,7 @@ public class Channel {
 			} else {
 				Location loc = sender.getLocation();
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
-					if (!(this.getBanned().contains(p)) && this.playerIsInChannel(p) && isInWorld(p) && isInDistance(p, loc)){
+					if (!(this.getBanned().contains(p)) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld()) && isInDistance(p, loc)){
 						for (String s: newMessage){
 							p.sendMessage(s);
 						}
@@ -222,10 +264,10 @@ public class Channel {
 	public static void noOneIsNear(Player p){
 		Random test = new Random();
 		if (messages.isEmpty()){
-			p.sendMessage(ChatColor.GREEN + "No one can hear you.");
+			p.sendMessage(ChatColour.GREEN + "No one can hear you.");
 			return;
 		}
-		p.sendMessage(ChatColor.GREEN + messages.get(test.nextInt(messages.size())));
+		p.sendMessage(ChatColour.GREEN + messages.get(test.nextInt(messages.size())));
 	}
 	
 	public boolean isInDistance(Player receiver, Location sender){
@@ -239,6 +281,25 @@ public class Channel {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean isAutoJoin() {
+		return autoJoin;
+	}
+
+
+	public void setAutoJoin(boolean autoJoin) {
+		this.autoJoin = autoJoin;
+	}
+
+
+	public boolean isAutoFocus() {
+		return autoFocus;
+	}
+
+
+	public void setAutoFocus(boolean autoFocus) {
+		this.autoFocus = autoFocus;
 	}
 	
 	public List<String> getMuted() {
@@ -308,6 +369,18 @@ public class Channel {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public boolean usesMe() {
+		return usesMe;
+	}
+
+	public void setUsesMe(boolean usesMe) {
+		this.usesMe = usesMe;
+	}
+	
+	public void setPlayers(List<Player> players) {
+		this.players = players;
+	}
 
 	public String getShortCut() {
 		return shortCut;
@@ -317,12 +390,12 @@ public class Channel {
 		this.shortCut = shortCut;
 	}
 
-	public ChatColor getColor() {
-		return color;
+	public ChatColour getColor() {
+		return colour;
 	}
 
-	public void setColor(ChatColor color) {
-		this.color = color;
+	public void setColor(ChatColour color) {
+		this.colour = color;
 	}
 
 	public boolean isIc() {

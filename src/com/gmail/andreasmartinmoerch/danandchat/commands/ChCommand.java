@@ -1,5 +1,7 @@
 package com.gmail.andreasmartinmoerch.danandchat.commands;
 
+import java.util.logging.Logger;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,13 +22,11 @@ public class ChCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
-		String commandName = cmd.getName();
-		
 		if (!(sender instanceof Player)){
 			return true;
 		}
 		Player player = (Player)sender;
-		
+		player.sendMessage("Changed channel to " + ChannelManager.playerFocused.get(player).getShortCut() + " <---");
 		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.changeChannel)){
 			player.sendMessage(ChatColor.RED + "You haven't got the permission to do that.");
 			return true;
@@ -35,7 +35,6 @@ public class ChCommand implements CommandExecutor{
 		if (args.length != 1){
 			return false;
 		}
-		
 		return ChannelManager.playerChangeChannel(args[0], player);
 	}
 	

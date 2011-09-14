@@ -33,22 +33,22 @@ public class ChInterpreter {
 	}
 	
 	public static String colorKey(String format){
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.AQUA.toString(), ChatColor.AQUA.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.BLACK.toString(), ChatColor.BLACK.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.BLUE.toString(), ChatColor.BLUE.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.DARK_AQUA.toString(), ChatColor.DARK_AQUA.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.DARK_BLUE.toString(), ChatColor.DARK_BLUE.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.DARK_GRAY.toString(), ChatColor.DARK_GRAY.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.DARK_GREEN.toString(), ChatColor.DARK_GREEN.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.DARK_PURPLE.toString(), ChatColor.DARK_PURPLE.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.DARK_RED.toString(), ChatColor.DARK_RED.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.GOLD.toString(), ChatColor.GOLD.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.GRAY.toString(), ChatColor.GRAY.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.GREEN.toString(), ChatColor.GREEN.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.LIGHT_PURPLE.toString(), ChatColor.LIGHT_PURPLE.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.RED.toString(), ChatColor.RED.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.WHITE.toString(), ChatColor.WHITE.getStrPresentation());
-		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColor.YELLOW.toString(), ChatColor.YELLOW.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.AQUA.toString(), ChatColour.AQUA.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.BLACK.toString(), ChatColour.BLACK.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.BLUE.toString(), ChatColour.BLUE.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.DARK_AQUA.toString(), ChatColour.DARK_AQUA.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.DARK_BLUE.toString(), ChatColour.DARK_BLUE.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.DARK_GRAY.toString(), ChatColour.DARK_GRAY.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.DARK_GREEN.toString(), ChatColour.DARK_GREEN.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.DARK_PURPLE.toString(), ChatColour.DARK_PURPLE.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.DARK_RED.toString(), ChatColour.DARK_RED.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.GOLD.toString(), ChatColour.GOLD.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.GRAY.toString(), ChatColour.GRAY.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.GREEN.toString(), ChatColour.GREEN.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.LIGHT_PURPLE.toString(), ChatColour.LIGHT_PURPLE.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.RED.toString(), ChatColour.RED.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.WHITE.toString(), ChatColour.WHITE.getStrPresentation());
+		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.YELLOW.toString(), ChatColour.YELLOW.getStrPresentation());
 		return format;
 	}
 	

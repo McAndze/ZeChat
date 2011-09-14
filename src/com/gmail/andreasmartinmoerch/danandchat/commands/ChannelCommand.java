@@ -42,7 +42,7 @@ public class ChannelCommand implements CommandExecutor{
 		switch (ca){
 		case BAN: return banPlayer(player, args);
 		case UNBAN: return unbanPlayer(player, args);
-		case LIST: return listChannels(player);
+		case LIST: return listChannels(player, args);
 		default: return false;
 		}
 		
@@ -91,22 +91,49 @@ public class ChannelCommand implements CommandExecutor{
 	// END <CHANNEL UNBAN>
 	
 	// START <CHANNEL LIST>
-	public boolean listChannels(Player player){
-		
-		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.channel + PermissionChecker.list)){
-			player.sendMessage(ChatColor.RED + "Unknown command.");
-			return true;
-		}
-		
-		player.sendMessage(ChatColor.GREEN + "Syntax: " + ChatColor.GRAY + "<ChannelName> <Channel Shortcut> |");
-		String list = ChatColor.YELLOW + "Channels:";
-
-		for (Channel c: ChannelManager.channels){
-			if (!c.isHidden()){
-				list += " �" + c.getColor() + c.getName() + " " + c.getShortCut() + " |";
+	public boolean listChannels(Player player, String[] args){
+		if ((args.length == 2 && args[1].equalsIgnoreCase("available"))){
+			if (!this.plugin.perms.playerHasPermission(player,
+					PermissionChecker.prefix 
+					+ PermissionChecker.channel 
+					+ PermissionChecker.list 
+					+ PermissionChecker.available)){
+				player.sendMessage(ChatColor.DARK_PURPLE + "You do not have access to that command.");
+				return true;
 			}
+			player.sendMessage(ChatColor.GREEN + "===Channels available to you===");
+			player.sendMessage(ChatColor.GREEN + "Syntax: " + ChatColor.GRAY + "<ChannelName> <Channel Shortcut> |");
+			String list = ChatColor.YELLOW + "Channels: ";
+
+			for (Channel c: ChannelManager.channels){
+				if (!c.isHidden() && !c.getBanned().contains(player)){
+					list += ChatColor.GREEN + c.getName() + " " + c.getShortCut() + ChatColor.RED + " | ";
+				}
+			}
+			player.sendMessage(list);
+		} else if (args.length == 2 && args[1].equalsIgnoreCase("in") || args.length == 1){
+			if (!this.plugin.perms.playerHasPermission(player,
+					PermissionChecker.prefix 
+					+ PermissionChecker.channel 
+					+ PermissionChecker.list 
+					+ PermissionChecker.in)){
+				player.sendMessage(ChatColor.DARK_PURPLE + "You do not have access to that command.");
+				return true;
+			}
+			player.sendMessage(ChatColor.GREEN + "===Channels you're in===");
+			player.sendMessage(ChatColor.GREEN + "Syntax: " + ChatColor.GRAY + "<ChannelName> <Channel Shortcut> |");
+			String list = ChatColor.YELLOW + "Channels: ";
+			
+			for (Channel c: ChannelManager.channels){
+				if (c.playerIsInChannel(player)){
+					list += ChatColor.GREEN + c.getName() + " " + c.getShortCut() + ChatColor.RED + " | ";
+				}
+			}
+			player.sendMessage(list);
+		} else {
+			return false;
 		}
-		player.sendMessage(list);
+	
 		return true;
 	}
 	// END <CHANNEL LIST>

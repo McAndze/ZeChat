@@ -71,19 +71,15 @@ public class DanAndChat extends JavaPlugin{
 	public void onEnable(){
 		server = getServer();
 		
-		initializeStuff();
 		PluginDescriptionFile pdfFile = getDescription();
 		log.info(sfPlugin + " Version: " + pdfFile.getVersion() + " by Mcandze, is enabled.");	
 		
-		for (Player p: getServer().getOnlinePlayers()){
-			ChannelManager.initializePlayerChannels(p);
-		}
 		
 		PluginManager pm = getServer().getPluginManager();
 		
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.High, this);
-		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
+		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		
 		// Set commands!
 		this.getCommand(Commands.CH.toString()).setExecutor(new ChCommand(this));
@@ -91,6 +87,8 @@ public class DanAndChat extends JavaPlugin{
 		this.getCommand(Commands.LEAVECHANNEL.toString()).setExecutor(new LeavechannelCommand(this));
 		this.getCommand(Commands.ME.toString()).setExecutor(new MeCommand(this));
 		this.getCommand(Commands.T.toString()).setExecutor(new TCommand(this));
+		
+		initializeStuff();
 		
 		CallHome.load(this);
 	}
