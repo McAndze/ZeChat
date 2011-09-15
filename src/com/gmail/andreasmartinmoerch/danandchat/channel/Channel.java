@@ -209,7 +209,7 @@ public class Channel {
 			return;
 		}
 		
-		if (ChannelManager.playerIsInChannel(sender, this)){
+		if (this.playerIsInChannel(sender)){
 			
 			if (this.getLocalRange() == -1){
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
@@ -233,7 +233,7 @@ public class Channel {
 		boolean ic = false;
 		Logger log = DanAndChat.log;
 		
-		if (ChannelManager.playerIsInChannel(sender, this)){
+		if (this.playerIsInChannel(sender)){
 			ArrayList<String> newMessage = MessageHandler.formatMessage(this, sender, message);
 			for (String s: newMessage){
 				log.info("[DanAndChat]" + s);

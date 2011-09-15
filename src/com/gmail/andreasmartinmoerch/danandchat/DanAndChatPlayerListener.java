@@ -1,24 +1,13 @@
 package com.gmail.andreasmartinmoerch.danandchat;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
-import com.gmail.andreasmartinmoerch.danandchat.commands.ChCommand;
-import com.gmail.andreasmartinmoerch.danandchat.commands.ChannelCommand;
-import com.gmail.andreasmartinmoerch.danandchat.commands.Commands;
-import com.gmail.andreasmartinmoerch.danandchat.commands.LeavechannelCommand;
-import com.gmail.andreasmartinmoerch.danandchat.commands.MeCommand;
-import com.gmail.andreasmartinmoerch.danandchat.commands.TCommand;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 /**
  * The Player Listener.
@@ -44,7 +33,7 @@ public class DanAndChatPlayerListener extends PlayerListener{
 			initializePlayer(player);
 			player.sendMessage("hi");
 		}
-		Channel c = ChannelManager.playerFocused.get(player);
+		Channel c = this.plugin.channels.getFocusedChannel(player);
 		
 		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.canTalk)){;
 			event.getPlayer().sendMessage(ChatColor.RED + "You are not allowed to talk. At all. Or rather; chat.");
@@ -79,11 +68,11 @@ public class DanAndChatPlayerListener extends PlayerListener{
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		
-		for (Channel c: ChannelManager.channels){
+		for (Channel c: this.plugin.channels.channels){
 			c.removePlayer(player);
+			c.getFocused().remove(player);
 		}
 		plugin.perms.init.remove(player);
-		ChannelManager.playerFocused.remove(player);
 	}
 	
 	

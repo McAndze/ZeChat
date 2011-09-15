@@ -72,16 +72,14 @@ public class DanAndChat extends JavaPlugin{
 	 */
 	public void onEnable(){
 		server = getServer();
-		registerCommands();
-		
+		initializeStuff();
 		PluginManager pm = getServer().getPluginManager();
 		
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.High, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		
-		initializeStuff();
-		
+		registerCommands();
 		CallHome.load(this);
 		PluginDescriptionFile pdfFile = getDescription();
 		log.info(sfPlugin + " Version: " + pdfFile.getVersion() + " by Mcandze, is enabled.");	
@@ -95,7 +93,7 @@ public class DanAndChat extends JavaPlugin{
 		Settings.config = null;
 		channels = null;
 		Settings.channelsConfig = null;
-		ChannelManager.channels = null;
+//		ChannelManager.channels = null;
 		ExtensionManager.permissions = null;
 		this.perms = null;
 	}
@@ -110,8 +108,7 @@ public class DanAndChat extends JavaPlugin{
 	}
 	
 	public void registerCommands(){
-		this.getCommand(Commands.CH.toString()).setExecutor(new ChCommand(this));
-		this.getCommand(Commands.CH.toString()).setExecutor(new ChCommand(this));
+		this.getCommand(Commands.CH.toString()).setExecutor(new ChangeCommand(this));
 		this.getCommand(Commands.CHANNEL.toString()).setExecutor(new ChannelCommand(this));
 		this.getCommand(Commands.LEAVECHANNEL.toString()).setExecutor(new LeavechannelCommand(this));
 		this.getCommand(Commands.ME.toString()).setExecutor(new MeCommand(this));

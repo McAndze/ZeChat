@@ -1,7 +1,6 @@
 name: DanAndChat
 main: com.gmail.andreasmartinmoerch.danandchat.DanAndChat
 version: 0.1.7
-softdepend: [PermissionsBukkit]
 commands:
   ch:
     description: Used for changing channels.
@@ -61,6 +60,7 @@ permissions:
             danandchat.tell: true
             danandchat.me: true
             danandchat.changechannel: true
+        default: true
     danandchat.channel.ban:
         description: 'Gives the ability to ban players. Will elaborate soon.'
     danandchat.channel.unban:

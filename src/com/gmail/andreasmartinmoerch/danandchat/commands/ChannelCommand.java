@@ -6,7 +6,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.gmail.andreasmartinmoerch.danandchat.ChannelManager;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
@@ -58,8 +57,8 @@ public class ChannelCommand implements CommandExecutor{
 		
 		if (args.length == 2){
 			Player victim = DanAndChat.server.getPlayer(args[1]);
-			Channel c = ChannelManager.getFocusedChannel(player);
-//			c.banPlayer(victim);
+			Channel c = this.plugin.channels.getFocusedChannel(player);
+			c.getBanned().add(victim.getName());
 			if (victim.isOnline()){
 				victim.sendMessage(ChatColor.RED + "You have been banned from channel: §" + c.getColor() + c.getName());
 			}
@@ -78,8 +77,8 @@ public class ChannelCommand implements CommandExecutor{
 		}
 		if (args.length == 2){
 			Player victim = DanAndChat.server.getPlayer(args[1]);
-			Channel c = ChannelManager.getFocusedChannel(player);
-//			c.unbanPlayer(victim);
+			Channel c = this.plugin.channels.getFocusedChannel(victim);
+			c.getBanned().remove(victim.getName());
 			if (victim.isOnline()){
 				victim.sendMessage(ChatColor.GREEN + "You have been unbanned from channel: §" + c.getColor() + c.getName());
 			}
@@ -105,7 +104,7 @@ public class ChannelCommand implements CommandExecutor{
 			player.sendMessage(ChatColor.GREEN + "Syntax: " + ChatColor.GRAY + "<ChannelName> <Channel Shortcut> |");
 			String list = ChatColor.YELLOW + "Channels: ";
 
-			for (Channel c: ChannelManager.channels){
+			for (Channel c: this.plugin.channels.channels){
 				if (!c.isHidden() && !c.getBanned().contains(player)){
 					list += ChatColor.GREEN + c.getName() + " " + c.getShortCut() + ChatColor.RED + " | ";
 				}
@@ -124,7 +123,7 @@ public class ChannelCommand implements CommandExecutor{
 			player.sendMessage(ChatColor.GREEN + "Syntax: " + ChatColor.GRAY + "<ChannelName> <Channel Shortcut> |");
 			String list = ChatColor.YELLOW + "Channels: ";
 			
-			for (Channel c: ChannelManager.channels){
+			for (Channel c: this.plugin.channels.channels){
 				if (c.playerIsInChannel(player)){
 					list += ChatColor.GREEN + c.getName() + " " + c.getShortCut() + ChatColor.RED + " | ";
 				}

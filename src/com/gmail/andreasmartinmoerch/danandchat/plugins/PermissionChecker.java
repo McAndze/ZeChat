@@ -50,7 +50,7 @@ public class PermissionChecker {
 	
 	public void initializePlayer(Player p){
 		// REWRITING: 
-		List<Channel> channels = ChannelManager.channels;
+		List<Channel> channels = this.plugin.channels.channels;
  		for (Channel c: channels){
  			if (c.isAutoJoin()){
  				c.addPlayer(p);
@@ -60,7 +60,7 @@ public class PermissionChecker {
  				c.getFocused().add(p);;
  			}
  		}
- 		if (!ChannelManager.playerFocused.containsKey(p)){
+ 		if (!this.plugin.channels.playerHasFocusedChannel(p)){
  			Channel c = channels.get(0);
  			if (!c.getBanned().contains(p.getName()))
  			{

@@ -42,7 +42,7 @@ public class MeCommand implements CommandExecutor{
 		}
 		boolean inAChannel = false;
 		Channel c = null;
-		if ((c = ChannelManager.playerFocused.get(player)) != null){
+		if ((c = this.plugin.channels.getFocusedChannel(player)) != null){
 			inAChannel = true;
 			
 		} else {

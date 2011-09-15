@@ -11,9 +11,9 @@ import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 
 public class ChannelManager
 {
-  public static HashMap<Player, Channel> playerFocused;
-  public static List<Channel> channels;
-  private static HashMap<Player, Boolean> playerState;
+//  public static HashMap<Player, Channel> playerFocused;
+//  public static List<Channel> channels;
+//  private static HashMap<Player, Boolean> playerState;
 
 //  public static boolean playerChangeChannel(String channel, Player player)
 //  {

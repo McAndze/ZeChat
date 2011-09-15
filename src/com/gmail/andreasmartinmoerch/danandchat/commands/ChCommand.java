@@ -1,5 +1,7 @@
 package com.gmail.andreasmartinmoerch.danandchat.commands;
 
+import java.util.logging.Logger;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,6 +23,7 @@ public class ChCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
+		Logger.getLogger("Minecraft").info("HI - FROM DANANDCHAT");
 		if (!(sender instanceof Player)){
 			return true;
 		}
@@ -35,7 +38,7 @@ public class ChCommand implements CommandExecutor{
 		}
 		Channel c = null;
 		Channel oldFocus = null;
-		for (Channel ch: ChannelManager.channels){
+		for (Channel ch: this.plugin.channels.channels){
 			if (ch.getShortCut().equalsIgnoreCase(args[0])){
 				c = ch;
 			}
