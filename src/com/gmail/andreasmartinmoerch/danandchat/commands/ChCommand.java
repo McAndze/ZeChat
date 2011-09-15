@@ -1,7 +1,5 @@
 package com.gmail.andreasmartinmoerch.danandchat.commands;
 
-import java.util.logging.Logger;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.ChannelManager;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
+import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
 public class ChCommand implements CommandExecutor{
@@ -26,8 +25,7 @@ public class ChCommand implements CommandExecutor{
 			return true;
 		}
 		Player player = (Player)sender;
-		player.sendMessage("Changed channel to " + ChannelManager.playerFocused.get(player).getShortCut() + " <---");
-		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.changeChannel)){
+		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.changeChannel)){
 			player.sendMessage(ChatColor.RED + "You haven't got the permission to do that.");
 			return true;
 		}
@@ -35,7 +33,29 @@ public class ChCommand implements CommandExecutor{
 		if (args.length != 1){
 			return false;
 		}
-		return ChannelManager.playerChangeChannel(args[0], player);
+		Channel c = null;
+		Channel oldFocus = null;
+		for (Channel ch: ChannelManager.channels){
+			if (ch.getShortCut().equalsIgnoreCase(args[0])){
+				c = ch;
+			}
+			if (ch.getFocused().contains(player)){
+				oldFocus = ch;
+				oldFocus.getFocused().remove(player);
+			}
+		}
+		if (c == null){
+			player.sendMessage(ChatColor.RED + "Could not find channel with shortcut: " + args[0] + ".");
+			if (oldFocus != null){
+				oldFocus.getFocused().add(player);
+			} else {
+				player.sendMessage(ChatColor.RED + "Could not re-join previously focused channel.");				
+			}
+			return true;
+		}
+		c.addPlayer(player);
+		c.getFocused().add(player);
+		return true;
 	}
 	
 }

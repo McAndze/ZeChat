@@ -57,7 +57,7 @@ public class PermissionChecker {
  			}
  			if(c.isAutoFocus() && !c.getBanned().contains(p.getName())){
  				c.addPlayer(p);
- 				ChannelManager.playerFocused.put(p, c);
+ 				c.getFocused().add(p);;
  			}
  		}
  		if (!ChannelManager.playerFocused.containsKey(p)){
@@ -65,7 +65,7 @@ public class PermissionChecker {
  			if (!c.getBanned().contains(p.getName()))
  			{
  	 			c.addPlayer(p);
- 	 			ChannelManager.playerFocused.put(p, c);
+ 	 			c.getFocused();
  			}
  		}
  		init.add(p);

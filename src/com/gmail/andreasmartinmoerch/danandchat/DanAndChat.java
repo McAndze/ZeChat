@@ -61,6 +61,8 @@ public class DanAndChat extends JavaPlugin{
 	private final DanAndChatPlayerListener playerListener = new DanAndChatPlayerListener(this);
 	// Handles channels, and the players that are in them.
 	
+	public Channels channels;
+	
 	public Settings settings;
 	public static Server server;
 	public PermissionChecker perms;
@@ -70,10 +72,7 @@ public class DanAndChat extends JavaPlugin{
 	 */
 	public void onEnable(){
 		server = getServer();
-		
-		PluginDescriptionFile pdfFile = getDescription();
-		log.info(sfPlugin + " Version: " + pdfFile.getVersion() + " by Mcandze, is enabled.");	
-		
+		registerCommands();
 		
 		PluginManager pm = getServer().getPluginManager();
 		
@@ -81,16 +80,11 @@ public class DanAndChat extends JavaPlugin{
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		
-		// Set commands!
-		this.getCommand(Commands.CH.toString()).setExecutor(new ChCommand(this));
-		this.getCommand(Commands.CHANNEL.toString()).setExecutor(new ChannelCommand(this));
-		this.getCommand(Commands.LEAVECHANNEL.toString()).setExecutor(new LeavechannelCommand(this));
-		this.getCommand(Commands.ME.toString()).setExecutor(new MeCommand(this));
-		this.getCommand(Commands.T.toString()).setExecutor(new TCommand(this));
-		
 		initializeStuff();
 		
 		CallHome.load(this);
+		PluginDescriptionFile pdfFile = getDescription();
+		log.info(sfPlugin + " Version: " + pdfFile.getVersion() + " by Mcandze, is enabled.");	
 	}
 	
 
@@ -99,6 +93,7 @@ public class DanAndChat extends JavaPlugin{
 	 */
 	public void onDisable(){
 		Settings.config = null;
+		channels = null;
 		Settings.channelsConfig = null;
 		ChannelManager.channels = null;
 		ExtensionManager.permissions = null;
@@ -107,12 +102,20 @@ public class DanAndChat extends JavaPlugin{
 	
 	public void initializeStuff(){
 		Settings.initialize();
-		ChannelManager.initialize();
+//		ChannelManager.initialize();
+		channels = new Channels(this);
 		ExtensionManager.loadNaviaChar();
 		perms = new PermissionChecker(this);
 		ExtensionManager.loadPermissions();
 	}
 	
-
+	public void registerCommands(){
+		this.getCommand(Commands.CH.toString()).setExecutor(new ChCommand(this));
+		this.getCommand(Commands.CH.toString()).setExecutor(new ChCommand(this));
+		this.getCommand(Commands.CHANNEL.toString()).setExecutor(new ChannelCommand(this));
+		this.getCommand(Commands.LEAVECHANNEL.toString()).setExecutor(new LeavechannelCommand(this));
+		this.getCommand(Commands.ME.toString()).setExecutor(new MeCommand(this));
+		this.getCommand(Commands.T.toString()).setExecutor(new TCommand(this));
+	}
 
 }

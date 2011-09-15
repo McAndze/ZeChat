@@ -59,6 +59,16 @@ public class Channel {
 	}
 
 
+	public List<Player> getFocused() {
+		return focused;
+	}
+
+
+	public void setFocused(List<Player> focused) {
+		this.focused = focused;
+	}
+
+
 	public void loadFromConfig(){
 		// Worlds
 		List<World> worlds = new ArrayList<World>();

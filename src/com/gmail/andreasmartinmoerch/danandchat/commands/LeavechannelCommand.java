@@ -38,16 +38,22 @@ public class LeavechannelCommand implements CommandExecutor{
 		}
 		// End validation.
 		Channel c;
-		if ((c=ChannelManager.getChannelWithShortcut(args[0])) == null){
-			player.sendMessage(ChatColor.RED + "Channel does not exist.");
+		if ((c=plugin.channels.getChannelWithShortcut(args[0])) == null){
+			player.sendMessage(ChatColor.RED + "Channel does not exist, with shortcut: " + args[0] + ".");
 			return true;
 		}
 		
-		if (!ChannelManager.playerIsInChannel(player, c)){
+		if (!c.playerIsInChannel(player)){
 			player.sendMessage(ChatColor.RED + "You are not in that channel!");
 		}
 		
 		c.removePlayer(player);
+		c.getFocused().remove(player);
+		for (Channel ch: this.plugin.channels.channels){
+			if (ch.isAutoFocus() && ch.playerIsInChannel(player)){
+				ch.getFocused().add(player);
+			}
+		}
 		return true;
 	}
 	
