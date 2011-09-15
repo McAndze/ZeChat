@@ -4,15 +4,14 @@ import java.util.logging.Logger;
 
 import org.blockface.bukkitstats.CallHome;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.gmail.andreasmartinmoerch.danandchat.commands.ChCommand;
 import com.gmail.andreasmartinmoerch.danandchat.commands.ChannelCommand;
+import com.gmail.andreasmartinmoerch.danandchat.commands.CommandManager;
 import com.gmail.andreasmartinmoerch.danandchat.commands.Commands;
 import com.gmail.andreasmartinmoerch.danandchat.commands.LeavechannelCommand;
 import com.gmail.andreasmartinmoerch.danandchat.commands.MeCommand;
@@ -67,6 +66,8 @@ public class DanAndChat extends JavaPlugin{
 	public static Server server;
 	public PermissionChecker perms;
 	
+	public CommandManager commandManager;
+	
 	/**
 	 * Default method
 	 */
@@ -96,6 +97,7 @@ public class DanAndChat extends JavaPlugin{
 //		ChannelManager.channels = null;
 		ExtensionManager.permissions = null;
 		this.perms = null;
+		this.commandManager = null;
 	}
 	
 	public void initializeStuff(){
@@ -105,6 +107,8 @@ public class DanAndChat extends JavaPlugin{
 		ExtensionManager.loadNaviaChar();
 		perms = new PermissionChecker(this);
 		ExtensionManager.loadPermissions();
+		this.commandManager = new CommandManager(this);
+		commandManager.initialize();
 	}
 	
 	public void registerCommands(){
