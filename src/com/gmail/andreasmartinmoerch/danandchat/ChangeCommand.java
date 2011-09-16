@@ -22,7 +22,6 @@ public class ChangeCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
-		Logger.getLogger("Minecraft").info("HI - FROM DANANDCHAT");
 		if (!(sender instanceof Player)){
 			return true;
 		}

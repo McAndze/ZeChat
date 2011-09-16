@@ -1,6 +1,7 @@
 package com.gmail.andreasmartinmoerch.danandchat.commands;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import org.bukkit.command.PluginCommand;
 import org.bukkit.util.config.Configuration;
@@ -11,13 +12,19 @@ import com.gmail.andreasmartinmoerch.danandchat.Settings;
 
 public class CommandManager {
 	private DanAndChat plugin;
+	private Configuration conf;
 	
 	public CommandManager(DanAndChat plugin){
+		Logger.getLogger("Minecraft").info("[DanAndChat] Hi!!!");
 		this.plugin = plugin;
+		initialize();
 	}
 	
 	public void initialize(){
-		Configuration conf = Settings.config;
+		conf = Settings.config;
+		if (!conf.getBoolean("plugin" +"."+ "initialized", false)){
+			createConf();
+		}
 		// Initialize the "ch" command.
 		if (conf.getBoolean("commands" +"."+ Commands.CH.toString().toLowerCase() +"."+ "enabled" , true)){
 			chCommand();
@@ -35,6 +42,20 @@ public class CommandManager {
 			tCommand();
 		}
 	}
+	
+	public void createConf(){
+		conf.setProperty("plugin" + "." + "initialized", true);
+		conf.setProperty("commands" +"."+ Commands.CH.toString().toLowerCase() +"."+ "enabled" , true);
+		conf.setProperty("commands" +"."+ Commands.CHANNEL.toString().toLowerCase() +"."+ "enabled" , true);
+		conf.setProperty("commands" +"."+ Commands.LEAVECHANNEL.toString().toLowerCase() +"."+ "enabled" , true);
+		conf.setProperty("commands" +"."+ Commands.ME.toString().toLowerCase() +"."+ "enabled" , true);
+		conf.setProperty("commands" +"."+ Commands.T.toString().toLowerCase() +"."+ "enabled" , true);
+		conf.save();
+		conf.load();
+	}
+	/**
+	 * I know the setAliases don't work this way. They will be changed soon.
+	 */
 	
 	public void chCommand(){
 		Configuration conf = Settings.config;

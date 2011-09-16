@@ -10,12 +10,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.gmail.andreasmartinmoerch.danandchat.commands.ChannelCommand;
 import com.gmail.andreasmartinmoerch.danandchat.commands.CommandManager;
-import com.gmail.andreasmartinmoerch.danandchat.commands.Commands;
-import com.gmail.andreasmartinmoerch.danandchat.commands.LeavechannelCommand;
-import com.gmail.andreasmartinmoerch.danandchat.commands.MeCommand;
-import com.gmail.andreasmartinmoerch.danandchat.commands.TCommand;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
@@ -80,10 +75,9 @@ public class DanAndChat extends JavaPlugin{
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		
-		registerCommands();
 		CallHome.load(this);
 		PluginDescriptionFile pdfFile = getDescription();
-		log.info(sfPlugin + " Version: " + pdfFile.getVersion() + " by Mcandze, is enabled.");	
+		log.info(sfPlugin + " Version: " + pdfFile.getVersion() + " by McAndze AKA Huliheaden, is enabled.");	
 	}
 	
 
@@ -108,15 +102,5 @@ public class DanAndChat extends JavaPlugin{
 		perms = new PermissionChecker(this);
 		ExtensionManager.loadPermissions();
 		this.commandManager = new CommandManager(this);
-		commandManager.initialize();
 	}
-	
-	public void registerCommands(){
-		this.getCommand(Commands.CH.toString()).setExecutor(new ChangeCommand(this));
-		this.getCommand(Commands.CHANNEL.toString()).setExecutor(new ChannelCommand(this));
-		this.getCommand(Commands.LEAVECHANNEL.toString()).setExecutor(new LeavechannelCommand(this));
-		this.getCommand(Commands.ME.toString()).setExecutor(new MeCommand(this));
-		this.getCommand(Commands.T.toString()).setExecutor(new TCommand(this));
-	}
-
 }
