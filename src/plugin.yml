@@ -4,6 +4,7 @@ version: 0.1.8-dev
 commands:
   ch:
     description: Used for changing channels.
+    aliases: [cha, change]
     usage: |
         Invalid use of /<command>. Examples:
            /<command> g - Joins, and changes your focused channel, to the shortcutted channel 'g'.

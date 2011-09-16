@@ -57,7 +57,7 @@ public class CommandManager {
 	 * I know the setAliases don't work this way. They will be changed soon.
 	 */
 	
-	public void chCommand(){
+	public void chCommand(){							
 		Configuration conf = Settings.config;
 		PluginCommand cmd = plugin.getCommand(Commands.CH.toString());
 		cmd.setAliases(conf.getStringList("commands" +"."+ Commands.CH.toString().toLowerCase() +"."+ "aliases:", new ArrayList<String>()));
