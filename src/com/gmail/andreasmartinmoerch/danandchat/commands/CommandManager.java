@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.util.config.Configuration;
 
-import com.gmail.andreasmartinmoerch.danandchat.ChangeCommand;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.Settings;
 
