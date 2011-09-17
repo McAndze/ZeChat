@@ -1,6 +1,7 @@
 name: DanAndChat
 main: com.gmail.andreasmartinmoerch.danandchat.DanAndChat
-version: 0.1.8-dev
+version: 0.1.9
+softdepend: [ColorMe]
 commands:
   ch:
     description: Used for changing channels.
@@ -10,6 +11,7 @@ commands:
            /<command> g - Joins, and changes your focused channel, to the shortcutted channel 'g'.
   leavechannel:
     description: Used for leaving channels
+    aliases: [lch]
     usage: |
         Invalid use of /<command>. Examples:
            /<command> g = Leaves the shortcutted channel 'g'
@@ -22,6 +24,7 @@ commands:
   t:
     description: Used for messaging.
     usage: /t <Player> <Message>
+    aliases: [pm, message]
   me:
     description: Used for making emotes.
     usage: /me <Action>

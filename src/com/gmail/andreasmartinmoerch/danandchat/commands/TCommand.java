@@ -35,12 +35,12 @@ public class TCommand implements CommandExecutor{
 		}
 		
 		Player p;
-		if ((p = DanAndChat.server.getPlayer(args[0])) != null){
+		if ((p = DanAndChat.server.getPlayer(args[0])) == null){
 			player.sendMessage(ChatColor.RED + "Player does not exist.");
 			return true;
 		}
 		
-		if (!(p = DanAndChat.server.getPlayer(args[0])).isOnline()){
+		if (!p.isOnline()){
 			player.sendMessage(ChatColor.RED + "That player isn't online.");
 			return true;
 		}

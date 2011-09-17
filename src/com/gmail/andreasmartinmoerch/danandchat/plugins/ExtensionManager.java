@@ -19,7 +19,7 @@ public class ExtensionManager {
 	public static void loadColorMe(){
 		Plugin plugin;
 		if ((plugin = DanAndChat.server.getPluginManager().getPlugin("ColorMe")) != null){
-			color = (ColorMe)color;
+			color = (ColorMe)plugin;
 		}
 	}
 	

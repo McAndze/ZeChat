@@ -4,5 +4,6 @@ public enum PlayerArgs {
 	PREFIX,
 	GROUP,
 	NAME,
-	COLOUR
+	COLOUR,
+	DISPLAYNAME
 }
