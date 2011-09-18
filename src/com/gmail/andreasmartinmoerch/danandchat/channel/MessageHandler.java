@@ -1,4 +1,4 @@
-package com.gmail.andreasmartinmoerch.danandchat;
+package com.gmail.andreasmartinmoerch.danandchat.channel;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,7 +10,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
+import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
+import com.gmail.andreasmartinmoerch.danandchat.Settings;
 import com.gmail.andreasmartinmoerch.danandchat.chmarkup.ChInterpreter;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
 /**

@@ -1,21 +1,21 @@
-package com.gmail.andreasmartinmoerch.danandchat;
+package com.gmail.andreasmartinmoerch.danandchat.channel;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Vector;
 import java.util.logging.Logger;
 
-import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
+import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
+
 
 public class ChannelLogger {
 	public static Logger log = Logger.getLogger("Minecraft");
 	private File chLog;
 	private Channel channel;
-	private List<String> toWrite;
+	private Vector<String> toWrite;
 	
 	public ChannelLogger(Channel channel){
 		this.channel = channel;
@@ -28,7 +28,7 @@ public class ChannelLogger {
 			}
 			
 		}
-		this.toWrite = new ArrayList<String>();
+		this.toWrite = new Vector<String>();
 	}
 	
 	public void logMsg(String s, String type){

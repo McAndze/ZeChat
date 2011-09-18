@@ -20,34 +20,37 @@ public class ChannelCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
-		String commandName = cmd.getName();
+		
+		
+		if (args.length < 1){
+			return false;
+		}
+		
+		ChannelArgs ca;
+		try {
+			ca = ChannelArgs.valueOf(args[0].toUpperCase());
+		} catch (Exception e){
+			return false;
+		}
 		
 		if (!(sender instanceof Player)){
 			if (args.length < 2){
 				return false;
 			}
-			if (args[0].equalsIgnoreCase("write")){
+			if (ca.equals(ChannelArgs.WRITE)){
 				writeFile(args);
+			} else {
+				sender.sendMessage("Unknown arg: " + ca.toString());
 			}
 			return true;
 		} else {
 			Player player = (Player)sender;
 			
-			if (args.length < 1){
-				return false;
-			}
-			
-			ChannelArgs ca;
-			try {
-				ca = ChannelArgs.valueOf(args[0].toUpperCase());
-			} catch (Exception e){
-				return false;
-			}
-			
 			switch (ca){
 			case BAN: return banPlayer(player, args);
 			case UNBAN: return unbanPlayer(player, args);
 			case LIST: return listChannels(player, args);
+			case WRITE: return writeFile(args);
 			default: return false;
 			}
 		}		

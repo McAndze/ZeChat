@@ -11,9 +11,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.ConfigurationNode;
 
-import com.gmail.andreasmartinmoerch.danandchat.ChannelLogger;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
-import com.gmail.andreasmartinmoerch.danandchat.MessageHandler;
 import com.gmail.andreasmartinmoerch.danandchat.Settings;
 import com.gmail.andreasmartinmoerch.danandchat.chmarkup.ChatColour;
 

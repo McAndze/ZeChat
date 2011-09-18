@@ -1,10 +1,11 @@
-package com.gmail.andreasmartinmoerch.danandchat;
+package com.gmail.andreasmartinmoerch.danandchat.channel;
 
 import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
+import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
+import com.gmail.andreasmartinmoerch.danandchat.Settings;
 
 public class Channels {
 	private DanAndChat plugin;
