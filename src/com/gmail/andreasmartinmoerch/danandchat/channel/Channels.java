@@ -14,7 +14,7 @@ public class Channels {
 	
 	public Channels(DanAndChat plugin){
 		this.plugin = plugin;
-	    channels = Settings.getChannels();
+	    channels = this.plugin.settings.getChannels();
 
 	    DanAndChat.log.info("[DanAndChat] Loaded " + channels.size() + " channels.");
 	}

@@ -28,7 +28,7 @@ public class LeavechannelCommand implements CommandExecutor{
 		}
 		Player player = (Player)sender;
 		// Start validation
-		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.leaveChannel)){
+		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.leaveChannel)){
 			player.sendMessage(ChatColor.RED + "You don't have permission to do that.");
 			return false;
 		}

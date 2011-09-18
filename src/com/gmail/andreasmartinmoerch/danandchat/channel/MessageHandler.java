@@ -20,88 +20,16 @@ import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
  *
  */
 public class MessageHandler {
+	private DanAndChat plugin;
+	public MessageHandler(DanAndChat plugin){
+		this.plugin = plugin;
+	}
 	
 	private static final int LINEBREAK = 60;
 	
-	public static ArrayList<String> formatMessage(Channel c, Player sender, String originalMessage){
+	public ArrayList<String> formatMessage(Channel c, Player sender, String originalMessage){
 		
-		return breakMessage(ChInterpreter.interpretString(c.getFormatting(), c, sender, originalMessage));
-	}
-	
-	public void noOneIsNear(Player p){
-		ArrayList<String> messages = new ArrayList<String>();
-		try {
-			File file = new File(Settings.mainDirectory + File.separator + "messages.txt");
-			if (!file.exists()){
-				file.createNewFile();
-			}
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			String sCurLine;
-			while ((sCurLine = br.readLine()) != null){
-				messages.add(sCurLine);
-			}
-			br.close();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-		Random test = new Random();
-		if (!messages.isEmpty()){
-			p.sendMessage(ChatColor.GREEN + messages.get(test.nextInt(messages.size())));
-		} else {
-			p.sendMessage(ChatColor.GREEN + "No one is in range.");
-		}
-		
-	}
-	
-//	public static String encodeGlobalMessage(Player player, String message, Channel channel){
-//		// ['Color''ChannelName']<'PlayerColor''PlayerName'> 'Message'
-//		String prefix;
-//		String finalString;
-//		String playerColor = "f";
-////		prefix = ExtensionManager.permissions.getGroupPrefix(ExtensionManager.permissions.getGroup(player.getName()));
-//		// TODO: Playercolor, from Characterizationing plugin.
-//		
-//		finalString =
-//			"§" + channel.getColor()
-//			+ "[" + channel.getName() + "]"
-//			+ "§" + playerColor + "<" + "§" + prefix + player.getDisplayName() + "§f> "
-//			+ message;
-//		
-//		// Final String
-//		
-//		return finalString;
-//	}
-	
-	public static boolean playerCanTalk(Player player, DanAndChat instance){
-		if (ExtensionManager.permissions.has(player, "naviachat.chat.cantalk")){
-			return true;
-		} else {
-			player.sendMessage(ChatColor.RED + "You are muted by an administrator.");
-			return false;
-		}
-	}
-	
-	public static String getIcEmote(Player sender, String action){
-		String name = "";
-		
-		if (ExtensionManager.isUsingNaviaChar){
-//			if (CharHandler.playerHasACharacter(sender)){
-//				name = CharHandler.getCharacterByPlayerName(sender.getName()).getCharacterName().split(" ")[0];
-//			} else {
-//				name = sender.getDisplayName();
-//			}
-		} else {
-			name = sender.getDisplayName();
-		}
-		
-		String message = ChatColor.AQUA
-			+ "* "
-			+ name
-			+ " "
-			+ ChatColor.WHITE
-			+ action;
-		
-		return message;
+		return breakMessage((new ChInterpreter(this.plugin)).interpretString(c.getFormatting(), c, sender, originalMessage));
 	}
 	
 	// TODO: Fix this. It's BUGGED AS HELL

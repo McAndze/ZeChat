@@ -20,7 +20,13 @@ public class Settings {
 		public static final String channelsDir = "plugins" + File.separator + "DanAndChat";
 		public static final String channelsFile = "channels.yml";
 	
-	public static void initialize(){
+	private DanAndChat plugin;
+	
+	public Settings(DanAndChat plugin){
+		this.plugin = plugin;
+	}
+		
+	public void initialize(){
 		config = new Configuration(new File(configDir, configFile));
 		config.load();
 		
@@ -28,7 +34,7 @@ public class Settings {
 		channelsConfig.load();
 	}
 	
-	public static List<Channel> getChannels(){
+	public List<Channel> getChannels(){
 		List<Channel> channels = new ArrayList<Channel>();
 		ConfigurationNode glNode;
 		if ((glNode = channelsConfig.getNode("channels")) == null){
@@ -36,7 +42,7 @@ public class Settings {
 		}
 		
 		for (String s: glNode.getKeys()){
-			Channel c = new Channel(s);
+			Channel c = new Channel(s, this.plugin);
 			c.loadFromConfig();
 			channels.add(c);
 		}
@@ -51,7 +57,7 @@ public class Settings {
 		return channels;
 	}
 	
-	public static void refresh(Configuration c){
+	public void refresh(Configuration c){
 		c.save();
 		c.load();
 	}

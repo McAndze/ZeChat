@@ -43,13 +43,12 @@ public class PermissionChecker {
 		
 	public PermissionChecker(DanAndChat plugin){
 		this.plugin = plugin;
-		for (Player p: plugin.server.getOnlinePlayers()){
+		for (Player p: plugin.getServer().getOnlinePlayers()){
 			initializePlayer(p);
 		}
 	}
 	
 	public void initializePlayer(Player p){
-		// REWRITING: 
 		List<Channel> channels = this.plugin.channels.channels;
  		for (Channel c: channels){
  			if (c.isAutoJoin()){
@@ -69,80 +68,6 @@ public class PermissionChecker {
  			}
  		}
  		init.add(p);
-		
-//		boolean success = false;
-//		List<Channel> channels = ChannelManager.channels;
-//		for (Channel c:  channels){
-//			if (p.hasPermission(prefix + changeChannel + "." + c.getShortCut())){
-//				c.addPlayer(p);
-//			}
-//			if (p.hasPermission(prefix + focusedChannel + "." + c.getShortCut())){
-//				if (!c.playerIsInChannel(p)){
-//					c.addPlayer(p);
-//				}
-//				ChannelManager.playerFocused.put(p, c);
-//			}
-//		}
-//		if (ChannelManager.playerFocused.containsKey(p)){
-//			success = true;
-//		}
-//		if (!success){
-//			p.sendMessage(ChatColor.RED + "Chat initialization failed. Please speak to the server admin about this issue.  You may not be able to talk, or have to join a channel manually. Try \"/channel list available\" to see what channels you can join.");
-//			this.init.remove(p);
-//			return;
-//		}
-//		this.init.add(p);
-//	    ArrayList<String> perms = new ArrayList<String>();
-//	    perms.add("danandchat.defaultchannel.g");
-//	    String focusedPerm = "danandchat.focusedchannel.g";
-//	    for (PermissionAttachmentInfo perm : p.getEffectivePermissions())
-//	    {
-//	      String s;
-//	      if ((s = perm.getPermission()).startsWith("danandchat.defaultchannel")) {
-//	        perms.add(s);
-//	      }
-//	      if (perm.getPermission().startsWith("danandchat.focusedchannel")) {
-//	        focusedPerm = perm.getPermission();
-//	      }
-//	    }
-//	    for (String s : perms) {
-//	      StringTokenizer strTok = new StringTokenizer(s, ".");
-//	      for (int i = 0; strTok.hasMoreElements() || i == 2; i++){
-//	    	  strTok.nextToken();
-//	      }
-//	      for (Channel c : ChannelManager.channels) {
-//	    	 if (strTok.hasMoreTokens()){
-//		        if (strTok.nextToken().equalsIgnoreCase(c.getShortCut())) {
-//		          c.addPlayer(p);
-//		        }
-//	    	 }
-//	      p.sendMessage(focusedPerm);
-//		  StringTokenizer strTok2 = new StringTokenizer(focusedPerm, ".");
-//		  for (int i = 0; strTok2.hasMoreElements() || i == 2; i++){
-//			  p.sendMessage(strTok.nextToken());
-//		  }
-//	      if (strTok2.hasMoreTokens()){
-//		      if (c.getShortCut().equalsIgnoreCase(strTok2.nextToken()))
-//		          ChannelManager.playerFocused.put(p, c);
-//	      }
-//	      }
-//	    }
-	}
-	
-	//TODO: Still trying to think of a better way of doing this.
-	public boolean playerHasPermission(Player player, String perm){
-		
-		for (Permission p: plugin.getDescription().getPermissions()){
-			if (p.getName().equalsIgnoreCase(perm)){
-				if (player.hasPermission(p)){
-					return true;
-				} else {
-					break;
-				}
-			}
-		}
-		
-		return false;
 	}
 	
 	public static String getGroup(Player player){

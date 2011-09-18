@@ -26,7 +26,7 @@ public class TCommand implements CommandExecutor{
 		}
 		Player player = (Player)sender;
 		
-		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.tell)){
+		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.tell)){
 			player.sendMessage(ChatColor.RED + "You can not use that command.");
 			return true;
 		}

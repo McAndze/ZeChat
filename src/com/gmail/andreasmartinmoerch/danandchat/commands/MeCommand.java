@@ -21,14 +21,13 @@ public class MeCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
-		String commandName = cmd.getName();
 		
 		if (!(sender instanceof Player)){
 			return true;
 		}
 		Player player = (Player)sender;
 		
-		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.me)){
+		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.me)){
 			player.sendMessage(ChatColor.RED + "You can not use that command.");
 			return true;
 		}
@@ -53,14 +52,6 @@ public class MeCommand implements CommandExecutor{
 			return true;
 		}
 		c.sendMe(player, action);
-//  		if (ChannelManager.getFocusedChannel(player).isLocal()){
-//		    	MessageHandler.sendIndependentLocalMessage(
-//					player.getLocation(), 
-//					MessageHandler.getIcEmote(player, action), 
-//					ChannelManager.getFocusedChannel(player).getRange());
-//		} else {
-//			NaviaChat.server.broadcastMessage(ChatColor.AQUA + "* " + player.getDisplayName() + " " + action);
-//		}
 		return true;
 	}
 	

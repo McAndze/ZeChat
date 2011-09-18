@@ -22,6 +22,7 @@ import com.gmail.andreasmartinmoerch.danandchat.chmarkup.ChatColour;
  */
 public class Channel {
 	
+	private DanAndChat plugin;
 	private List<World> worlds;
 	private List<String> banned;
 	private List<String> muted;
@@ -45,8 +46,9 @@ public class Channel {
 
 	private List<Player> players;
 
-	public Channel(String name) {
+	public Channel(String name, DanAndChat plugin) {
 		this.name = name;
+		this.plugin = plugin;
 		
 		this.worlds = new ArrayList<World>();
 		this.banned = new ArrayList<String>();
@@ -245,10 +247,7 @@ public class Channel {
 		
 		if (this.playerIsInChannel(sender)){
 			this.chLogger.logMsg(sender.getName() + ": " + message, "MSG");
-			ArrayList<String> newMessage = MessageHandler.formatMessage(this, sender, message);
-			for (String s: newMessage){
-				log.info("[DanAndChat]" + s);
-			}
+			ArrayList<String> newMessage = this.plugin.msgHandler.formatMessage(this, sender, message);
 			if (this.getLocalRange() == -1){
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
 					if (!(this.getBanned().contains(p)) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld())){
@@ -282,6 +281,10 @@ public class Channel {
 	
 	public static ArrayList<String> messages = new ArrayList<String>();
 	
+	public void banPlayer(String s){
+		this.banned.add(s);
+		this.chNode.setProperty("banned-players", banned);
+	}
 	public static void noOneIsNear(Player p){
 		Random test = new Random();
 		if (messages.isEmpty()){

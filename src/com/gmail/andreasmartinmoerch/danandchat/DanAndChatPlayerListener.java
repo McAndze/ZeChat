@@ -31,11 +31,10 @@ public class DanAndChatPlayerListener extends PlayerListener{
 			plugin.
 			perms.
 			initializePlayer(player);
-			player.sendMessage("hi");
 		}
 		Channel c = this.plugin.channels.getFocusedChannel(player);
 		
-		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.canTalk)){;
+		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.canTalk)){;
 			event.getPlayer().sendMessage(ChatColor.RED + "You are not allowed to talk. At all. Or rather; chat.");
 			return;
 		}

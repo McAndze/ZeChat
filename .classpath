@@ -2,8 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/andreas/OMGTREES/plugins/extres/PermissionsEx-1.13-package/Permissions.jar"/>
-	<classpathentry kind="lib" path="/home/andreas/OMGTREES/plugins/extres/ColorMe.jar"/>
-	<classpathentry kind="lib" path="/home/andreas/OMGTREES/plugins/extres/BukkitDev/bukkit.jar"/>
+	<classpathentry kind="lib" path="/home/andreas/Skrivebord/McAndze - Tech/OMGTREES/plugins/extres/BukkitDev/bukkit.jar"/>
+	<classpathentry kind="lib" path="/home/andreas/Skrivebord/McAndze - Tech/OMGTREES/plugins/extres/ColorMe.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

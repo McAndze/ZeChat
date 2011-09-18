@@ -58,7 +58,7 @@ public class ChannelCommand implements CommandExecutor{
 	
 	// <CHANNEL BAN>
 	public boolean banPlayer(Player player, String[] args){
-		if (!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.channel + PermissionChecker.ban)){
+		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.channel + PermissionChecker.ban)){
 			player.sendMessage(ChatColor.RED + "Unknown command.");
 			return true;
 		}
@@ -66,8 +66,8 @@ public class ChannelCommand implements CommandExecutor{
 		if (args.length == 2){
 			Player victim = DanAndChat.server.getPlayer(args[1]);
 			Channel c = this.plugin.channels.getFocusedChannel(player);
-			c.getBanned().add(victim.getName());
-			if (victim.isOnline()){
+			c.banPlayer(args[1]);
+			if (victim != null && victim.isOnline()){
 				victim.sendMessage(ChatColor.RED + "You have been banned from channel: §" + c.getColor() + c.getName());
 			}
 			return true;
@@ -79,7 +79,7 @@ public class ChannelCommand implements CommandExecutor{
 	
 	// START <CHANNEL UNBAN>
 	public boolean unbanPlayer(Player player, String[] args){
-		if(!this.plugin.perms.playerHasPermission(player, PermissionChecker.prefix + PermissionChecker.channel + PermissionChecker.unban)){
+		if(!player.hasPermission(PermissionChecker.prefix + PermissionChecker.channel + PermissionChecker.unban)){
 			player.sendMessage(ChatColor.RED + "Unknown command.");
 			return true;
 		}
@@ -100,7 +100,7 @@ public class ChannelCommand implements CommandExecutor{
 	// START <CHANNEL LIST>
 	public boolean listChannels(Player player, String[] args){
 		if ((args.length == 2 && args[1].equalsIgnoreCase("available"))){
-			if (!this.plugin.perms.playerHasPermission(player,
+			if (!player.hasPermission(
 					PermissionChecker.prefix 
 					+ PermissionChecker.channel 
 					+ PermissionChecker.list 
@@ -119,7 +119,7 @@ public class ChannelCommand implements CommandExecutor{
 			}
 			player.sendMessage(list);
 		} else if (args.length == 2 && args[1].equalsIgnoreCase("in") || args.length == 1){
-			if (!this.plugin.perms.playerHasPermission(player,
+			if (!player.hasPermission(
 					PermissionChecker.prefix 
 					+ PermissionChecker.channel 
 					+ PermissionChecker.list 

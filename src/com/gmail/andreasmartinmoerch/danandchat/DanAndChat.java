@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channels;
+import com.gmail.andreasmartinmoerch.danandchat.channel.MessageHandler;
 import com.gmail.andreasmartinmoerch.danandchat.commands.CommandManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
@@ -62,8 +63,9 @@ public class DanAndChat extends JavaPlugin{
 	public Settings settings;
 	public static Server server;
 	public PermissionChecker perms;
-	
+	public ExtensionManager exManager;
 	public CommandManager commandManager;
+	public MessageHandler msgHandler;
 	
 	/**
 	 * Default method
@@ -90,22 +92,23 @@ public class DanAndChat extends JavaPlugin{
 		for (Channel c: this.channels.channels){
 			c.getChLogger().write();
 		}
-		Settings.config = null;
+		msgHandler = null;
+		settings = null;
 		channels = null;
 		Settings.channelsConfig = null;
 //		ChannelManager.channels = null;
-		ExtensionManager.permissions = null;
 		this.perms = null;
 		this.commandManager = null;
 	}
 	
 	public void initializeStuff(){
-		Settings.initialize();
+		this.msgHandler = new MessageHandler(this);
+		settings = new Settings(this);
+		settings.initialize();
+		exManager = new ExtensionManager(this);
 //		ChannelManager.initialize();
 		channels = new Channels(this);
-		ExtensionManager.loadNaviaChar();
 		perms = new PermissionChecker(this);
-		ExtensionManager.loadPermissions();
 		this.commandManager = new CommandManager(this);
 	}
 }
