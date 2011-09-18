@@ -10,6 +10,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.commands.CommandManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
@@ -85,6 +86,9 @@ public class DanAndChat extends JavaPlugin{
 	 * Default method
 	 */
 	public void onDisable(){
+		for (Channel c: this.channels.channels){
+			c.getChLogger().write();
+		}
 		Settings.config = null;
 		channels = null;
 		Settings.channelsConfig = null;

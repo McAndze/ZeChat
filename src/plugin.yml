@@ -1,6 +1,6 @@
 name: DanAndChat
 main: com.gmail.andreasmartinmoerch.danandchat.DanAndChat
-version: 0.1.9
+version: 0.1.9-dev
 softdepend: [ColorMe]
 commands:
   ch:
@@ -83,3 +83,6 @@ permissions:
         description: 'I do not think this node will ever be needed as an individual node, until I make it channel-specific. It just gives players access to leave channels for now.'
     danandchat.changechannel:
         description: 'I do not think this node will ever be needed as an individual node either, until I make it channel-specific. It just gives players access to change channels for now.'
+    danandchat.channel.write.*:
+        description: 'Gives permission to print the log of all channels.'
+        default: op

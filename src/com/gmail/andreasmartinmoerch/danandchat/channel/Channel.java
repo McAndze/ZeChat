@@ -11,7 +11,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.ConfigurationNode;
 
-import com.gmail.andreasmartinmoerch.danandchat.ChannelManager;
+import com.gmail.andreasmartinmoerch.danandchat.ChannelLogger;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.MessageHandler;
 import com.gmail.andreasmartinmoerch.danandchat.Settings;
@@ -43,6 +43,7 @@ public class Channel {
 	private boolean usesMe;
 	private boolean autoJoin;
 	private boolean autoFocus;
+	private ChannelLogger chLogger;
 
 	private List<Player> players;
 
@@ -70,6 +71,7 @@ public class Channel {
 
 
 	public void loadFromConfig(){
+		this.chLogger = new ChannelLogger(this);
 		// Worlds
 		List<World> worlds = new ArrayList<World>();
 		List<String> defWorlds = new ArrayList<String>();
@@ -172,6 +174,16 @@ public class Channel {
 		
 	}
 	
+
+	public ChannelLogger getChLogger() {
+		return chLogger;
+	}
+
+
+	public void setChLogger(ChannelLogger chLogger) {
+		this.chLogger = chLogger;
+	}
+	
 	public String getFormatting() {
 		return formatting;
 	}
@@ -210,7 +222,7 @@ public class Channel {
 		}
 		
 		if (this.playerIsInChannel(sender)){
-			
+			this.chLogger.logMsg("* "+sender.getName() + emote, "EMOTE");
 			if (this.getLocalRange() == -1){
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
 					if (!(this.getBanned().contains(p.getName())) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld())){
@@ -234,6 +246,7 @@ public class Channel {
 		Logger log = DanAndChat.log;
 		
 		if (this.playerIsInChannel(sender)){
+			this.chLogger.logMsg(sender.getName() + ": " + message, "MSG");
 			ArrayList<String> newMessage = MessageHandler.formatMessage(this, sender, message);
 			for (String s: newMessage){
 				log.info("[DanAndChat]" + s);

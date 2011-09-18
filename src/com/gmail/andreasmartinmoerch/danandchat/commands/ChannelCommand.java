@@ -23,29 +23,34 @@ public class ChannelCommand implements CommandExecutor{
 		String commandName = cmd.getName();
 		
 		if (!(sender instanceof Player)){
+			if (args.length < 2){
+				return false;
+			}
+			if (args[0].equalsIgnoreCase("write")){
+				writeFile(args);
+			}
 			return true;
-		}
-		Player player = (Player)sender;
-		
-		if (args.length < 1){
-			return false;
-		}
-		
-		ChannelArgs ca;
-		try {
-			ca = ChannelArgs.valueOf(args[0].toUpperCase());
-		} catch (Exception e){
-			return false;
-		}
-		
-		switch (ca){
-		case BAN: return banPlayer(player, args);
-		case UNBAN: return unbanPlayer(player, args);
-		case LIST: return listChannels(player, args);
-		default: return false;
-		}
-		
-		
+		} else {
+			Player player = (Player)sender;
+			
+			if (args.length < 1){
+				return false;
+			}
+			
+			ChannelArgs ca;
+			try {
+				ca = ChannelArgs.valueOf(args[0].toUpperCase());
+			} catch (Exception e){
+				return false;
+			}
+			
+			switch (ca){
+			case BAN: return banPlayer(player, args);
+			case UNBAN: return unbanPlayer(player, args);
+			case LIST: return listChannels(player, args);
+			default: return false;
+			}
+		}		
 	}
 	
 	// <CHANNEL BAN>
@@ -136,5 +141,23 @@ public class ChannelCommand implements CommandExecutor{
 		return true;
 	}
 	// END <CHANNEL LIST>
+	
+	public boolean writeFile(String[] args){
+		if (args[1].equals("all")){
+			for (Channel c: this.plugin.channels.channels){
+				c.getChLogger().write();
+			}
+			return true;
+		} else {
+			for (Channel c: this.plugin.channels.channels){
+				if (args[1].equalsIgnoreCase(c.getName())){
+					c.getChLogger().write();
+					return true;
+				}
+			}
+		}
+		this.plugin.log.warning("Could not find channel: " + args[1] + ".");
+		return true;
+	}
 	
 }
