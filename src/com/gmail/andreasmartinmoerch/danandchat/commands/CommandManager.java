@@ -14,7 +14,6 @@ public class CommandManager {
 	private Configuration conf;
 	
 	public CommandManager(DanAndChat plugin){
-		Logger.getLogger("Minecraft").info("[DanAndChat] Hi!!!");
 		this.plugin = plugin;
 		initialize();
 	}

@@ -1,17 +1,14 @@
 package com.gmail.andreasmartinmoerch.danandchat.plugins;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.StringTokenizer;
 
-import org.bukkit.ChatColor;
+import me.samkio.RPGWorld.RPGWorldPlugin;
+
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.Plugin;
 
-import com.gmail.andreasmartinmoerch.danandchat.ChannelManager;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
-import com.gmail.andreasmartinmoerch.danandchat.DanAndChatPlayerListener;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 
 public class PermissionChecker {
@@ -22,6 +19,7 @@ public class PermissionChecker {
 	public List<Player> init = new ArrayList<Player>();
 	
 	public static final String all = ".*";
+
 	
 	public static final String prefix = "danandchat";
 		public static final String channel = ".channel";
@@ -64,7 +62,7 @@ public class PermissionChecker {
  			if (!c.getBanned().contains(p.getName()))
  			{
  	 			c.addPlayer(p);
- 	 			c.getFocused();
+ 	 			c.getFocused().add(p);
  			}
  		}
  		init.add(p);

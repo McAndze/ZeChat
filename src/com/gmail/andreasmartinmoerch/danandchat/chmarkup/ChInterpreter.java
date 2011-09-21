@@ -1,5 +1,9 @@
 package com.gmail.andreasmartinmoerch.danandchat.chmarkup;
 
+import me.samkio.RPGWorld.RPGWorldPlugin;
+import me.samkio.RPGWorld.ranks.RankManager;
+
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
@@ -62,9 +66,37 @@ public class ChInterpreter {
 		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.NAME.toString(), player.getName());
 		if (this.plugin.exManager.isUsingColorMe()){
 			format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.COLOUR.toString(), this.plugin.exManager.color.getColor(player.getName()));
+		} else {
+			format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.COLOUR.toString(), "");
 		}
+		if(this.plugin.exManager.usesRPGWorld()){
+			if (RPGWorldPlugin.useRanksAsPrefix()){
+				format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.RPGPREFIX, RankManager.getPlayerRank(player.getName()));
+			} else {
+				format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.RPGPREFIX, "");
+			}
+		} else {
+			format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.RPGPREFIX, "");
+		}
+		
+		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.HEALTH, healthToString(player)); 
 //		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.PREFIX.toString() + "\\\\}", PermissionChecker.getPrefix(player));
 		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.DISPLAYNAME.toString(), player.getDisplayName());
 		return format;
+	}
+	
+	private String healthToString(Player player){
+		int health = 0;
+		String s = "";
+		
+		for (health = 0; health < 20; health++){
+			if (health > player.getHealth()){
+				s += ChatColor.RED + "|";
+			} else {
+				s += ChatColor.GREEN + "|";
+			}
+		}
+		s += ChatColor.WHITE;
+		return s;
 	}
 }

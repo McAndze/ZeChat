@@ -80,10 +80,9 @@ public class Channel {
 		for (String s: chNode.getStringList("worlds", defWorlds)){
 				World world = DanAndChat.server.getWorld(s);
 				if (world != null){
-					DanAndChat.log.info("Found world: " + world.getName());
 					worlds.add(world);
 				} else {
-					DanAndChat.log.warning("[DanAndChat] Found invalid world specified: " + s + " - In channel: " + this.getName() + ". It may not work.");
+					DanAndChat.log.warning("[DanAndChat] Found invalid world specified: " + s + " - In channel: " + this.getName() + ". It may not work in this world.");
 				}
 		}
 		if (worlds.isEmpty()){

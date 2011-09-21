@@ -50,12 +50,13 @@ import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
  *
  */
 public class DanAndChat extends JavaPlugin{
+	
 	public static final Logger log = Logger.getLogger("Minecraft");
 	
 	public static final String sPlugin = "DanAndChat";
 	public static final String sfPlugin = "[" + sPlugin + "]";
 	// Player Listener
-	private final DanAndChatPlayerListener playerListener = new DanAndChatPlayerListener(this);
+	public final DanAndChatPlayerListener playerListener = new DanAndChatPlayerListener(this);
 	// Handles channels, and the players that are in them.
 	
 	public Channels channels;
@@ -76,12 +77,13 @@ public class DanAndChat extends JavaPlugin{
 		PluginManager pm = getServer().getPluginManager();
 		
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.High, this);
-		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
+		if (!this.exManager.usesRPGWorld()){
+			pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
+		}
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 		
 		CallHome.load(this);
 		PluginDescriptionFile pdfFile = getDescription();
-		log.info(sfPlugin + " Version: " + pdfFile.getVersion() + " by McAndze AKA Huliheaden, is enabled.");	
 	}
 	
 
@@ -106,6 +108,7 @@ public class DanAndChat extends JavaPlugin{
 		settings = new Settings(this);
 		settings.initialize();
 		exManager = new ExtensionManager(this);
+		exManager.initRPGWorld();
 //		ChannelManager.initialize();
 		channels = new Channels(this);
 		perms = new PermissionChecker(this);

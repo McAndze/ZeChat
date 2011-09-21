@@ -24,18 +24,21 @@ public class DanAndChatPlayerListener extends PlayerListener{
 
 
 	public void onPlayerChat(PlayerChatEvent event){
+		if (event.isCancelled()){
+			return;
+		}
+		onChat(event);
+		
+	}
+	
+	public void onChat(PlayerChatEvent event){
 		Player player = event.getPlayer();
 		String message;
 		event.setCancelled(true);
-		if (!plugin.perms.init.contains(player)){
-			plugin.
-			perms.
-			initializePlayer(player);
-		}
 		Channel c = this.plugin.channels.getFocusedChannel(player);
 		
 		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.canTalk)){;
-			event.getPlayer().sendMessage(ChatColor.RED + "You are not allowed to talk. At all. Or rather; chat.");
+			event.getPlayer().sendMessage(ChatColor.RED + "You are not allowed to chat. At all. You can chat with me though, but I'll say the same pretty much.. all the time.");
 			return;
 		}
 		message = event.getMessage();
@@ -54,13 +57,17 @@ public class DanAndChatPlayerListener extends PlayerListener{
 		} else {
 			event.getPlayer().sendMessage(ChatColor.RED + "You're in an invalid channel. Try your luck with \"/ch g\" or \"/ch l\"");
 		}
-		
 	}
-	
 	
 
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		if (!plugin.perms.init.contains(player)){
+			plugin.
+			perms.
+			initializePlayer(player);
+		}
 	}
 
 	@Override

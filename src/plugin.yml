@@ -1,6 +1,6 @@
 name: DanAndChat
 main: com.gmail.andreasmartinmoerch.danandchat.DanAndChat
-version: 0.1.11
+version: 0.1.13
 softdepend: [ColorMe, PermissionsBukkit]
 commands:
   ch:

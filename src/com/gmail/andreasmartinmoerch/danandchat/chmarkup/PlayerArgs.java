@@ -5,5 +5,7 @@ public enum PlayerArgs {
 	GROUP,
 	NAME,
 	COLOUR,
-	DISPLAYNAME
+	DISPLAYNAME,
+	HEALTH,
+	RPGPREFIX
 }

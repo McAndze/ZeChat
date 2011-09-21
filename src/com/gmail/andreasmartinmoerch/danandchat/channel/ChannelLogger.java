@@ -19,12 +19,15 @@ public class ChannelLogger {
 	
 	public ChannelLogger(Channel channel){
 		this.channel = channel;
+		File dirs = new File("plugins" + File.separator + "DanAndChat" + File.separator + "logs");
+		dirs.mkdirs();
 		this.chLog = new File("plugins" + File.separator + "DanAndChat" + File.separator + "logs", channel.getName() + ".log");
 		if (!chLog.exists()){
 			try {
 				chLog.createNewFile();
 			} catch (IOException e){
 				log.warning("[DanAndChat] Could not make file " + chLog.getName() + "!");
+				e.printStackTrace();
 			}
 			
 		}
