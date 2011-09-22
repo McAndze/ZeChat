@@ -54,7 +54,7 @@ public class PermissionChecker {
  			}
  			if(c.isAutoFocus() && !c.getBanned().contains(p.getName())){
  				c.addPlayer(p);
- 				c.getFocused().add(p);;
+ 				c.getFocused().add(p);
  			}
  		}
  		if (!this.plugin.channels.playerHasFocusedChannel(p)){

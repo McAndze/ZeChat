@@ -108,7 +108,7 @@ public class DanAndChat extends JavaPlugin{
 		settings = new Settings(this);
 		settings.initialize();
 		exManager = new ExtensionManager(this);
-		exManager.initRPGWorld();
+		exManager.initialize();
 //		ChannelManager.initialize();
 		channels = new Channels(this);
 		perms = new PermissionChecker(this);

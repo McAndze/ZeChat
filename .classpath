@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="/home/andreas/Skrivebord/McAndze - Tech/OMGTREES/plugins/extres/ColorMe.jar"/>
 	<classpathentry kind="lib" path="/home/andreas/Skrivebord/McAndze - Tech/OMGTREES/testserver/plugins/Factions.jar"/>
 	<classpathentry kind="lib" path="/home/andreas/Skrivebord/McAndze - Tech/OMGTREES/plugins/jars/RPGWorld/RPGWorld.jar"/>
+	<classpathentry kind="lib" path="/home/andreas/Skrivebord/McAndze - Tech/OMGTREES/plugins/extres/PermissionsBukkit-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

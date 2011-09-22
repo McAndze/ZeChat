@@ -1,14 +1,18 @@
 package com.gmail.andreasmartinmoerch.danandchat.chmarkup;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import me.samkio.RPGWorld.RPGWorldPlugin;
 import me.samkio.RPGWorld.ranks.RankManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
-import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
 public class ChInterpreter {
@@ -34,6 +38,8 @@ public class ChInterpreter {
 	}
 	
 	public String channelKey(String format, final Channel channel){
+		// TODO: Add checks, so we don't have to call more than necessary.
+		
 		format = format.replaceAll("&" + ChKey.CHANNEL.toString() + "." + ChannelArgs.COLOUR.toString(), channel.getColor().getStrPresentation());
 		format = format.replaceAll("&" + ChKey.CHANNEL.toString() + "." + ChannelArgs.NAME.toString(), channel.getName());
 		format = format.replaceAll("&" + ChKey.CHANNEL.toString() + "." + ChannelArgs.SHORTCUT.toString(), channel.getShortCut());
@@ -42,6 +48,7 @@ public class ChInterpreter {
 	}
 	
 	public String colorKey(String format){
+		// TODO: Add checks, so we don't have to call more than necessary.
 		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.AQUA.toString(), ChatColour.AQUA.getStrPresentation());
 		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.BLACK.toString(), ChatColour.BLACK.getStrPresentation());
 		format = format.replaceAll("&" + ChKey.COLOUR.toString() + "." + ChatColour.BLUE.toString(), ChatColour.BLUE.getStrPresentation());
@@ -62,10 +69,11 @@ public class ChInterpreter {
 	}
 	
 	public String playerKey(String format, Player player){
+		// TODO: Add checks, so we don't have to call more than necessary.
 		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.GROUP.toString(), PermissionChecker.getGroup(player));
 		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.NAME.toString(), player.getName());
 		if (this.plugin.exManager.isUsingColorMe()){
-			format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.COLOUR.toString(), this.plugin.exManager.color.getColor(player.getName()));
+			format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.COLOUR.toString(), this.plugin.exManager.color.findColor(this.plugin.exManager.color.getColor(player.getName())));
 		} else {
 			format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.COLOUR.toString(), "");
 		}
@@ -82,7 +90,23 @@ public class ChInterpreter {
 		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.HEALTH, healthToString(player)); 
 //		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.PREFIX.toString() + "\\\\}", PermissionChecker.getPrefix(player));
 		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.DISPLAYNAME.toString(), player.getDisplayName());
+		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.PREFIX.toString(), getPrefix(player));
 		return format;
+	}
+	
+	private String getPrefix(Player player){
+		String prefix = "";
+		if (this.plugin.exManager.usesPermissionsBukkit()){
+			ArrayList<PermissionAttachmentInfo> e = new ArrayList<PermissionAttachmentInfo>(player.getEffectivePermissions());
+			for (PermissionAttachmentInfo permInfo: e){
+				String s = permInfo.getPermission();
+				if (s.toLowerCase().startsWith("danandchat.prefix")){
+					prefix = s.substring(18);
+					return prefix;
+				}
+			}
+		}
+		return prefix;
 	}
 	
 	private String healthToString(Player player){

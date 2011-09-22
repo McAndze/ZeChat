@@ -1,21 +1,37 @@
 package com.gmail.andreasmartinmoerch.danandchat.plugins;
 
-import me.samkio.RPGWorld.RPGWorldPlugin;
-
 import org.bukkit.plugin.Plugin;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
-import com.gmail.andreasmartinmoerch.danandchat.DanAndChatRPG;
+import com.platymuus.bukkit.permissions.PermissionsPlugin;
 import com.sparkedia.valrix.ColorMe.ColorMe;
 
 public class ExtensionManager {
-	public RPGWorldPlugin rpgplugin = null;
+	boolean usesrpg = false;
 	public ColorMe color;
 	public boolean isUsingNaviaChar = false;
 	private DanAndChat plugin;
+	public PermissionsPlugin permissionsBukkit;
 	
 	public ExtensionManager(DanAndChat plugin){
 		this.plugin = plugin;
+	}
+	
+	public void initialize(){
+		loadColorMe();
+		initRPGWorld();
+		loadPermissions();
+	}
+	
+	public boolean usesPermissionsBukkit(){
+		return permissionsBukkit != null;
+	}
+	
+	public void loadPermissions(){
+		Plugin plugin;
+		if ((plugin = DanAndChat.server.getPluginManager().getPlugin("PermissionsBukkit")) != null){
+			this.permissionsBukkit = (PermissionsPlugin)plugin;
+		}
 	}
 	
 	public void loadColorMe(){
@@ -36,16 +52,15 @@ public class ExtensionManager {
 	}
 	
 	public boolean usesRPGWorld(){
-		return this.rpgplugin != null;
+		return usesrpg;
 	}
 	
 	public void initRPGWorld(){
-		Plugin testPlugin;
-		if ((testPlugin = this.plugin.getServer().getPluginManager().getPlugin("RPGWorld")) != null){
-			rpgplugin = (RPGWorldPlugin)testPlugin;
-			this.plugin.log.info("[DanAndChat] Found RPGWorld! Hooking in!");
-		}
-		if (this.usesRPGWorld()){
-			this.rpgplugin.chatPlugins.hookPlugin(new DanAndChatRPG(plugin));
-		}
-	}}
+//		Plugin testPlugin = null;
+//		if ((testPlugin = this.plugin.getServer().getPluginManager().getPlugin("RPGWorld")) != null){
+//			RPGWorldPlugin rpg = (RPGWorldPlugin)testPlugin;
+//			this.plugin.log.info("[DanAndChat] Found RPGWorld! Hooking in!");
+//			rpg.chatPlugins.hookPlugin(new DanAndChatRPG(plugin));
+//		}
+	}
+}

@@ -7,5 +7,5 @@ public enum PlayerArgs {
 	COLOUR,
 	DISPLAYNAME,
 	HEALTH,
-	RPGPREFIX
+	RPGPREFIX,
 }

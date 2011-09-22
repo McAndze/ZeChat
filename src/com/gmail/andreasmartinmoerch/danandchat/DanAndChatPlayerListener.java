@@ -38,7 +38,7 @@ public class DanAndChatPlayerListener extends PlayerListener{
 		Channel c = this.plugin.channels.getFocusedChannel(player);
 		
 		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.canTalk)){;
-			event.getPlayer().sendMessage(ChatColor.RED + "You are not allowed to chat. At all. You can chat with me though, but I'll say the same pretty much.. all the time.");
+			event.getPlayer().sendMessage(ChatColor.RED + "You are not allowed to chat. At all. You can chat with me though, but I'm quite shy.");
 			return;
 		}
 		message = event.getMessage();
@@ -64,9 +64,7 @@ public class DanAndChatPlayerListener extends PlayerListener{
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		if (!plugin.perms.init.contains(player)){
-			plugin.
-			perms.
-			initializePlayer(player);
+			plugin.perms.initializePlayer(player);
 		}
 	}
 
