@@ -27,9 +27,9 @@ public class MessageHandler {
 	
 	private static final int LINEBREAK = 60;
 	
-	public ArrayList<String> formatMessage(Channel c, Player sender, String originalMessage){
+	public ArrayList<String> formatMessage(String format, Channel c, Player sender, String originalMessage){
 		
-		return breakMessage((new ChInterpreter(this.plugin)).interpretString(c.getFormatting(), c, sender, originalMessage));
+		return breakMessage((new ChInterpreter(this.plugin)).interpretString(format, c, sender, originalMessage));
 	}
 	
 	// TODO: Fix this. It's BUGGED AS HELL

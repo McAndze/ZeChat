@@ -1,6 +1,6 @@
 name: DanAndChat
 main: com.gmail.andreasmartinmoerch.danandchat.DanAndChat
-version: 0.1.11
+version: 0.2-dev(Burst)
 softdepend: [ColorMe, PermissionsBukkit]
 commands:
   ch:
@@ -28,6 +28,10 @@ commands:
   me:
     description: Used for making emotes.
     usage: /me <Action>
+    aliases: [emote, em]
+  prefix:
+    description: Used for prefixing.
+    usage: /prefix <prefix|prefixgroup> <player|group> <prefix>
 permissions:
     danandchat.*:
         description: 'Gives access to everything DanAndChat related.'
@@ -44,17 +48,25 @@ permissions:
         children:
             danandchat.channel.ban: true
             danandchat.channel.unban: true
+            danandchat.channel.mute: true
+            danandchat.channel.unmute: true
+        default: false
     danandchat.channel.*:
         description: 'Gives access to everything in the /channel command.'
         children:
             danandchat.channel.ban: true
             danandchat.channel.unban: true
             danandchat.channel.list.*: true
+            danandchat.channel.mute: true
+            danandchat.channel.unmute: true
+            danandchat.channel.reload: true
+        default: false
     danandchat.channel.list.*:
         description: 'Gives access to both channel lists.'
         children:
             danandchat.channel.list.in: true
             danandchat.channel.list.available: true
+        default: false
     danandchat.basic:
         description: 'Everything you need for the regular chatter!'
         children:
@@ -67,22 +79,43 @@ permissions:
         default: true
     danandchat.channel.ban:
         description: 'Gives the ability to ban players. Will elaborate soon.'
+        default: false
     danandchat.channel.unban:
         description: 'Gives the ability to unban players. Will elaborate soon.'
+        default: false
     danandchat.channel.list.in:
         description: 'Lists channels that the player is currently in.'
+        default: false
     danandchat.channel.list.available:
         description: 'Lists channels available to the player.'
+        default: false
     danandchat.cantalk:
         description: 'Gives the ability to talk. Will be channel-specific soon.'
+        default: false
     danandchat.tell:
         description: 'Gives the ability to /t if enabled. NOT WORKING ATM.'
+        default: false
     danandchat.me:
         description: 'Gives the ability to emote. Will be channel-specific soon. NOT WORKING ATM.'
+        default: false
     danandchat.leavechannel:
         description: 'I do not think this node will ever be needed as an individual node, until I make it channel-specific. It just gives players access to leave channels for now.'
+        default: false
     danandchat.changechannel:
         description: 'I do not think this node will ever be needed as an individual node either, until I make it channel-specific. It just gives players access to change channels for now.'
+        default: false
     danandchat.channel.write.*:
         description: 'Gives permission to print the log of all channels.'
+        default: op
+    danandchat.prefix:
+        description: 'Gives permission to set prefixes.'
+        default: op
+    danandchat.channel.mute:
+        description: 'Gives permission to mute..'
+        default: op
+    danandchat.channel.unmute:
+        description: 'Gives permission to unmute.'
+        default: op
+    danandchat.channel.reload:
+        description: 'Gives permission to relaod configs.'
         default: op

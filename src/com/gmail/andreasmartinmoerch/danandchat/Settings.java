@@ -69,7 +69,6 @@ public class Settings {
 		if (!config.getBoolean("plugin" +"."+ "initialized", false)){
 			initializeConf();
 		}
-		this.config.setProperty("plugin" + "." + "initialized", true);
 	}
 	
 	public void initializeConf(){
@@ -78,8 +77,6 @@ public class Settings {
 		config.setProperty("commands" +"."+ Commands.LEAVECHANNEL.toString().toLowerCase() +"."+ "enabled" , true);
 		config.setProperty("commands" +"."+ Commands.ME.toString().toLowerCase() +"."+ "enabled" , true);
 		config.setProperty("commands" +"."+ Commands.T.toString().toLowerCase() +"."+ "enabled" , true);
-		config.save();
-		config.load();
 		
 		List<String> worlds = new ArrayList<String>();
 		for (World w: this.plugin.server.getWorlds()){
@@ -101,7 +98,10 @@ public class Settings {
 		this.channelsConfig.setProperty("channels.local.auto-focus", false);
 		this.channelsConfig.setProperty("channels.local.formatting", "&PLAYER.DISPLAYNAME: &MESSAGE");
 		this.channelsConfig.save();
-		this.channelsConfig.load();;
+		this.channelsConfig.load();
+		this.config.setProperty("plugin" + "." + "initialized", true);
+		config.save();
+		config.load();
 	}
 	
 	public List<Channel> getChannels(){

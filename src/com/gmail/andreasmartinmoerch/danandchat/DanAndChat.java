@@ -106,8 +106,8 @@ public class DanAndChat extends JavaPlugin{
 	
 	public void initializeStuff(){
 	    this.msgHandler = new MessageHandler(this);
-	    this.commandManager = new CommandManager(this);
 	    this.settings = new Settings(this);
+	    this.commandManager = new CommandManager(this);
 	    this.settings.initialize();
 	    this.exManager = new ExtensionManager(this);
 	    this.exManager.initialize();

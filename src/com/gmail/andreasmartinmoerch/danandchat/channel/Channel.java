@@ -37,11 +37,13 @@ public class Channel {
 	private boolean bPrivate;
 	private ConfigurationNode chNode;;
 	private int localRange;
-	private String formatting = "[&CHANNEL.COLOUR&CHANNEL.NAME]&COLOUR.WHITE<&PLAYER.NAME>: &MESSAGE";
+	private String formatting;
+	private String meFormatting;
 	private boolean usesMe;
 	private boolean autoJoin;
 	private boolean autoFocus;
 	private ChannelLogger chLogger;
+	private String password;
 
 	private List<Player> players;
 
@@ -79,7 +81,6 @@ public class Channel {
 		for (String s: chNode.getStringList("worlds", defWorlds)){
 				World world = DanAndChat.server.getWorld(s);
 				if (world != null){
-					DanAndChat.log.info("Found world: " + world.getName());
 					worlds.add(world);
 				} else {
 					DanAndChat.log.warning("[DanAndChat] Found invalid world specified: " + s + " - In channel: " + this.getName() + ". It may not work.");
@@ -163,6 +164,23 @@ public class Channel {
 		String newformat;
 		if ((newformat = chNode.getString("formatting")) != null && !(newformat.isEmpty())){
 			this.setFormatting(newformat);
+		} else if ((newformat = this.plugin.settings.channelsConfig.getString("globals.formatting", null)) == null){
+			this.plugin.settings.channelsConfig.setProperty("globals.formatting", "[&CHANNEL.COLOUR&CHANNEL.NAME]&COLOUR.WHITE<&PLAYER.NAME>: &MESSAGE");
+			newformat = this.plugin.settings.channelsConfig.getString("globals.formatting", null);
+			this.setFormatting(newformat);
+		}
+		String newMeFormat;
+		if ((newMeFormat = chNode.getString("me-formatting")) != null && !(newMeFormat.isEmpty())){
+			this.setMeFormatting(newMeFormat);
+		} else {
+			if((newMeFormat = this.plugin.settings.channelsConfig.getString("globals.me-formatting")) == null){
+				
+			}
+			if ((newMeFormat = this.plugin.settings.channelsConfig.getString("globals.me-formatting", null)) == null){
+		}
+			this.plugin.settings.channelsConfig.setProperty("globals.me-formatting", "* &PLAYER.DISPLAYNAME &MESSAGE");
+			newMeFormat = this.plugin.settings.channelsConfig.getString("globals.me-formatting", null);
+			this.setMeFormatting(newMeFormat);
 		}
 		
 		// Autojoin?
@@ -171,8 +189,34 @@ public class Channel {
 		// Autofocus?
 		this.setAutoFocus(chNode.getBoolean("auto-focus", false));
 		
+		this.setPassword(chNode.getString("password", null));
 	}
 	
+	
+
+	public String getMeFormatting() {
+		return meFormatting;
+	}
+
+
+	public void setMeFormatting(String meFormatting) {
+		this.meFormatting = meFormatting;
+	}
+	
+	public boolean usesPassword(){
+		return password != null;
+	}
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 
 	public ChannelLogger getChLogger() {
 		return chLogger;
@@ -222,17 +266,23 @@ public class Channel {
 		
 		if (this.playerIsInChannel(sender)){
 			this.chLogger.logMsg("* "+sender.getName() + emote, "EMOTE");
+			ArrayList<String> newEmote = this.plugin.msgHandler.formatMessage(this.meFormatting, this, sender, emote);
 			if (this.getLocalRange() == -1){
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
 					if (!(this.getBanned().contains(p.getName())) && !(this.getMuted().contains(p.getName())) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld())){
-						p.sendMessage(ChatColor.GOLD + "* " + sender.getDisplayName() + " " + emote);
+						for (String s: newEmote){
+							p.sendMessage(s);
+						}
+						
 					}
 				}
 			} else {
 				Location loc = sender.getLocation();
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
 					if (!(this.getBanned().contains(p.getName())) && !(this.getMuted().contains(p.getName())) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld()) && isInDistance(p, loc)){
-						p.sendMessage(ChatColor.GOLD + "* " + sender.getDisplayName() + " " + emote);
+						for (String s: newEmote){
+							p.sendMessage(s);
+						}
 					}
 				}
 			}
@@ -245,10 +295,10 @@ public class Channel {
 		
 		if (this.playerIsInChannel(sender)){
 			this.chLogger.logMsg(sender.getName() + ": " + message, "MSG");
-			ArrayList<String> newMessage = this.plugin.msgHandler.formatMessage(this, sender, message);
+			ArrayList<String> newMessage = this.plugin.msgHandler.formatMessage(this.formatting, this, sender, message);
 			if (this.getLocalRange() == -1){
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
-					if (!(this.getBanned().contains(p)) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld())){
+					if (!(this.getBanned().contains(p))&& !(this.getMuted().contains(p.getName()))  && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld())){
 						for (String s: newMessage){
 							p.sendMessage(s);
 						}
@@ -257,7 +307,7 @@ public class Channel {
 			} else {
 				Location loc = sender.getLocation();
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
-					if (!(this.getBanned().contains(p)) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld()) && isInDistance(p, loc)){
+					if (!(this.getBanned().contains(p))&& !(this.getMuted().contains(p.getName()))  && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld()) && isInDistance(p, loc)){
 						for (String s: newMessage){
 							p.sendMessage(s);
 						}

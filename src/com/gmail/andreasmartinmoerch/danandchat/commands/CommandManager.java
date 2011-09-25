@@ -15,9 +15,7 @@ public class CommandManager {
 	private Configuration conf;
 	
 	public CommandManager(DanAndChat plugin){
-		Logger.getLogger("Minecraft").info("[DanAndChat] Hi!!!");
 		this.plugin = plugin;
-		initialize();
 	}
 	
 
@@ -85,7 +83,7 @@ public class CommandManager {
 	  public void prefixCommand() {
 	    Configuration conf = this.plugin.settings.config;
 	    Command cmd = this.plugin.getCommand(Commands.PREFIX.toString());
-	    cmd.setAliases(conf.getStringList("commands." + Commands.PREFIX.toString().toLowerCase() + "." + "aliases:", new ArrayList<String>()));
+//	    cmd.setAliases(conf.getStringList("commands." + Commands.PREFIX.toString().toLowerCase() + "." + "aliases:", new ArrayList<String>()));
 	    ((PluginCommand)cmd).setExecutor(new PrefixCommand(this.plugin));
 	  }
 }

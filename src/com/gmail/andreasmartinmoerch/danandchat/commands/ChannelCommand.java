@@ -39,10 +39,9 @@ public class ChannelCommand implements CommandExecutor{
 	      }
 	      switch (ca) { 
 	      case RELOAD:
-	        return writeFile(args);
-	      case UNBAN:
-	        return reload(sender, args); }
-	      sender.sendMessage("Unknown arg: " + ca.toString()); return false;
+	        return reload(sender, args);
+	        default: sender.sendMessage("Unknown arg: " + ca.toString()); return false;
+	      }
 	    } else {
 	    	Player player = (Player)sender;
 	    	try {
@@ -53,22 +52,24 @@ public class ChannelCommand implements CommandExecutor{
 	    switch (ca) { case BAN:
 		      return banPlayer(player, args);
 		    case LIST:
-		      return unbanPlayer(player, args);
+		      return listChannels(player, args);
 		    case MUTE:
 		      return listChannels(player, args);
 		    case RELOAD:
-		      return writeFile(args);
+		      return reload(player, args);
 		    case UNMUTE:
-		      return mutePlayer(player, args);
-		    case WRITE:
 		      return unmutePlayer(player, args);
-		    case UNBAN: } return false;
+		    case WRITE:
+		      return writeFile(args);
+		    case UNBAN: unbanPlayer(player, args);
+		    default: return false;	
+	    }
 	    }	
 	}
 	
 	public boolean reload(CommandSender sender, String[] args)
 	  {
-	    if (args.length < 3) {
+	    if (args.length < 2) {
 	      return false;
 	    }
 	    if (((sender instanceof Player)) && 
@@ -77,16 +78,16 @@ public class ChannelCommand implements CommandExecutor{
 	      return true;
 	    }
 
-	    if (args[2].toLowerCase().startsWith("prefix")) {
+	    if (args[1].toLowerCase().startsWith("prefix")) {
 	      this.plugin.settings.prefixConfig.load();
 	      sender.sendMessage(ChatColor.GREEN + "Reloaded " + ChatColor.GOLD + "prefixes.yml");
 	      return true;
-	    }if (args[2].toLowerCase().startsWith("channe")) {
+	    }if (args[1].toLowerCase().startsWith("channe")) {
 	      this.plugin.settings.prefixConfig.load();
 	      sender.sendMessage(ChatColor.GREEN + "Reloaded " + ChatColor.GOLD + "channels.yml");
 	      return true;
 	    }
-	    if (args[2].toLowerCase().startsWith("conf")) {
+	    if (args[1].toLowerCase().startsWith("conf")) {
 	      this.plugin.settings.prefixConfig.load();
 	      sender.sendMessage(ChatColor.GREEN + "Reloaded " + ChatColor.GOLD + "config.yml");
 	      return true;

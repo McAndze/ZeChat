@@ -20,10 +20,10 @@ public class Prefixer {
 		
 		prefix = this.plugin.settings.prefixConfig.getString("users." + player.getName().toLowerCase(), null);
 		
-		if (prefix == null){
-			getGroupsPrefix(player);
+		if (prefix == null || prefix.equals("null")){
+			prefix = getGroupsPrefix(player);
 		}
-		if (prefix == null){
+		if (prefix == null || prefix.equals("null")){
 			return "";
 		}
 		prefix = prefix.replaceAll("&", "§");
@@ -47,29 +47,27 @@ public class Prefixer {
 //			}
 //	}
 	
-	public String getGroupsPrefix(Player player){
-		String groupsPrefix = "";
-		if (this.plugin.exManager.usesPermissionsBukkit()){
-			List<Group> groups = this.plugin.exManager.permissionsBukkit.getGroups(player.getName());
-			if (groups == null || groups.isEmpty()){
-				return "";
-			}
-			for (Group g: groups){
-				if (groupsPrefix.equalsIgnoreCase("")){
-					groupsPrefix = getGroupPrefix(g.getName());
-					player.sendMessage(groupsPrefix);
-					if (groups.size() == 1){
-						player.sendMessage("groups size 1");
-						return groupsPrefix;
-					}
-				} else {
-					groupsPrefix += ChatColor.WHITE + "|" +  getGroupPrefix(g.getName());
-				}
-			}
-				
-			}
-		return groupsPrefix;
-	}
+	  public String getGroupsPrefix(Player player)
+	  {
+	    String groupsPrefix = "";
+	    if (this.plugin.exManager.usesPermissionsBukkit()) {
+	      List<Group> groups = this.plugin.exManager.permissionsBukkit.getGroups(player.getName());
+	      if ((groups == null) || (groups.isEmpty())) {
+	        return "";
+	      }
+	      for (Group g : groups) {
+	        if (groupsPrefix.equalsIgnoreCase("")) {
+	          groupsPrefix = getGroupPrefix(g.getName());
+	        }
+	        else
+	        {
+	          groupsPrefix = groupsPrefix + ChatColor.WHITE + "|" + getGroupPrefix(g.getName());
+	        }
+	      }
+	    }
+
+	    return groupsPrefix;
+	  }
 	
 	public String getGroupPrefix(String group){
 		String groupPrefix = "";
