@@ -1,11 +1,10 @@
 package com.gmail.andreasmartinmoerch.danandchat.chmarkup;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
-import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
-import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
 public class ChInterpreter {
 	private DanAndChat plugin;
@@ -58,13 +57,52 @@ public class ChInterpreter {
 	}
 	
 	public String playerKey(String format, Player player){
-		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.GROUP.toString(), PermissionChecker.getGroup(player));
-		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.NAME.toString(), player.getName());
-		if (this.plugin.exManager.isUsingColorMe()){
-			format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.COLOUR.toString(), this.plugin.exManager.color.getColor(player.getName()));
-		}
-//		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.PREFIX.toString() + "\\\\}", PermissionChecker.getPrefix(player));
-		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.DISPLAYNAME.toString(), player.getDisplayName());
-		return format;
+	    if ((this.plugin.exManager.usesPermissionsBukkit()) && (format.contains("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.GROUP.toString()))) {
+	        String group = this.plugin.exManager.permissionsBukkit.getGroup(player.getName()).getName();
+	        if (group == null) {
+	          group = "";
+	        }
+	        format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.GROUP.toString(), group);
+	      } else {
+	        format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.GROUP.toString(), "");
+	      }
+
+	      format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.NAME.toString(), player.getName());
+
+	      if (this.plugin.exManager.isUsingColorMe())
+	        format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.COLOUR.toString(), this.plugin.exManager.color.findColor(this.plugin.exManager.color.getColor(player.getName())));
+	      else {
+	        format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.COLOUR.toString(), "");
+	      }
+	      if (this.plugin.exManager.usesRPGWorld()) {
+	    	  format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.RPGPREFIX, "");
+//	        if (RPGWorldPlugin.useRanksAsPrefix())
+//	          format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.RPGPREFIX, RankManager.getPlayerRank(player.getName()));
+//	        else
+//	          format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.RPGPREFIX, "");
+	      }
+	      else {
+	        format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.RPGPREFIX, "");
+	      }
+
+	      format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.HEALTH, healthToString(player));
+	      format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.DISPLAYNAME.toString(), player.getDisplayName());
+	      format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.PREFIX.toString(), this.plugin.prefixer.getPrefix(player));
+	      return format;
+	}
+	
+	private String healthToString(Player player){
+	    int health = 0;
+	    String s = "";
+
+	    for (health = 0; health < 20; health++) {
+	      if (health > player.getHealth())
+	        s = s + ChatColor.RED + "|";
+	      else {
+	        s = s + ChatColor.GREEN + "|";
+	      }
+	    }
+	    s = s + ChatColor.WHITE;
+	    return s;
 	}
 }

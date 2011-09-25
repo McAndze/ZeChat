@@ -16,6 +16,7 @@ import com.gmail.andreasmartinmoerch.danandchat.channel.MessageHandler;
 import com.gmail.andreasmartinmoerch.danandchat.commands.CommandManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
+import com.gmail.andreasmartinmoerch.danandchat.prefixer.Prefixer;
 
 /**
  * This program is free software. It comes without any warranty, to
@@ -66,6 +67,7 @@ public class DanAndChat extends JavaPlugin{
 	public ExtensionManager exManager;
 	public CommandManager commandManager;
 	public MessageHandler msgHandler;
+	public Prefixer prefixer;
 	
 	/**
 	 * Default method
@@ -89,26 +91,29 @@ public class DanAndChat extends JavaPlugin{
 	 * Default method
 	 */
 	public void onDisable(){
-		for (Channel c: this.channels.channels){
-			c.getChLogger().write();
-		}
-		msgHandler = null;
-		settings = null;
-		channels = null;
-		Settings.channelsConfig = null;
-//		ChannelManager.channels = null;
-		this.perms = null;
-		this.commandManager = null;
+	    for (Channel c : this.channels.channels) {
+	        c.getChLogger().write();
+	      }
+	      this.msgHandler = null;
+	      this.settings = null;
+	      this.exManager = null;
+	      this.prefixer = null;
+	      this.channels = null;
+
+	      this.perms = null;
+	      this.commandManager = null;;
 	}
 	
 	public void initializeStuff(){
-		this.msgHandler = new MessageHandler(this);
-		settings = new Settings(this);
-		settings.initialize();
-		exManager = new ExtensionManager(this);
-//		ChannelManager.initialize();
-		channels = new Channels(this);
-		perms = new PermissionChecker(this);
-		this.commandManager = new CommandManager(this);
+	    this.msgHandler = new MessageHandler(this);
+	    this.commandManager = new CommandManager(this);
+	    this.settings = new Settings(this);
+	    this.settings.initialize();
+	    this.exManager = new ExtensionManager(this);
+	    this.exManager.initialize();
+	    this.prefixer = new Prefixer(this);
+
+	    this.channels = new Channels(this);
+	    this.perms = new PermissionChecker(this);
 	}
 }

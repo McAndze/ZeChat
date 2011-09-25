@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/home/andreas/Skrivebord/McAndze - Tech/OMGTREES/plugins/extres/BukkitDev/bukkit.jar"/>
 	<classpathentry kind="lib" path="/home/andreas/Skrivebord/McAndze - Tech/OMGTREES/plugins/extres/ColorMe.jar"/>
+	<classpathentry kind="lib" path="/home/andreas/Skrivebord/McAndze - Tech/OMGTREES/plugins/extres/PermissionsBukkit-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

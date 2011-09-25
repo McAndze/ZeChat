@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.config.ConfigurationNode;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
-import com.gmail.andreasmartinmoerch.danandchat.Settings;
 import com.gmail.andreasmartinmoerch.danandchat.chmarkup.ChatColour;
 
 /**
@@ -54,7 +53,7 @@ public class Channel {
 		this.banned = new ArrayList<String>();
 		this.allowedGroups = new ArrayList<String>();
 		this.allowedPlayers = new ArrayList<String>();
-		this.chNode = Settings.channelsConfig.getNode("channels" + "." + this.getName());
+		this.chNode = this.plugin.settings.channelsConfig.getNode("channels" + "." + this.getName());
 		this.players = new ArrayList<Player>();
 		this.focused = new ArrayList<Player>();
 	}
@@ -126,10 +125,10 @@ public class Channel {
 		
 		// Colour
 		try {
-			this.setColor(ChatColour.valueOf(Settings.channelsConfig.getString(this.getName() + ".colour").toUpperCase()));
+			this.setColor(ChatColour.valueOf(this.plugin.settings.channelsConfig.getString(this.getName() + ".colour").toUpperCase()));
 		} catch (Exception e){
 			try {
-				this.setColor(ChatColour.valueOf(Settings.channelsConfig.getString(this.getName() + ".color").toUpperCase()));
+				this.setColor(ChatColour.valueOf(this.plugin.settings.channelsConfig.getString(this.getName() + ".color").toUpperCase()));
 			} catch (Exception ex){
 				
 			}
@@ -225,14 +224,14 @@ public class Channel {
 			this.chLogger.logMsg("* "+sender.getName() + emote, "EMOTE");
 			if (this.getLocalRange() == -1){
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
-					if (!(this.getBanned().contains(p.getName())) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld())){
+					if (!(this.getBanned().contains(p.getName())) && !(this.getMuted().contains(p.getName())) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld())){
 						p.sendMessage(ChatColor.GOLD + "* " + sender.getDisplayName() + " " + emote);
 					}
 				}
 			} else {
 				Location loc = sender.getLocation();
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
-					if (!(this.getBanned().contains(p.getName())) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld()) && isInDistance(p, loc)){
+					if (!(this.getBanned().contains(p.getName())) && !(this.getMuted().contains(p.getName())) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld()) && isInDistance(p, loc)){
 						p.sendMessage(ChatColor.GOLD + "* " + sender.getDisplayName() + " " + emote);
 					}
 				}
@@ -243,7 +242,6 @@ public class Channel {
 
 	public void sendMessage(String message, Player sender){
 		boolean ic = false;
-		Logger log = DanAndChat.log;
 		
 		if (this.playerIsInChannel(sender)){
 			this.chLogger.logMsg(sender.getName() + ": " + message, "MSG");
@@ -281,10 +279,35 @@ public class Channel {
 	
 	public static ArrayList<String> messages = new ArrayList<String>();
 	
-	public void banPlayer(String s){
-		this.banned.add(s);
-		this.chNode.setProperty("banned-players", banned);
-	}
+	  public void banPlayer(String s)
+	  {
+	    this.banned.add(s);
+	    this.chNode.setProperty("banned-players", this.banned);
+	    this.plugin.settings.channelsConfig.save();
+	    this.plugin.settings.channelsConfig.load();
+	  }
+
+	  public void unbanPlayer(String s) {
+	    this.banned.remove(s);
+	    this.chNode.setProperty("banned-players", this.banned);
+	    this.plugin.settings.channelsConfig.save();
+	    this.plugin.settings.channelsConfig.load();
+	  }
+
+	  public void mutePlayer(String s) {
+	    this.muted.add(s);
+	    this.chNode.setProperty("muted-players", this.muted);
+	    this.plugin.settings.channelsConfig.save();
+	    this.plugin.settings.channelsConfig.load();
+	  }
+
+	  public void unmutePlayer(String s) {
+	    this.muted.remove(s);
+	    this.chNode.setProperty("muted-players", this.muted);
+	    this.plugin.settings.channelsConfig.save();
+	    this.plugin.settings.channelsConfig.load();
+	  }
+	  
 	public static void noOneIsNear(Player p){
 		Random test = new Random();
 		if (messages.isEmpty()){
