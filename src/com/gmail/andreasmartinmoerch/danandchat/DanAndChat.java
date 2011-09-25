@@ -16,6 +16,7 @@ import com.gmail.andreasmartinmoerch.danandchat.channel.MessageHandler;
 import com.gmail.andreasmartinmoerch.danandchat.commands.CommandManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
+import com.gmail.andreasmartinmoerch.danandchat.prefixer.Prefixer;
 
 /**
  * This program is free software. It comes without any warranty, to
@@ -67,6 +68,7 @@ public class DanAndChat extends JavaPlugin{
 	public ExtensionManager exManager;
 	public CommandManager commandManager;
 	public MessageHandler msgHandler;
+	public Prefixer prefixer;
 	
 	/**
 	 * Default method
@@ -96,22 +98,28 @@ public class DanAndChat extends JavaPlugin{
 		}
 		msgHandler = null;
 		settings = null;
+		this.exManager = null;
+		this.prefixer = null;
 		channels = null;
-		Settings.channelsConfig = null;
 //		ChannelManager.channels = null;
 		this.perms = null;
 		this.commandManager = null;
 	}
 	
+	/**
+	 * Initializes stuff in the correct order.
+	 */
 	public void initializeStuff(){
+		
 		this.msgHandler = new MessageHandler(this);
+		this.commandManager = new CommandManager(this);
 		settings = new Settings(this);
 		settings.initialize();
 		exManager = new ExtensionManager(this);
 		exManager.initialize();
+		this.prefixer = new Prefixer(this);
 //		ChannelManager.initialize();
 		channels = new Channels(this);
 		perms = new PermissionChecker(this);
-		this.commandManager = new CommandManager(this);
 	}
 }

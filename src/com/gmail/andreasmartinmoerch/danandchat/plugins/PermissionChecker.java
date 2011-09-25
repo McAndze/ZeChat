@@ -46,6 +46,10 @@ public class PermissionChecker {
 		}
 	}
 	
+	/**
+	 * Initalizes a Player's channels.
+	 * @param p Player to initialize.
+	 */
 	public void initializePlayer(Player p){
 		List<Channel> channels = this.plugin.channels.channels;
  		for (Channel c: channels){
@@ -66,18 +70,5 @@ public class PermissionChecker {
  			}
  		}
  		init.add(p);
-	}
-	
-	public static String getGroup(Player player){
-//		return ExtensionManager.permissions.getGroup(player.getWorld().getName(), player.getName());
-		return "";
-	}
-	
-	public static String getPrefix(Player player){
-//		if (!ExtensionManager.isUsingPermissions()){
-//			return "";
-//		}
-//		return ExtensionManager.permissions.getGroup(player.getWorld().getName(), player.getName());
-		return "";
 	}
 }

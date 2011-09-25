@@ -37,12 +37,11 @@ public class ChannelCommand implements CommandExecutor{
 			if (args.length < 2){
 				return false;
 			}
-			if (ca.equals(ChannelArgs.WRITE)){
-				writeFile(args);
-			} else {
-				sender.sendMessage("Unknown arg: " + ca.toString());
+			switch(ca){
+			case WRITE: return writeFile(args);
+			case RELOAD: return reload(sender, args);
+			default: sender.sendMessage("Unknown arg: " + ca.toString());return false;
 			}
-			return true;
 		} else {
 			Player player = (Player)sender;
 			
@@ -51,9 +50,77 @@ public class ChannelCommand implements CommandExecutor{
 			case UNBAN: return unbanPlayer(player, args);
 			case LIST: return listChannels(player, args);
 			case WRITE: return writeFile(args);
+			case MUTE: return mutePlayer(player, args);
+			case UNMUTE: return unmutePlayer(player, args);
 			default: return false;
 			}
 		}		
+	}
+	
+	public boolean reload(CommandSender sender, String[] args){
+		if (args.length < 3){
+			return false;
+		}
+		if (sender instanceof Player){
+			if (!((Player)sender).hasPermission("danandchat.channel.reload")){
+				sender.sendMessage(ChatColor.RED + "No permission.");
+				return true;
+			}
+		}
+		if (args[2].toLowerCase().startsWith("prefix")){
+			this.plugin.settings.prefixConfig.load();
+			sender.sendMessage(ChatColor.GREEN + "Reloaded " + ChatColor.GOLD + "prefixes.yml");
+			return true;
+		} else if(args[2].toLowerCase().startsWith("channe")){
+			this.plugin.settings.prefixConfig.load();
+			sender.sendMessage(ChatColor.GREEN + "Reloaded " + ChatColor.GOLD + "channels.yml");
+			return true;
+			
+		} else if(args[2].toLowerCase().startsWith("conf")){
+			this.plugin.settings.prefixConfig.load();
+			sender.sendMessage(ChatColor.GREEN + "Reloaded " + ChatColor.GOLD + "config.yml");
+			return true;
+			
+		}
+		
+		return false;
+	}
+	
+	public boolean mutePlayer(Player player, String[] args){
+		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.channel + ".mute")){
+			player.sendMessage(ChatColor.RED + "Unknown command.");
+			return true;
+		}
+		
+		if (args.length == 2){
+			Player victim = DanAndChat.server.getPlayer(args[1]);
+			Channel c = this.plugin.channels.getFocusedChannel(player);
+			c.mutePlayer(args[1]);
+			if (victim != null && victim.isOnline()){
+				victim.sendMessage(ChatColor.RED + "You have been muted from channel: " + c.getName());
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean unmutePlayer(Player player, String[] args){
+		if(!player.hasPermission(PermissionChecker.prefix + PermissionChecker.channel + ".unmute")){
+			player.sendMessage(ChatColor.RED + "Unknown command.");
+			return true;
+		}
+		if (args.length == 2){
+			Player victim = DanAndChat.server.getPlayer(args[1]);
+			Channel c = this.plugin.channels.getFocusedChannel(victim);
+			c.unmutePlayer(args[1]);
+			if (victim.isOnline()){
+				victim.sendMessage(ChatColor.GREEN + "You have been unmuted from channel: " + c.getName());
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	// <CHANNEL BAN>
@@ -68,7 +135,7 @@ public class ChannelCommand implements CommandExecutor{
 			Channel c = this.plugin.channels.getFocusedChannel(player);
 			c.banPlayer(args[1]);
 			if (victim != null && victim.isOnline()){
-				victim.sendMessage(ChatColor.RED + "You have been banned from channel: §" + c.getColor() + c.getName());
+				victim.sendMessage(ChatColor.RED + "You have been banned from channel: "+ c.getName());
 			}
 			return true;
 		} else {
@@ -86,9 +153,9 @@ public class ChannelCommand implements CommandExecutor{
 		if (args.length == 2){
 			Player victim = DanAndChat.server.getPlayer(args[1]);
 			Channel c = this.plugin.channels.getFocusedChannel(victim);
-			c.getBanned().remove(victim.getName());
+			c.unbanPlayer(args[1]);
 			if (victim.isOnline()){
-				victim.sendMessage(ChatColor.GREEN + "You have been unbanned from channel: §" + c.getColor() + c.getName());
+				victim.sendMessage(ChatColor.GREEN + "You have been unbanned from channel: "+ c.getName());
 			}
 			return true;
 		} else {

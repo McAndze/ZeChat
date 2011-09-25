@@ -54,7 +54,7 @@ public class Channel {
 		this.banned = new ArrayList<String>();
 		this.allowedGroups = new ArrayList<String>();
 		this.allowedPlayers = new ArrayList<String>();
-		this.chNode = Settings.channelsConfig.getNode("channels" + "." + this.getName());
+		this.chNode = plugin.settings.channelsConfig.getNode("channels" + "." + this.getName());
 		this.players = new ArrayList<Player>();
 		this.focused = new ArrayList<Player>();
 	}
@@ -125,10 +125,10 @@ public class Channel {
 		
 		// Colour
 		try {
-			this.setColor(ChatColour.valueOf(Settings.channelsConfig.getString(this.getName() + ".colour").toUpperCase()));
+			this.setColor(ChatColour.valueOf(chNode.getString(".colour").toUpperCase()));
 		} catch (Exception e){
 			try {
-				this.setColor(ChatColour.valueOf(Settings.channelsConfig.getString(this.getName() + ".color").toUpperCase()));
+				this.setColor(ChatColour.valueOf(chNode.getString(".color").toUpperCase()));
 			} catch (Exception ex){
 				
 			}
@@ -249,7 +249,7 @@ public class Channel {
 			ArrayList<String> newMessage = this.plugin.msgHandler.formatMessage(this, sender, message);
 			if (this.getLocalRange() == -1){
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
-					if (!(this.getBanned().contains(p)) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld())){
+					if (!(this.getBanned().contains(p.getName())) && !(this.getMuted().contains(p.getName())) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld())){
 						for (String s: newMessage){
 							p.sendMessage(s);
 						}
@@ -258,7 +258,7 @@ public class Channel {
 			} else {
 				Location loc = sender.getLocation();
 				for (Player p: DanAndChat.server.getOnlinePlayers()){
-					if (!(this.getBanned().contains(p)) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld()) && isInDistance(p, loc)){
+					if (!(this.getBanned().contains(p.getName())) && !(this.getMuted().contains(p.getName())) && this.playerIsInChannel(p) && this.getWorlds().contains(sender.getWorld()) && isInDistance(p, loc)){
 						for (String s: newMessage){
 							p.sendMessage(s);
 						}
@@ -283,7 +283,31 @@ public class Channel {
 	public void banPlayer(String s){
 		this.banned.add(s);
 		this.chNode.setProperty("banned-players", banned);
+		this.plugin.settings.channelsConfig.save();
+		this.plugin.settings.channelsConfig.load();
 	}
+	
+	public void unbanPlayer(String s){
+		this.banned.remove(s);
+		this.chNode.setProperty("banned-players", banned);
+		this.plugin.settings.channelsConfig.save();
+		this.plugin.settings.channelsConfig.load();
+	}
+	
+	public void mutePlayer(String s){
+		this.muted.add(s);
+		this.chNode.setProperty("muted-players", muted);
+		this.plugin.settings.channelsConfig.save();
+		this.plugin.settings.channelsConfig.load();
+	}
+	
+	public void unmutePlayer(String s){
+		this.muted.remove(s);
+		this.chNode.setProperty("muted-players", muted);
+		this.plugin.settings.channelsConfig.save();
+		this.plugin.settings.channelsConfig.load();
+	}
+	
 	public static void noOneIsNear(Player p){
 		Random test = new Random();
 		if (messages.isEmpty()){

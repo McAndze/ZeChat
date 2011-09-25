@@ -1,8 +1,11 @@
 package com.gmail.andreasmartinmoerch.danandchat.chmarkup;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
+
+import javax.print.attribute.standard.Severity;
 
 import me.samkio.RPGWorld.RPGWorldPlugin;
 import me.samkio.RPGWorld.ranks.RankManager;
@@ -13,9 +16,9 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
-import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
 public class ChInterpreter {
+	
 	private DanAndChat plugin;
 	public ChInterpreter(DanAndChat plugin){
 		this.plugin = plugin;
@@ -40,7 +43,6 @@ public class ChInterpreter {
 	public String channelKey(String format, final Channel channel){
 		// TODO: Add checks, so we don't have to call more than necessary.
 		
-		format = format.replaceAll("&" + ChKey.CHANNEL.toString() + "." + ChannelArgs.COLOUR.toString(), channel.getColor().getStrPresentation());
 		format = format.replaceAll("&" + ChKey.CHANNEL.toString() + "." + ChannelArgs.NAME.toString(), channel.getName());
 		format = format.replaceAll("&" + ChKey.CHANNEL.toString() + "." + ChannelArgs.SHORTCUT.toString(), channel.getShortCut());
 		format = format.replaceAll("&" + ChKey.CHANNEL.toString() + "." + ChannelArgs.SHORTNAME.toString(), channel.getShortCut());
@@ -70,8 +72,18 @@ public class ChInterpreter {
 	
 	public String playerKey(String format, Player player){
 		// TODO: Add checks, so we don't have to call more than necessary.
-		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.GROUP.toString(), PermissionChecker.getGroup(player));
+		if (this.plugin.exManager.usesPermissionsBukkit() && format.contains("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.GROUP.toString())){
+			String group = this.plugin.exManager.permissionsBukkit.getGroup(player.getName()).getName();
+			if (group == null){
+				group = "";
+			}
+			format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.GROUP.toString(), group);
+		} else {
+			format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.GROUP.toString(), "");
+		}
+		
 		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.NAME.toString(), player.getName());
+		
 		if (this.plugin.exManager.isUsingColorMe()){
 			format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.COLOUR.toString(), this.plugin.exManager.color.findColor(this.plugin.exManager.color.getColor(player.getName())));
 		} else {
@@ -88,26 +100,37 @@ public class ChInterpreter {
 		}
 		
 		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.HEALTH, healthToString(player)); 
-//		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.PREFIX.toString() + "\\\\}", PermissionChecker.getPrefix(player));
 		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.DISPLAYNAME.toString(), player.getDisplayName());
-		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.PREFIX.toString(), getPrefix(player));
+		format = format.replaceAll("&" + ChKey.PLAYER.toString() + "." + PlayerArgs.PREFIX.toString(), this.plugin.prefixer.getPrefix(player));
 		return format;
 	}
 	
-	private String getPrefix(Player player){
-		String prefix = "";
-		if (this.plugin.exManager.usesPermissionsBukkit()){
-			ArrayList<PermissionAttachmentInfo> e = new ArrayList<PermissionAttachmentInfo>(player.getEffectivePermissions());
-			for (PermissionAttachmentInfo permInfo: e){
-				String s = permInfo.getPermission();
-				if (s.toLowerCase().startsWith("danandchat.prefix")){
-					prefix = s.substring(18);
-					return prefix;
-				}
-			}
-		}
-		return prefix;
-	}
+//	private String replace(String format, String sOld, Method method, Object... args){
+//	
+//	String toReturn = "";
+//	if (!format.contains(sOld)){
+//		return format;
+//	} else {
+//		try {
+//			// TODO: Find a better way to handle method args.
+//			String replace;
+//			if (args == null){
+//				replace = (String)method.invoke();
+//			} else {
+//			String replace = (String)method.invoke(args);
+//			toReturn = format.replaceAll(sOld, replace);
+//		} catch (IllegalArgumentException i){
+//			this.plugin.log.severe("[DanAndChat] Illegal arguments passed to " + method.getName() + "! Report to McAndze/Huliheaden.");
+//			i.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			this.plugin.log.severe("[DanAndChat] Illegal access from " + method.getName() + "! Report to McAndze/Huliheaden.");
+//			e.printStackTrace();
+//		} catch (InvocationTargetException e) {
+//			e.printStackTrace();
+//		}
+//	}
+//	return toReturn;
+//}
 	
 	private String healthToString(Player player){
 		int health = 0;
