@@ -18,6 +18,11 @@ public class DanAndParser {
 	public DanAndParser(DanAndChat plugin){
 		this.plugin = plugin;
 	}
+	
+	/**
+	 * @deprecated
+	 * @see #fullParse(String, boolean, Object...)
+	 */
 	public String interpretString(String format, final Channel channel, final Player player, final String message){
 		if (format.contains("&" + ParsingVariables.CHANNEL.toString() + ".")){
 			format = parseChannelInfo(format, channel);
