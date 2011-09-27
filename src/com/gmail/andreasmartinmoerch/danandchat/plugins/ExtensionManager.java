@@ -10,57 +10,61 @@ public class ExtensionManager {
 	boolean usesrpg = false;
 	public ColorMe color;
 	public boolean isUsingNaviaChar = false;
-	private DanAndChat plugin;
+	private final DanAndChat plugin;
 	public PermissionsPlugin permissionsBukkit;
-	
-	public ExtensionManager(DanAndChat plugin){
+
+	public ExtensionManager(DanAndChat plugin) {
 		this.plugin = plugin;
 	}
-	
-	public void initialize(){
+
+	public void initialize() {
 		loadColorMe();
 		initRPGWorld();
 		loadPermissions();
 	}
-	
-	public boolean usesPermissionsBukkit(){
+
+	public boolean usesPermissionsBukkit() {
 		return permissionsBukkit != null;
 	}
-	
-	public void loadPermissions(){
+
+	public void loadPermissions() {
 		Plugin plugin;
-		if ((plugin = DanAndChat.server.getPluginManager().getPlugin("PermissionsBukkit")) != null){
-			this.permissionsBukkit = (PermissionsPlugin)plugin;
+		if ((plugin = this.plugin.getServer().getPluginManager()
+				.getPlugin("PermissionsBukkit")) != null) {
+			this.permissionsBukkit = (PermissionsPlugin) plugin;
 		}
 	}
-	
-	public void loadColorMe(){
+
+	public void loadColorMe() {
 		Plugin plugin;
-		if ((plugin = DanAndChat.server.getPluginManager().getPlugin("ColorMe")) != null){
-			color = (ColorMe)plugin;
+		if ((plugin = this.plugin.getServer().getPluginManager()
+				.getPlugin("ColorMe")) != null) {
+			color = (ColorMe) plugin;
 		}
 	}
-	
-	public boolean isUsingColorMe(){
+
+	public boolean isUsingColorMe() {
 		return color != null;
 	}
-	
-	public void loadNaviaChar(){
-		if (DanAndChat.server.getPluginManager().getPlugin("NaviaChar") != null){
+
+	public void loadNaviaChar() {
+		if (this.plugin.getServer().getPluginManager().getPlugin("NaviaChar") != null) {
 			isUsingNaviaChar = true;
 		}
 	}
-	
-	public boolean usesRPGWorld(){
+
+	public boolean usesRPGWorld() {
 		return usesrpg;
 	}
-	
-	public void initRPGWorld(){
-//		Plugin testPlugin = null;
-//		if ((testPlugin = this.plugin.getServer().getPluginManager().getPlugin("RPGWorld")) != null){
-//			RPGWorldPlugin rpg = (RPGWorldPlugin)testPlugin;
-//			this.plugin.log.info("[DanAndChat] Found RPGWorld! Hooking in!");
-//			rpg.chatPlugins.hookPlugin(new DanAndChatRPG(plugin));
-//		}
+
+	public void initRPGWorld() {
+		// Plugin testPlugin = null;
+		// if ((testPlugin =
+		// this.plugin.getServer().getPluginManager().getPlugin("RPGWorld")) !=
+		// null){
+		// RPGWorldPlugin rpg = (RPGWorldPlugin)testPlugin;
+		// this.plugin.log.info("[DanAndChat] Found RPGWorld! Hooking in!");
+		// rpg.chatPlugins.hookPlugin(new DanAndChatRPG(plugin));
+		// }
 	}
 }

@@ -3,7 +3,6 @@ package com.gmail.andreasmartinmoerch.danandchat;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.World;
@@ -58,7 +57,7 @@ public class Settings {
 		
 		config = new Configuration(fConfig);
 		config.load();
-		this.plugin.commandManager.initialize();
+		this.plugin.getCommandManager().initialize();
 		
 		channelsConfig = new Configuration(fChannelsConfig);
 		channelsConfig.load();
@@ -79,7 +78,7 @@ public class Settings {
 		config.setProperty("commands" +"."+ Commands.T.toString().toLowerCase() +"."+ "enabled" , true);
 		
 		List<String> worlds = new ArrayList<String>();
-		for (World w: this.plugin.server.getWorlds()){
+		for (World w: this.plugin.getServer().getWorlds()){
 			worlds.add(w.getName());
 		}
 		this.channelsConfig.setProperty("channels.Global.worlds", worlds);

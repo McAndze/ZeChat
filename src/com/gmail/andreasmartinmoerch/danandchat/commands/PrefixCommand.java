@@ -38,7 +38,7 @@ public class PrefixCommand implements CommandExecutor {
 				return false;
 			}
 			Logger.getLogger("Minecraft").info("3");
-			sender.sendMessage(this.plugin.prefixer.setGroupPrefix(group, prefix));
+			sender.sendMessage(this.plugin.getPrefixer().setGroupPrefix(group, prefix));
 			Logger.getLogger("Minecraft").info("4");
 		} else if (subcmd.equalsIgnoreCase("prefix")){
 			String player = args[1];
@@ -48,7 +48,7 @@ public class PrefixCommand implements CommandExecutor {
 				return false;
 			}
 			
-			sender.sendMessage(this.plugin.prefixer.setPrefix(player, prefix));
+			sender.sendMessage(this.plugin.getPrefixer().setPrefix(player, prefix));
 		}
 		return true;
 	}

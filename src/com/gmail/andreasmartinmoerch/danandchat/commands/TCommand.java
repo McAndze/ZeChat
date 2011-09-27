@@ -9,10 +9,10 @@ import org.bukkit.entity.Player;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
-public class TCommand implements CommandExecutor{
-	private DanAndChat plugin;
-	
-	public TCommand(DanAndChat plugin){
+public class TCommand implements CommandExecutor {
+	private final DanAndChat plugin;
+
+	public TCommand(DanAndChat plugin) {
 		this.plugin = plugin;
 	}
 
@@ -20,38 +20,41 @@ public class TCommand implements CommandExecutor{
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
 		String commandName = cmd.getName();
-		
-		if (!(sender instanceof Player)){
+
+		if (!(sender instanceof Player)) {
 			return true;
 		}
-		Player player = (Player)sender;
-		
-		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.tell)){
+		Player player = (Player) sender;
+
+		if (!player.hasPermission(PermissionChecker.prefix
+				+ PermissionChecker.tell)) {
 			player.sendMessage(ChatColor.RED + "You can not use that command.");
 			return true;
 		}
-		if (args.length < 1){
+		if (args.length < 1) {
 			return false;
 		}
-		
+
 		Player p;
-		if ((p = DanAndChat.server.getPlayer(args[0])) == null){
+		if ((p = this.plugin.getServer().getPlayer(args[0])) == null) {
 			player.sendMessage(ChatColor.RED + "Player does not exist.");
 			return true;
 		}
-		
-		if (!p.isOnline()){
+
+		if (!p.isOnline()) {
 			player.sendMessage(ChatColor.RED + "That player isn't online.");
 			return true;
 		}
 		int len = args.length;
 		String message = "";
-		for (int i = 1; i < len; i++){
+		for (int i = 1; i < len; i++) {
 			message = message + " " + args[i];
 		}
-		p.sendMessage(ChatColor.GREEN + "From " + player.getName() + ": " + ChatColor.WHITE + message);
-		player.sendMessage(ChatColor.YELLOW + "To " + p.getName() + ": " + message);
+		p.sendMessage(ChatColor.GREEN + "From " + player.getName() + ": "
+				+ ChatColor.WHITE + message);
+		player.sendMessage(ChatColor.YELLOW + "To " + p.getName() + ": "
+				+ message);
 		return true;
 	}
-	
+
 }

@@ -6,7 +6,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.gmail.andreasmartinmoerch.danandchat.ChannelManager;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
@@ -38,7 +37,7 @@ public class LeavechannelCommand implements CommandExecutor{
 		}
 		// End validation.
 		Channel c;
-		if ((c=plugin.channels.getChannelWithShortcut(args[0])) == null){
+		if ((c=plugin.getChannels().getChannelWithShortcut(args[0])) == null){
 			player.sendMessage(ChatColor.RED + "Channel does not exist, with shortcut: " + args[0] + ".");
 			return true;
 		}
@@ -49,7 +48,7 @@ public class LeavechannelCommand implements CommandExecutor{
 		
 		c.removePlayer(player);
 		c.getFocused().remove(player);
-		for (Channel ch: this.plugin.channels.channels){
+		for (Channel ch: this.plugin.getChannels().channels){
 			if (ch.isAutoFocus() && ch.playerIsInChannel(player)){
 				ch.getFocused().add(player);
 			}

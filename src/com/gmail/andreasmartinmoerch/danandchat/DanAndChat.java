@@ -3,7 +3,6 @@ package com.gmail.andreasmartinmoerch.danandchat;
 import java.util.logging.Logger;
 
 import org.blockface.bukkitstats.CallHome;
-import org.bukkit.Server;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -46,80 +45,121 @@ import com.gmail.andreasmartinmoerch.danandchat.prefixer.Prefixer;
  * The above license applies to all classes, unless stated otherwise in the individual class.
  */
 /**
+ * This is the main class of DanAndChat.
  * 
  * @author McAndze
- *
+ * 
  */
-public class DanAndChat extends JavaPlugin{
-	
-	public static final Logger log = Logger.getLogger("Minecraft");
-	
-	public static final String sPlugin = "DanAndChat";
-	public static final String sfPlugin = "[" + sPlugin + "]";
-	// Player Listener
-	public final DanAndChatPlayerListener playerListener = new DanAndChatPlayerListener(this);
-	// Handles channels, and the players that are in them.
-	
-	public Channels channels;
-	
-	public Settings settings;
-	public static Server server;
-	public PermissionChecker perms;
-	public ExtensionManager exManager;
-	public CommandManager commandManager;
-	public MessageHandler msgHandler;
-	public Prefixer prefixer;
-	
+public class DanAndChat extends JavaPlugin {
+	// Finals
 	/**
-	 * Default method
+	 * Just a quick way to access the Logger. Probably won't be used much
+	 * longer.
 	 */
-	public void onEnable(){
-		server = getServer();
-		initializeStuff();
-		PluginManager pm = getServer().getPluginManager();
-		
-		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.High, this);
-		if (!this.exManager.usesRPGWorld()){
-			pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-		}
-		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
-		
-		CallHome.load(this);
-		PluginDescriptionFile pdfFile = getDescription();
-	}
-	
+	public final Logger log = Logger.getLogger("Minecraft");
+	/**
+	 * The DanAndChat PlayerListener-
+	 */
+	public final DanAndChatPlayerListener playerListener = new DanAndChatPlayerListener(
+			this);
+
+	// Private variables to get. Not set.
+	private Channels channels;
+	private Settings settings;
+	private PermissionChecker permissionChecker;
+	private ExtensionManager extensionManager;
+	private CommandManager commandManager;
+	private MessageHandler messageHandler;
+	private Prefixer prefixer;
 
 	/**
 	 * Default method
 	 */
-	public void onDisable(){
-		for (Channel c: this.channels.channels){
+	public void onEnable() {
+		initializeStuff();
+		PluginManager pm = getServer().getPluginManager();
+
+		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.High,
+				this);
+		if (!this.extensionManager.usesRPGWorld()) {
+			pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener,
+					Priority.Monitor, this);
+		}
+		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener,
+				Priority.Monitor, this);
+
+		CallHome.load(this);
+		PluginDescriptionFile pdfFile = getDescription();
+
+		this.log.info("[DanAndChat] DanAndChat v" + pdfFile.getVersion()
+				+ " enabled.");
+	}
+
+	/**
+	 * Default method
+	 */
+	public void onDisable() {
+		for (Channel c : this.channels.channels) {
 			c.getChLogger().write();
 		}
-		msgHandler = null;
-		settings = null;
-		this.exManager = null;
+		this.messageHandler = null;
+		this.settings = null;
+		this.extensionManager = null;
 		this.prefixer = null;
-		channels = null;
-//		ChannelManager.channels = null;
-		this.perms = null;
+		this.channels = null;
+		// ChannelManager.channels = null;
+		this.permissionChecker = null;
 		this.commandManager = null;
 	}
-	
+
 	/**
 	 * Initializes stuff in the correct order.
 	 */
-	public void initializeStuff(){
-		
-		this.msgHandler = new MessageHandler(this);
+	public void initializeStuff() {
+		this.messageHandler = new MessageHandler(this);
 		this.commandManager = new CommandManager(this);
-		settings = new Settings(this);
-		settings.initialize();
-		exManager = new ExtensionManager(this);
-		exManager.initialize();
+		this.settings = new Settings(this);
+		this.settings.initialize();
+		this.extensionManager = new ExtensionManager(this);
+		this.extensionManager.initialize();
 		this.prefixer = new Prefixer(this);
-//		ChannelManager.initialize();
-		channels = new Channels(this);
-		perms = new PermissionChecker(this);
+		// ChannelManager.initialize();
+		this.channels = new Channels(this);
+		this.permissionChecker = new PermissionChecker(this);
+	}
+
+	@SuppressWarnings("javadoc")
+	public Channels getChannels() {
+		return channels;
+	}
+
+	@SuppressWarnings("javadoc")
+	public Settings getSettings() {
+		return settings;
+	}
+
+	@SuppressWarnings("javadoc")
+	public PermissionChecker getPermissionChecker() {
+		return permissionChecker;
+	}
+
+	@SuppressWarnings("javadoc")
+	public ExtensionManager getExtensionManager() {
+		return extensionManager;
+	}
+
+	@SuppressWarnings("javadoc")
+	public CommandManager getCommandManager() {
+		return commandManager;
+	}
+
+	@SuppressWarnings("javadoc")
+	public MessageHandler getMessageHandler() {
+		return messageHandler;
+	}
+
+	@SuppressWarnings("javadoc")
+	public Prefixer getPrefixer() {
+		return prefixer;
 	}
 }

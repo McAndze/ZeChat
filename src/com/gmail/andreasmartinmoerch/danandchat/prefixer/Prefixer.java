@@ -18,7 +18,7 @@ public class Prefixer {
 	public String getPrefix(Player player){
 		String prefix;
 		
-		prefix = this.plugin.settings.prefixConfig.getString("users." + player.getName().toLowerCase(), null);
+		prefix = this.plugin.getSettings().prefixConfig.getString("users." + player.getName().toLowerCase(), null);
 		
 		if (prefix == null){
 			prefix = getGroupsPrefix(player);
@@ -32,7 +32,7 @@ public class Prefixer {
 	
 //	public String getGroupsPrefix(String... groups){
 //		String groupsPrefix = "";
-//		if (this.plugin.exManager.usesPermissionsBukkit()){
+//		if (this.plugin.getExtensionManager().usesPermissionsBukkit()){
 //			if (groups == null || groups.isEmpty()){
 //				return "";
 //			}
@@ -49,8 +49,8 @@ public class Prefixer {
 	
 	public String getGroupsPrefix(Player player){
 		String groupsPrefix = "";
-		if (this.plugin.exManager.usesPermissionsBukkit()){
-			List<Group> groups = this.plugin.exManager.permissionsBukkit.getGroups(player.getName());
+		if (this.plugin.getExtensionManager().usesPermissionsBukkit()){
+			List<Group> groups = this.plugin.getExtensionManager().permissionsBukkit.getGroups(player.getName());
 			if (groups == null || groups.isEmpty()){
 				return "";
 			}
@@ -72,8 +72,8 @@ public class Prefixer {
 	
 	public String getGroupPrefix(String group){
 		String groupPrefix = "";
-		if (this.plugin.exManager.usesPermissionsBukkit()){
-			String test = this.plugin.settings.prefixConfig.getString("groups." + group.toLowerCase(), null);
+		if (this.plugin.getExtensionManager().usesPermissionsBukkit()){
+			String test = this.plugin.getSettings().prefixConfig.getString("groups." + group.toLowerCase(), null);
 			if (test != null){
 				groupPrefix = test;
 			}
@@ -82,19 +82,19 @@ public class Prefixer {
 	}
 	
 	public String setGroupPrefix(String group, String prefix){
-		if (!this.plugin.exManager.usesPermissionsBukkit()){
+		if (!this.plugin.getExtensionManager().usesPermissionsBukkit()){
 			return ChatColor.RED + "No compatible group manager installed to set group prefix.";
 		}
-		this.plugin.settings.prefixConfig.load();
-		this.plugin.settings.prefixConfig.setProperty("groups." + group.toLowerCase(), prefix);
-		this.plugin.settings.prefixConfig.save();
+		this.plugin.getSettings().prefixConfig.load();
+		this.plugin.getSettings().prefixConfig.setProperty("groups." + group.toLowerCase(), prefix);
+		this.plugin.getSettings().prefixConfig.save();
 		return ChatColor.GREEN + "Set prefix: " + ChatColor.GOLD + prefix + ChatColor.GREEN + " to group: " + ChatColor.GOLD + group + ChatColor.GREEN + ".";
 	}
 	
 	public String setPrefix(String player, String prefix){
-		this.plugin.settings.prefixConfig.load();
-		this.plugin.settings.prefixConfig.setProperty("users." + player.toLowerCase(), prefix);
-		this.plugin.settings.prefixConfig.save();
+		this.plugin.getSettings().prefixConfig.load();
+		this.plugin.getSettings().prefixConfig.setProperty("users." + player.toLowerCase(), prefix);
+		this.plugin.getSettings().prefixConfig.save();
 		return ChatColor.GREEN + "Set prefix: " + ChatColor.GOLD + prefix + ChatColor.GREEN + " to player: " + ChatColor.GOLD + player + ChatColor.GREEN + ".";
 	}
 }

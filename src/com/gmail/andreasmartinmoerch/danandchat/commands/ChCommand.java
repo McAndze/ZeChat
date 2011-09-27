@@ -8,7 +8,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.gmail.andreasmartinmoerch.danandchat.ChannelManager;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
@@ -38,7 +37,7 @@ public class ChCommand implements CommandExecutor{
 		}
 		Channel c = null;
 		Channel oldFocus = null;
-		for (Channel ch: this.plugin.channels.channels){
+		for (Channel ch: this.plugin.getChannels().channels){
 			if (ch.getShortCut().equalsIgnoreCase(args[0])){
 				c = ch;
 			}

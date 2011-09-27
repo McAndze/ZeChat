@@ -5,7 +5,6 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
-import com.gmail.andreasmartinmoerch.danandchat.Settings;
 
 public class Channels {
 	private DanAndChat plugin;
@@ -14,9 +13,9 @@ public class Channels {
 	
 	public Channels(DanAndChat plugin){
 		this.plugin = plugin;
-	    channels = this.plugin.settings.getChannels();
+	    channels = this.plugin.getSettings().getChannels();
 
-	    DanAndChat.log.info("[DanAndChat] Loaded " + channels.size() + " channels.");
+	    this.plugin.log.info("[DanAndChat] Loaded " + channels.size() + " channels.");
 	}
 	
 	public boolean playerHasFocusedChannel(Player p){

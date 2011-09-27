@@ -1,7 +1,5 @@
 package com.gmail.andreasmartinmoerch.danandchat.commands;
 
-import java.util.logging.Logger;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -37,7 +35,7 @@ public class ChangeCommand implements CommandExecutor {
 		}
 		Channel c = null;
 		Channel oldFocus = null;
-		for (Channel ch: this.plugin.channels.channels){
+		for (Channel ch: this.plugin.getChannels().channels){
 			if (ch.getShortCut().equalsIgnoreCase(args[0])){
 				c = ch;
 			}

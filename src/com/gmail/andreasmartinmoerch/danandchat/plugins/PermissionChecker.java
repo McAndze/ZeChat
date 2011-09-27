@@ -3,10 +3,7 @@ package com.gmail.andreasmartinmoerch.danandchat.plugins;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.samkio.RPGWorld.RPGWorldPlugin;
-
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
@@ -51,7 +48,7 @@ public class PermissionChecker {
 	 * @param p Player to initialize.
 	 */
 	public void initializePlayer(Player p){
-		List<Channel> channels = this.plugin.channels.channels;
+		List<Channel> channels = this.plugin.getChannels().channels;
  		for (Channel c: channels){
  			if (c.isAutoJoin()){
  				c.addPlayer(p);
@@ -61,7 +58,7 @@ public class PermissionChecker {
  				c.getFocused().add(p);
  			}
  		}
- 		if (!this.plugin.channels.playerHasFocusedChannel(p)){
+ 		if (!this.plugin.getChannels().playerHasFocusedChannel(p)){
  			Channel c = channels.get(0);
  			if (!c.getBanned().contains(p.getName()))
  			{

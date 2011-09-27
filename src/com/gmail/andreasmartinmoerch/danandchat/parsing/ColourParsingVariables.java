@@ -1,6 +1,11 @@
-package com.gmail.andreasmartinmoerch.danandchat.chmarkup;
+package com.gmail.andreasmartinmoerch.danandchat.parsing;
 
-public enum ChatColour {
+/**
+ * @deprecated
+ * @author Huliheaden
+ *
+ */
+public enum ColourParsingVariables {
 	BLACK("§0"),
 	DARK_BLUE("§1"),
 	DARK_GREEN("§2"),
@@ -20,7 +25,7 @@ public enum ChatColour {
 	
 	private final String strPresentation;
 
-	private ChatColour(String strPresentation) {
+	private ColourParsingVariables(String strPresentation) {
 		this.strPresentation = strPresentation;
 	}
 
