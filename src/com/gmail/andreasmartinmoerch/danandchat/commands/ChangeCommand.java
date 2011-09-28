@@ -1,6 +1,5 @@
 package com.gmail.andreasmartinmoerch.danandchat.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,6 +8,7 @@ import org.bukkit.entity.Player;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
+import com.gmail.andreasmartinmoerch.danandchat.utils.Messages;
 
 public class ChangeCommand implements CommandExecutor {
 	
@@ -26,7 +26,7 @@ public class ChangeCommand implements CommandExecutor {
 		}
 		Player player = (Player)sender;
 		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.changeChannel)){
-			player.sendMessage(ChatColor.RED + "You haven't got the permission to do that.");
+			player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.NO_PERMISSION_CHANGE_CHANNEL));
 			return true;
 		}
 		
@@ -45,11 +45,11 @@ public class ChangeCommand implements CommandExecutor {
 			}
 		}
 		if (c == null){
-			player.sendMessage(ChatColor.RED + "Could not find channel with shortcut: " + args[0] + ".");
+			player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.COULD_NOT_FIND_CHANNEL_WITH_SHORTCUT, args[0]));
 			if (oldFocus != null){
 				oldFocus.getFocused().add(player);
 			} else {
-				player.sendMessage(ChatColor.RED + "Could not re-join previously focused channel.");				
+				player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.COULD_NOT_REJOIN_FOCUSED_CHANNEL));				
 			}
 			return true;
 		}

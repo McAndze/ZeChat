@@ -62,8 +62,132 @@ public class Channel {
 //	}
 	
 	public Channel(String name, DanAndChat plugin){
+		this.name = name;
 		this.plugin = plugin;
 		this.tags = new ArrayList<ChannelTag>();
+
+		this.worlds = new ArrayList<World>();
+		this.banned = new ArrayList<String>();
+		this.allowedGroups = new ArrayList<String>();
+		this.allowedPlayers = new ArrayList<String>();
+		this.chNode = plugin.getSettings().channelsConfig.getNode("channels"
+				+ "." + this.getName());
+		this.players = new ArrayList<Player>();
+		this.focused = new ArrayList<Player>();
+	}
+	
+	public void initialize(){
+		this.chLogger = new ChannelLogger(this);
+		// Worlds
+		List<World> worlds = new ArrayList<World>();
+		List<String> defWorlds = new ArrayList<String>();
+		defWorlds.add(this.plugin.getServer().getWorlds().get(0).getName());
+
+		for (String s : chNode.getStringList("worlds", defWorlds)) {
+			World world = this.plugin.getServer().getWorld(s);
+			if (world != null) {
+				worlds.add(world);
+			} else {
+				this.plugin.log
+						.warning("[DanAndChat] Found invalid world specified: "
+								+ s + " - In channel: " + this.getName()
+								+ ". It may not work in this world.");
+			}
+		}
+		if (worlds.isEmpty()) {
+			worlds.add(this.plugin.getServer().getWorlds().get(0));
+		}
+		this.setWorlds(worlds);
+
+		// Banned players
+		List<String> banned = new ArrayList<String>();
+		for (String s : chNode.getStringList("banned-players", banned)) {
+			banned.add(s);
+		}
+		this.setBanned(banned);
+
+		// Muted players
+		List<String> muted = new ArrayList<String>();
+
+		for (String s : chNode.getStringList("muted-players", muted)) {
+			muted.add(s);
+		}
+		this.setMuted(muted);
+
+		// ShortName
+		String shortName;
+		shortName = chNode.getString("short-name");
+		if (shortName == null) {
+			this.setShortName(this.getName());
+		} else {
+			this.setShortName(shortName);
+		}
+
+		// Shortcut
+		String shortcut;
+		shortcut = chNode.getString("shortcut");
+		if (shortcut == null || shortcut.isEmpty()) {
+			this.setShortCut(this.getName());
+		} else {
+			this.setShortCut(shortcut);
+		}
+
+		// Colour
+		try {
+			this.setColor(ColourParsingVariables.valueOf(chNode.getString(".colour")
+					.toUpperCase()));
+		} catch (Exception e) {
+			try {
+				this.setColor(ColourParsingVariables.valueOf(chNode.getString(".color")
+						.toUpperCase()));
+			} catch (Exception ex) {
+
+			}
+			this.setColor(ColourParsingVariables.WHITE);
+		}
+		
+		// TODO: Add support for group managers.
+		// // Allowed groups
+		// List<String> groups = new ArrayList<String>();
+		// for (String s: Settings.channelsConfig.getKeys("channels" + "." +
+		// this.getName() + ".allowed-groups")){
+		// groups.add(s);
+		// }
+		// this.setAllowedGroups(groups);
+		//
+		// // Allowed players
+		// List<String> players = new ArrayList<String>();
+		// for (String s: Settings.channelsConfig.getKeys("channels" + "." +
+		// this.getName() + ".exempted-players")){
+		// players.add(s);
+		// }
+		// this.setAllowedPlayers(players);
+
+		// In Character
+		this.setIc(chNode.getBoolean("in-character-focused", false));
+
+		// Uses /me?
+		this.setUsesMe(chNode.getBoolean("uses-me", true));
+
+		// Hidden
+		this.setHidden(chNode.getBoolean("hidden", false));
+		if (this.hidden){
+			this.tags.add(ChannelTag.HIDDEN);
+		}
+
+		// Range. -1 = Global
+		this.setLocalRange(chNode.getInt("range", -1));
+		String newformat;
+		if ((newformat = chNode.getString("formatting")) != null
+				&& !(newformat.isEmpty())) {
+			this.setFormatting(newformat);
+		}
+
+		// Autojoin?
+		this.setAutoJoin(chNode.getBoolean("auto-join", true));
+
+		// Autofocus?
+		this.setAutoFocus(chNode.getBoolean("auto-focus", false));
 	}
 	
 	public List<Player> getFocused() {

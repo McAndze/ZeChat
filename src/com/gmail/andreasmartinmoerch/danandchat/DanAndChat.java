@@ -16,6 +16,7 @@ import com.gmail.andreasmartinmoerch.danandchat.commands.CommandManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 import com.gmail.andreasmartinmoerch.danandchat.prefixer.Prefixer;
+import com.gmail.andreasmartinmoerch.danandchat.utils.MessageGetter;
 
 /**
  * This program is free software. It comes without any warranty, to
@@ -71,12 +72,13 @@ public class DanAndChat extends JavaPlugin {
 	private CommandManager commandManager;
 	private MessageHandler messageHandler;
 	private Prefixer prefixer;
+	private MessageGetter messageGetter;
 
 	/**
 	 * Default method
 	 */
 	public void onEnable() {
-		initializeStuff();
+		initializeFields();
 		PluginManager pm = getServer().getPluginManager();
 
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.High,
@@ -115,17 +117,27 @@ public class DanAndChat extends JavaPlugin {
 	/**
 	 * Initializes stuff in the correct order.
 	 */
-	public void initializeStuff() {
+	public void initializeFields() {
 		this.messageHandler = new MessageHandler(this);
 		this.commandManager = new CommandManager(this);
+		this.commandManager.initialize();
 		this.settings = new Settings(this);
 		this.settings.initialize();
 		this.extensionManager = new ExtensionManager(this);
 		this.extensionManager.initialize();
 		this.prefixer = new Prefixer(this);
-		// ChannelManager.initialize();
 		this.channels = new Channels(this);
+		this.channels.initialize();
 		this.permissionChecker = new PermissionChecker(this);
+		this.messageGetter = this.settings.getMessageGetter();
+	}
+	
+	public MessageGetter getMessageGetter() {
+		return messageGetter;
+	}
+
+	public void setMessageGetter(MessageGetter messageGetter) {
+		this.messageGetter = messageGetter;
 	}
 
 	@SuppressWarnings("javadoc")

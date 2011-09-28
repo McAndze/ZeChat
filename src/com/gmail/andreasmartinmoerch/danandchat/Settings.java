@@ -11,6 +11,7 @@ import org.bukkit.util.config.ConfigurationNode;
 
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.commands.Commands;
+import com.gmail.andreasmartinmoerch.danandchat.utils.MessageGetter;
 public class Settings {
 	public static final String mainDirectory = "plugins" + File.separator + "DanAndChat" + File.separator;
 	public static final String settingsDirectory = "Settings"  + File.separator;
@@ -24,6 +25,7 @@ public class Settings {
 	public Configuration prefixConfig;
 		public final String prefixConfigDir = configDir;
 		public final String prefixFile = "prefixes.yml";
+	public Configuration messageConfig;
 			
 	private DanAndChat plugin;
 	
@@ -65,9 +67,16 @@ public class Settings {
 		prefixConfig = new Configuration(fPrefixConfig);
 		prefixConfig.load();
 		
+		//TODO You know what to do.
+		messageConfig = new Configuration(new File(configDir, "messages.yml"));
+		
 		if (!config.getBoolean("plugin" +"."+ "initialized", false)){
 			initializeConf();
 		}
+	}
+	
+	public MessageGetter getMessageGetter(){
+		return new MessageGetter(this.plugin, this.messageConfig);
 	}
 	
 	public void initializeConf(){
