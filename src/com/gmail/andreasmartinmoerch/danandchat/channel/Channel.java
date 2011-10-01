@@ -27,7 +27,7 @@ public class Channel {
 	private List<World> worlds;
 	private List<String> banned;
 	private List<String> muted;
-	private List<Player> focused;
+	private List<String> focused;
 	private String name;
 	private String shortName;
 	private String shortCut;
@@ -45,7 +45,7 @@ public class Channel {
 	private boolean autoFocus;
 	private ChannelLogger chLogger;
 
-	private List<Player> players;
+	private List<String> players;
 
 //	public Channel(String name, DanAndChat plugin) {
 //		this.name = name;
@@ -72,8 +72,8 @@ public class Channel {
 		this.allowedPlayers = new ArrayList<String>();
 		this.chNode = plugin.getSettings().channelsConfig.getNode("channels"
 				+ "." + this.getName());
-		this.players = new ArrayList<Player>();
-		this.focused = new ArrayList<Player>();
+		this.players = new ArrayList<String>();
+		this.focused = new ArrayList<String>();
 	}
 	
 	public void initialize(){
@@ -190,11 +190,20 @@ public class Channel {
 		this.setAutoFocus(chNode.getBoolean("auto-focus", false));
 	}
 	
-	public List<Player> getFocused() {
+	public void removeFocus(Player player){
+		this.focused.remove(player.getName().toLowerCase());
+	}
+	
+	public void addFocus(Player player){
+		this.focused.add(player.getName().toLowerCase());
+		this.players.add(player.getName().toLowerCase());
+	}
+	
+	public List<String> getFocused() {
 		return focused;
 	}
 
-	public void setFocused(List<Player> focused) {
+	public void setFocused(List<String> focused) {
 		this.focused = focused;
 	}
 
@@ -542,15 +551,16 @@ public class Channel {
 	}
 
 	public boolean playerIsInChannel(Player p) {
-		return players.contains(p);
+		return players.contains(p.getName().toLowerCase());
 	}
 
 	public void removePlayer(Player p) {
-		this.players.remove(p);
+		this.players.remove(p.getName().toLowerCase());
+		this.removeFocus(p);
 	}
 
 	public void addPlayer(Player p) {
-		this.players.add(p);
+		this.players.add(p.getName().toLowerCase());
 	}
 
 	public String getName() {
@@ -569,7 +579,7 @@ public class Channel {
 		this.usesMe = usesMe;
 	}
 
-	public void setPlayers(List<Player> players) {
+	public void setPlayers(List<String> players) {
 		this.players = players;
 	}
 

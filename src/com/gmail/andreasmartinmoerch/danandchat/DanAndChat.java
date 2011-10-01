@@ -120,17 +120,19 @@ public class DanAndChat extends JavaPlugin {
 	 */
 	public void initializeFields() {
 		this.messageHandler = new MessageHandler(this);
-		this.commandManager = new CommandManager(this);
-		this.commandManager.initialize();
-		this.settings = new Settings(this);
-		this.settings.initialize();
-		this.extensionManager = new ExtensionManager(this);
-		this.extensionManager.initialize();
+		this.settings = new Settings(this);	
+		this.commandManager = new CommandManager(this);	
+		this.extensionManager = new ExtensionManager(this);	
 		this.prefixer = new Prefixer(this);
 		this.channels = new Channels(this);
-		this.channels.initialize();
 		this.permissionChecker = new PermissionChecker(this);
 		this.messageGetter = this.settings.getMessageGetter();
+		
+		this.settings.initialize();
+		this.commandManager.initialize();
+		this.extensionManager.initialize();
+		this.channels.initialize();
+		
 	}
 	
 	public MessageGetter getMessageGetter() {

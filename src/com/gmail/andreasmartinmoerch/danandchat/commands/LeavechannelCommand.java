@@ -44,13 +44,17 @@ public class LeavechannelCommand implements CommandExecutor{
 		
 		if (!c.playerIsInChannel(player)){
 			player.sendMessage(ChatColor.RED + "You are not in that channel!");
+			return true;
 		}
 		
 		c.removePlayer(player);
-		c.getFocused().remove(player);
+		if(c.playerIsInChannel(player)){
+			player.sendMessage("DEBUG1");
+		}
 		for (Channel ch: this.plugin.getChannels().channels){
 			if (ch.isAutoFocus() && ch.playerIsInChannel(player)){
-				ch.getFocused().add(player);
+				player.sendMessage("DEBUG");
+				ch.addFocus(player);
 			}
 		}
 		return true;

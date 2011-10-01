@@ -49,14 +49,13 @@ public class ChCommand implements CommandExecutor{
 		if (c == null){
 			player.sendMessage(ChatColor.RED + "Could not find channel with shortcut: " + args[0] + ".");
 			if (oldFocus != null){
-				oldFocus.getFocused().add(player);
+				oldFocus.addFocus(player);
 			} else {
 				player.sendMessage(ChatColor.RED + "Could not re-join previously focused channel.");				
 			}
 			return true;
 		}
-		c.addPlayer(player);
-		c.getFocused().add(player);
+		c.addFocus(player);
 		return true;
 	}
 	

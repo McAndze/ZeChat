@@ -37,16 +37,14 @@ public class Channels {
  				c.addPlayer(p);
  			}
  			if(c.isAutoFocus() && !c.getBanned().contains(p.getName())){
- 				c.addPlayer(p);
- 				c.getFocused().add(p);
+ 				c.addFocus(p);
  			}
  		}
  		if (!this.plugin.getChannels().playerHasFocusedChannel(p)){
  			Channel c = channels.get(0);
  			if (!c.getBanned().contains(p.getName()))
  			{
- 	 			c.addPlayer(p);
- 	 			c.getFocused().add(p);
+ 	 			c.addFocus(p);
  			}
  		}
  		init.add(p);
