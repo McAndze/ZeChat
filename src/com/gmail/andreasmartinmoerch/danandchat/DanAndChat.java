@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channels;
+import com.gmail.andreasmartinmoerch.danandchat.channel.DanAndLogger;
 import com.gmail.andreasmartinmoerch.danandchat.channel.MessageHandler;
 import com.gmail.andreasmartinmoerch.danandchat.commands.CommandManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
@@ -74,6 +75,7 @@ public class DanAndChat extends JavaPlugin {
 	private MessageHandler messageHandler;
 	private Prefixer prefixer;
 	private MessageGetter messageGetter;
+	private DanAndLogger danandLogger;
 
 	/**
 	 * Default method
@@ -93,7 +95,7 @@ public class DanAndChat extends JavaPlugin {
 
 		CallHome.load(this);
 		PluginDescriptionFile pdfFile = getDescription();
-
+		
 		this.log.info("[DanAndChat] DanAndChat v" + pdfFile.getVersion()
 				+ " enabled.");
 	}
@@ -103,7 +105,7 @@ public class DanAndChat extends JavaPlugin {
 	 */
 	public void onDisable() {
 		for (Channel c : this.channels.channels) {
-			c.getChLogger().write();
+			c.getChLogger().writeToFile();
 		}
 		this.messageHandler = null;
 		this.settings = null;
@@ -126,12 +128,14 @@ public class DanAndChat extends JavaPlugin {
 		this.prefixer = new Prefixer(this);
 		this.channels = new Channels(this);
 		this.permissionChecker = new PermissionChecker(this);
+		this.danandLogger = new DanAndLogger(this, "danand.log", null);
 		
 		this.settings.initialize();
 		this.commandManager.initialize();
 		this.extensionManager.initialize();
 		this.channels.initialize();
 		this.messageGetter = this.settings.getNewMessageGetter();
+		this.danandLogger.initialize();
 	}
 	
 	/**

@@ -244,13 +244,13 @@ public class ChannelCommand implements CommandExecutor {
 	public boolean writeFile(String[] args) {
 		if (args[1].equals("all")) {
 			for (Channel c : this.plugin.getChannels().channels) {
-				c.getChLogger().write();
+				c.getChLogger().writeToFile();
 			}
 			return true;
 		} else {
 			for (Channel c : this.plugin.getChannels().channels) {
 				if (args[1].equalsIgnoreCase(c.getName())) {
-					c.getChLogger().write();
+					c.getChLogger().writeToFile();
 					return true;
 				}
 			}

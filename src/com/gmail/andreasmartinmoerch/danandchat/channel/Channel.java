@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.config.ConfigurationNode;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
-import com.gmail.andreasmartinmoerch.danandchat.channel.ChannelLogger;
 import com.gmail.andreasmartinmoerch.danandchat.parsing.ColourParsingVariables;
 
 /**
@@ -44,7 +43,7 @@ public class Channel {
 	private boolean usesMe;
 	private boolean autoJoin;
 	private boolean autoFocus;
-	private ChannelLogger chLogger;
+	private DanAndLogger chLogger;
 
 	private List<String> players;
 
@@ -78,7 +77,8 @@ public class Channel {
 	}
 	
 	public void initialize(){
-		this.chLogger = new ChannelLogger(this);
+		this.chLogger = new DanAndLogger(this.plugin, this);
+		this.chLogger.initialize();
 		// Worlds
 		List<World> worlds = new ArrayList<World>();
 		List<String> defWorlds = new ArrayList<String>();
@@ -208,122 +208,19 @@ public class Channel {
 		this.focused = focused;
 	}
 
+	/**
+	 * @deprecated
+	 * @see #initialize()
+	 */
 	public void loadFromConfig() {
-		this.chLogger = new ChannelLogger(this);
-		// Worlds
-		List<World> worlds = new ArrayList<World>();
-		List<String> defWorlds = new ArrayList<String>();
-		defWorlds.add(this.plugin.getServer().getWorlds().get(0).getName());
-
-		for (String s : chNode.getStringList("worlds", defWorlds)) {
-			World world = this.plugin.getServer().getWorld(s);
-			if (world != null) {
-				worlds.add(world);
-			} else {
-				this.plugin.log
-						.warning("[DanAndChat] Found invalid world specified: "
-								+ s + " - In channel: " + this.getName()
-								+ ". It may not work in this world.");
-			}
-		}
-		if (worlds.isEmpty()) {
-			worlds.add(this.plugin.getServer().getWorlds().get(0));
-		}
-		this.setWorlds(worlds);
-
-		// Banned players
-		List<String> banned = new ArrayList<String>();
-		for (String s : chNode.getStringList("banned-players", banned)) {
-			banned.add(s);
-		}
-		this.setBanned(banned);
-
-		// Muted players
-		List<String> muted = new ArrayList<String>();
-
-		for (String s : chNode.getStringList("muted-players", muted)) {
-			muted.add(s);
-		}
-		this.setMuted(muted);
-
-		// ShortName
-		String shortName;
-		shortName = chNode.getString("short-name");
-		if (shortName == null) {
-			this.setShortName(this.getName());
-		} else {
-			this.setShortName(shortName);
-		}
-
-		// Shortcut
-		String shortcut;
-		shortcut = chNode.getString("shortcut");
-		if (shortcut == null || shortcut.isEmpty()) {
-			this.setShortCut(this.getName());
-		} else {
-			this.setShortCut(shortcut);
-		}
-
-		// Colour
-		try {
-			this.setColor(ColourParsingVariables.valueOf(chNode.getString(".colour")
-					.toUpperCase()));
-		} catch (Exception e) {
-			try {
-				this.setColor(ColourParsingVariables.valueOf(chNode.getString(".color")
-						.toUpperCase()));
-			} catch (Exception ex) {
-
-			}
-			this.setColor(ColourParsingVariables.WHITE);
-		}
-
-		// // Allowed groups
-		// List<String> groups = new ArrayList<String>();
-		// for (String s: Settings.channelsConfig.getKeys("channels" + "." +
-		// this.getName() + ".allowed-groups")){
-		// groups.add(s);
-		// }
-		// this.setAllowedGroups(groups);
-		//
-		// // Allowed players
-		// List<String> players = new ArrayList<String>();
-		// for (String s: Settings.channelsConfig.getKeys("channels" + "." +
-		// this.getName() + ".exempted-players")){
-		// players.add(s);
-		// }
-		// this.setAllowedPlayers(players);
-
-		// In Character
-		this.setIc(chNode.getBoolean("in-character-focused", false));
-
-		// Uses /me?
-		this.setUsesMe(chNode.getBoolean("uses-me", true));
-
-		// Hidden
-		this.setHidden(chNode.getBoolean("hidden", false));
-
-		// Range. -1 = Global
-		this.setLocalRange(chNode.getInt("range", -1));
-		String newformat;
-		if ((newformat = chNode.getString("formatting")) != null
-				&& !(newformat.isEmpty())) {
-			this.setFormatting(newformat);
-		}
-
-		// Autojoin?
-		this.setAutoJoin(chNode.getBoolean("auto-join", true));
-
-		// Autofocus?
-		this.setAutoFocus(chNode.getBoolean("auto-focus", false));
-
+		this.initialize();
 	}
 
-	public ChannelLogger getChLogger() {
+	public DanAndLogger getChLogger() {
 		return chLogger;
 	}
 
-	public void setChLogger(ChannelLogger chLogger) {
+	public void setChLogger(DanAndLogger chLogger) {
 		this.chLogger = chLogger;
 	}
 
