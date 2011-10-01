@@ -88,8 +88,8 @@ public class Settings {
 		if ((prefix = this.config.getString("plugin.message-set", null)) == null){
 			msgGetter = new MessageGetter(this.plugin, this.messageConfig);
 		} else { msgGetter = new MessageGetter(this.plugin, this.messageConfig, prefix); }
-		
-		MessageGetter.debug = true;
+		MessageGetter.writeDefaultMessagesToConfig(this.messageConfig, false);
+		MessageGetter.debug = this.config.getBoolean("plugin.debug", false);
 		return msgGetter;
 	}
 	

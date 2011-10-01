@@ -24,7 +24,7 @@ public class MessageGetter {
 	public static void writeDefaultMessagesToConfig(Configuration config, boolean overwrite){
 		for (Messages message: Messages.values()){
 			if (config.getString(DEFAULT_PREFIX + "." + message.toString(), null) == null || overwrite){
-				config.setProperty(DEFAULT_PREFIX, message.getFallback());
+				config.setProperty(DEFAULT_PREFIX + "." + message.toString(), message.getFallback());
 			}
 			
 		}
