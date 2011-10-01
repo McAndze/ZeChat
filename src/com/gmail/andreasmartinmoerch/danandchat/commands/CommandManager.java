@@ -7,6 +7,12 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.util.config.Configuration;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
+import com.gmail.andreasmartinmoerch.danandchat.commands.ChangeCommand;
+import com.gmail.andreasmartinmoerch.danandchat.commands.ChannelCommand;
+import com.gmail.andreasmartinmoerch.danandchat.commands.Commands;
+import com.gmail.andreasmartinmoerch.danandchat.commands.LeavechannelCommand;
+import com.gmail.andreasmartinmoerch.danandchat.commands.MeCommand;
+import com.gmail.andreasmartinmoerch.danandchat.commands.TCommand;
 
 public class CommandManager {
 	private DanAndChat plugin;

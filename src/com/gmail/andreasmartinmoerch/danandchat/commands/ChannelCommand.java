@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
+import com.gmail.andreasmartinmoerch.danandchat.commands.ChannelArgs;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
 public class ChannelCommand implements CommandExecutor {

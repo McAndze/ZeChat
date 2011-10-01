@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
+import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 
 public class Channels {
 	private DanAndChat plugin;

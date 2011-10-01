@@ -126,19 +126,26 @@ public class DanAndChat extends JavaPlugin {
 		this.prefixer = new Prefixer(this);
 		this.channels = new Channels(this);
 		this.permissionChecker = new PermissionChecker(this);
-		this.messageGetter = this.settings.getMessageGetter();
 		
 		this.settings.initialize();
 		this.commandManager.initialize();
 		this.extensionManager.initialize();
 		this.channels.initialize();
-		
+		this.messageGetter = this.settings.getNewMessageGetter();
 	}
 	
+	/**
+	 * 
+	 * @return Used messageGetter
+	 */
 	public MessageGetter getMessageGetter() {
 		return messageGetter;
 	}
-
+	
+	/**
+	 * 
+	 * @param messageGetter sets this.messageGetter
+	 */
 	public void setMessageGetter(MessageGetter messageGetter) {
 		this.messageGetter = messageGetter;
 	}

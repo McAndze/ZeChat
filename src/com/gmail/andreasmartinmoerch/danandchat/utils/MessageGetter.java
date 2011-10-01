@@ -18,8 +18,19 @@ public class MessageGetter {
 
 	private final DanAndChat plugin;
 	private final Configuration configuration;
-	private final String prefix;
+	private String prefix;
 	public static boolean debug = false;
+	
+	public static void writeDefaultMessagesToConfig(Configuration config, boolean overwrite){
+		for (Messages message: Messages.values()){
+			if (config.getString(DEFAULT_PREFIX + "." + message.toString(), null) == null || overwrite){
+				config.setProperty(DEFAULT_PREFIX, message.getFallback());
+			}
+			
+		}
+		config.save();
+		config.load();
+	}
 
 	/**
 	 * Constructor with pre-defined prefix.
@@ -59,6 +70,14 @@ public class MessageGetter {
 	 */
 	public String getPrefix() {
 		return this.prefix;
+	}
+	
+	/**
+	 * 
+	 * @param prefix
+	 */
+	public void setPrefix(String prefix){
+		this.prefix = prefix;
 	}
 	
 	public String getMessageWithArgs(Messages message, String... args){

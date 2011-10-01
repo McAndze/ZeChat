@@ -9,6 +9,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
+import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 
 
 public class ChannelLogger {

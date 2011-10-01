@@ -26,6 +26,8 @@ public class Settings {
 		public final String prefixConfigDir = configDir;
 		public final String prefixFile = "prefixes.yml";
 	public Configuration messageConfig;
+		public final String messageConfigDir = configDir;
+		public final String messageFile = "messages.yml";
 			
 	private DanAndChat plugin;
 	
@@ -40,6 +42,7 @@ public class Settings {
 		File fConfig = new File(configDir, configFile);		
 		File fChannelsConfig = new File(channelsDir, channelsFile);
 		File fPrefixConfig = new File(prefixConfigDir, prefixFile);
+		File fMessageConfig = new File(messageConfigDir, messageFile);
 		
 		try {
 			if (!fConfig.exists()){
@@ -52,6 +55,9 @@ public class Settings {
 			
 			if (!fPrefixConfig.exists()){
 				fPrefixConfig.createNewFile();
+			}
+			if(!fMessageConfig.exists()){
+				fMessageConfig.createNewFile();
 			}
 		} catch (IOException e){
 			e.printStackTrace();
@@ -68,15 +74,23 @@ public class Settings {
 		prefixConfig.load();
 		
 		//TODO You know what to do.
-		messageConfig = new Configuration(new File(configDir, "messages.yml"));
+		messageConfig = new Configuration(fMessageConfig);
+		messageConfig.load();
 		
 		if (!config.getBoolean("plugin" +"."+ "initialized", false)){
 			initializeConf();
 		}
 	}
 	
-	public MessageGetter getMessageGetter(){
-		return new MessageGetter(this.plugin, this.messageConfig);
+	public MessageGetter getNewMessageGetter(){
+		String prefix = null;
+		MessageGetter msgGetter;
+		if ((prefix = this.config.getString("plugin.message-set", null)) == null){
+			msgGetter = new MessageGetter(this.plugin, this.messageConfig);
+		} else { msgGetter = new MessageGetter(this.plugin, this.messageConfig, prefix); }
+		
+		MessageGetter.debug = true;
+		return msgGetter;
 	}
 	
 	public void initializeConf(){

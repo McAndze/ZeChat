@@ -2,6 +2,8 @@ package com.gmail.andreasmartinmoerch.danandchat;
 
 import org.bukkit.event.player.PlayerChatEvent;
 
+import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
+
 import me.samkio.RPGWorld.chat.RPGWorldChatPlugin;
 
 public class DanAndChatRPG extends RPGWorldChatPlugin {
