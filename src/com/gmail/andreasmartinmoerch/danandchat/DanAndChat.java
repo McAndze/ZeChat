@@ -19,7 +19,7 @@ import com.gmail.andreasmartinmoerch.danandchat.prefixer.Prefixer;
 import com.gmail.andreasmartinmoerch.danandchat.utils.MessageGetter;
 import com.gmail.andreasmartinmoerch.danandchat.utils.Settings;
 
-/**
+/*
  * This program is free software. It comes without any warranty, to
  * the extent permitted by applicable law. You can redistribute it
  * and/or modify it under the terms of the Do What The Fuck You Want
@@ -27,7 +27,7 @@ import com.gmail.andreasmartinmoerch.danandchat.utils.Settings;
  * underneath for more details.
  */
 
-/**
+/*
  * DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
  *                   Version 2, December 2004
  *
@@ -43,7 +43,7 @@ import com.gmail.andreasmartinmoerch.danandchat.utils.Settings;
  * 0. You just DO WHAT THE FUCK YOU WANT TO.
  */
 
-/**
+/*
  * The above license applies to all classes, unless stated otherwise in the individual class.
  */
 /**

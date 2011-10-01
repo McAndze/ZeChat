@@ -83,9 +83,10 @@ public class MessageGetter {
 	public String getMessageWithArgs(Messages message, String... args){
 		String customMessage = getMessage(message);
 		int i = 0;
-		for (String s: args){
-			customMessage = customMessage.replaceFirst("%ARG" + String.valueOf(i), s);
-		}
+		String.format(customMessage, args);
+//		for (String s: args){
+//			customMessage = customMessage.replaceFirst("%ARG" + String.valueOf(i), s);
+//		}
 		
 		return customMessage;
 	}
