@@ -1,4 +1,4 @@
-package com.gmail.andreasmartinmoerch.danandchat;
+package com.gmail.andreasmartinmoerch.danandchat.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,9 +9,9 @@ import org.bukkit.World;
 import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
 
+import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.commands.Commands;
-import com.gmail.andreasmartinmoerch.danandchat.utils.MessageGetter;
 public class Settings {
 	public static final String mainDirectory = "plugins" + File.separator + "DanAndChat" + File.separator;
 	public static final String settingsDirectory = "Settings"  + File.separator;

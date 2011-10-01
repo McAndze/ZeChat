@@ -17,6 +17,7 @@ import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 import com.gmail.andreasmartinmoerch.danandchat.prefixer.Prefixer;
 import com.gmail.andreasmartinmoerch.danandchat.utils.MessageGetter;
+import com.gmail.andreasmartinmoerch.danandchat.utils.Settings;
 
 /**
  * This program is free software. It comes without any warranty, to
