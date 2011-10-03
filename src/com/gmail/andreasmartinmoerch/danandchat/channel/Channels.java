@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
-import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 
 public class Channels {
 	private DanAndChat plugin;
@@ -20,7 +19,7 @@ public class Channels {
 	
 	public void initialize(){
 		channels = this.plugin.getSettings().getChannels();
-	    this.plugin.log.info("[DanAndChat] Loaded " + channels.size() + " channels.");
+		this.plugin.getDanandLogger().logMsg("Loaded " + channels.size() + " channels.", null);
 	    
 		for (Player p: plugin.getServer().getOnlinePlayers()){
 			initializePlayer(p);
@@ -53,7 +52,7 @@ public class Channels {
 	
 	public boolean playerHasFocusedChannel(Player p){
 		for(Channel c: channels){
-			if (c.getFocused().contains(p)){
+			if (c.getFocused().contains(p.getName())){
 				return true;
 			}
 		}
@@ -67,9 +66,9 @@ public class Channels {
 		Channel ch = null;
 		boolean found = false;
 		for (Channel c: channels){
-			if (c.getFocused().contains(p)){
+			if (c.getFocused().contains(p.getName())){
 				if (found){
-					c.getFocused().remove(p);
+					c.removeFocus(p);
 				} else {
 					ch = c;
 					found = true;

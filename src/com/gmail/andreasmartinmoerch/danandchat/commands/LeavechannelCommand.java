@@ -1,6 +1,5 @@
 package com.gmail.andreasmartinmoerch.danandchat.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,6 +8,7 @@ import org.bukkit.entity.Player;
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
+import com.gmail.andreasmartinmoerch.danandchat.utils.Messages;
 
 public class LeavechannelCommand implements CommandExecutor{
 	private DanAndChat plugin;
@@ -28,7 +28,7 @@ public class LeavechannelCommand implements CommandExecutor{
 		Player player = (Player)sender;
 		// Start validation
 		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.leaveChannel)){
-			player.sendMessage(ChatColor.RED + "You don't have permission to do that.");
+			player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.NO_PERMISSION_LEAVECHANNEL));
 			return false;
 		}
 		
@@ -38,12 +38,12 @@ public class LeavechannelCommand implements CommandExecutor{
 		// End validation.
 		Channel c;
 		if ((c=plugin.getChannels().getChannelWithShortcut(args[0])) == null){
-			player.sendMessage(ChatColor.RED + "Channel does not exist, with shortcut: " + args[0] + ".");
+			player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.COULD_NOT_FIND_CHANNEL_WITH_SHORTCUT, args[0]));
 			return true;
 		}
 		
 		if (!c.playerIsInChannel(player)){
-			player.sendMessage(ChatColor.RED + "You are not in that channel!");
+			player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.YOU_ARE_NOT_IN_CHANNEL));
 			return true;
 		}
 		

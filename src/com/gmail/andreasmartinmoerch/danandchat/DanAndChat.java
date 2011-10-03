@@ -61,7 +61,7 @@ public class DanAndChat extends JavaPlugin {
 	 */
 	public final Logger log = Logger.getLogger("Minecraft");
 	/**
-	 * The DanAndChat PlayerListener-
+	 * The DanAndChat PlayerListener
 	 */
 	public final DanAndChatPlayerListener playerListener = new DanAndChatPlayerListener(
 			this);
@@ -136,6 +136,10 @@ public class DanAndChat extends JavaPlugin {
 		this.channels.initialize();
 		this.messageGetter = this.settings.getNewMessageGetter();
 		this.danandLogger.initialize();
+	}
+	
+	public DanAndLogger getDanandLogger() {
+		return danandLogger;
 	}
 	
 	/**

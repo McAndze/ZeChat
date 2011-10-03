@@ -26,7 +26,7 @@ public class Settings {
 		public final String prefixConfigDir = configDir;
 		public final String prefixFile = "prefixes.yml";
 	public Configuration messageConfig;
-		public final String messageConfigDir = configDir;
+		public final String messageConfigDir = configDir + File.separator + "advanced";
 		public final String messageFile = "messages.yml";
 			
 	private DanAndChat plugin;
@@ -39,6 +39,12 @@ public class Settings {
 		if (!this.plugin.getDataFolder().exists()){
 			this.plugin.getDataFolder().mkdirs();
 		}
+		
+		File f = new File(messageConfigDir);
+		if (!f.exists()){
+			f.mkdirs();
+		}
+		
 		File fConfig = new File(configDir, configFile);		
 		File fChannelsConfig = new File(channelsDir, channelsFile);
 		File fPrefixConfig = new File(prefixConfigDir, prefixFile);
@@ -73,7 +79,6 @@ public class Settings {
 		prefixConfig = new Configuration(fPrefixConfig);
 		prefixConfig.load();
 		
-		//TODO You know what to do.
 		messageConfig = new Configuration(fMessageConfig);
 		messageConfig.load();
 		

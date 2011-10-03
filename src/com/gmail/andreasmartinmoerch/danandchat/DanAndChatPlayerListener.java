@@ -6,7 +6,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 import com.gmail.andreasmartinmoerch.danandchat.utils.Messages;
@@ -77,7 +76,7 @@ public class DanAndChatPlayerListener extends PlayerListener {
 
 		for (Channel c : this.plugin.getChannels().channels) {
 			c.removePlayer(player);
-			c.getFocused().remove(player);
+			c.getFocused().remove(player.getName());
 		}
 		plugin.getChannels().init.remove(player);
 	}

@@ -24,6 +24,7 @@ public class DanAndLogger{
 	
 	public DanAndLogger(DanAndChat plugin, String thislog, String file){
 		this.plugin = plugin;
+		this.toWrite = new Vector<String>();
 		File dirs;
 		if (file == null){
 			dirs = new File("plugins" + File.separator + "DanAndChat" + File.separator + "logs");
@@ -66,14 +67,23 @@ public class DanAndLogger{
 	public void logMsg(String message, String type){	
 		String toLog;
 		if (this.channel == null){
-			toLog = "[DanAndChat] [" + type + "] " + ": " + message;
+			if (type != null && !type.isEmpty()){
+				toLog = "[DanAndChat] [" + type + "] " + ": " + message;
+			} else {
+				toLog = "[DanAndChat]: " + message;
+			}
+			
 		} else {
-			toLog = "[DanAndChat] [" + type + "][" +channel.getName()+ "]: " + message;
+			if (type != null && !type.isEmpty()){
+				toLog = "[DanAndChat] [" +channel.getName()+ "]: " + message;
+			} else {
+				toLog = "[DanAndChat] [" + type + "][" +channel.getName()+ "]: " + message;
+			}
 			
 		}
 		
 		if (MessageGetter.debug == false){
-			if (!type.equalsIgnoreCase("debug")){
+			if (type != null && !type.equalsIgnoreCase("debug") ){
 				log.info(toLog);
 			}
 		} else {

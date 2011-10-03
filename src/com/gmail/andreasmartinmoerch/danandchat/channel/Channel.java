@@ -89,10 +89,9 @@ public class Channel {
 			if (world != null) {
 				worlds.add(world);
 			} else {
-				this.plugin.log
-						.warning("[DanAndChat] Found invalid world specified: "
-								+ s + " - In channel: " + this.getName()
-								+ ". It may not work in this world.");
+				this.plugin.getDanandLogger().logMsg("Found invalid world specified: "
+						+ s + " - In channel: " + this.getName()
+						+ ". It may not work in this world.", "WARNING");
 			}
 		}
 		if (worlds.isEmpty()) {
@@ -192,12 +191,11 @@ public class Channel {
 	}
 	
 	public void removeFocus(Player player){
-		this.focused.remove(player.getName().toLowerCase());
+		this.focused.remove(player.getName());
 	}
 	
 	public void addFocus(Player player){
-		this.focused.add(player.getName().toLowerCase());
-		this.players.add(player.getName().toLowerCase());
+		this.focused.add(player.getName());
 	}
 	
 	public List<String> getFocused() {
@@ -458,7 +456,7 @@ public class Channel {
 	}
 
 	public void addPlayer(Player p) {
-		this.players.add(p.getName().toLowerCase());
+		this.players.add(p.getName());
 	}
 
 	public String getName() {

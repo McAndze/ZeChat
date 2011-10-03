@@ -31,6 +31,9 @@ commands:
   prefix:
     description: Used for prefixing.
     usage: /prefix <prefix|prefixgroup> <player|group> <prefix>
+  dac:
+    description: Used for managing the plugin.
+    usage: /dac <Args...>
 permissions:
     danandchat.*:
         description: 'Gives access to everything DanAndChat related.'

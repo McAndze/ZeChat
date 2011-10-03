@@ -39,9 +39,9 @@ public class ChangeCommand implements CommandExecutor {
 			if (ch.getShortCut().equalsIgnoreCase(args[0])){
 				c = ch;
 			}
-			if (ch.getFocused().contains(player)){
+			if (ch.getFocused().contains(player.getName())){
 				oldFocus = ch;
-				oldFocus.getFocused().remove(player);
+				oldFocus.removeFocus(player);
 			}
 		}
 		if (c == null){
@@ -49,10 +49,11 @@ public class ChangeCommand implements CommandExecutor {
 			if (oldFocus != null){
 				oldFocus.addFocus(player);
 			} else {
-				player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.COULD_NOT_REJOIN_FOCUSED_CHANNEL));				
+				player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.COULD_NOT_REJOIN_FOCUSED_CHANNEL));				
 			}
 			return true;
 		}
+		c.addPlayer(player);
 		c.addFocus(player);
 		return true;
 	}
