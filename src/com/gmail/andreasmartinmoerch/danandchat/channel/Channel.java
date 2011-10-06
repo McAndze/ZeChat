@@ -12,6 +12,7 @@ import org.bukkit.util.config.ConfigurationNode;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.parsing.ColourParsingVariables;
+import com.gmail.andreasmartinmoerch.danandchat.utils.Messages;
 
 /**
  * This class represents a Channel.
@@ -40,6 +41,7 @@ public class Channel {
 	private ConfigurationNode chNode;;
 	private int localRange;
 	private String formatting = "[&CHANNEL.COLOUR&CHANNEL.NAME]&COLOUR.WHITE<&PLAYER.NAME>: &MESSAGE";
+	private String meFormatting = "&6* &PLAYER.DISPLAYNAME &f&MESSAGE";
 	private boolean usesMe;
 	private boolean autoJoin;
 	private boolean autoFocus;
@@ -192,10 +194,18 @@ public class Channel {
 	
 	public void removeFocus(Player player){
 		this.focused.remove(player.getName());
+		if (this.plugin.getSettings().config.getBoolean("messages" + "." + "notify-on-unfocus", true) == true){
+			player.sendMessage(this.plugin.getMessageGetter()
+					.getMessageWithArgs(Messages.UNFOCUS_CHANNEL, this.getName()));
+		}
 	}
 	
-	public void addFocus(Player player){
-		this.focused.add(player.getName());
+	public void addFocus(Player p){
+		this.focused.add(p.getName());
+		if (this.plugin.getSettings().config.getBoolean("messages" + "." + "notify-on-focus", true) == true){
+			p.sendMessage(this.plugin.getMessageGetter()
+					.getMessageWithArgs(Messages.CHANGED_FOCUS_TO, this.getName()));
+		}
 	}
 	
 	public List<String> getFocused() {
@@ -288,11 +298,10 @@ public class Channel {
 
 	public void sendMessage(String message, Player sender) {
 		boolean ic = false;
-
 		if (this.playerIsInChannel(sender)) {
 			this.chLogger.logMsg(sender.getName() + ": " + message, "MSG");
 			ArrayList<String> newMessage = this.plugin.getMessageHandler()
-					.formatMessage(this, sender, message);
+					.formatMessage(this.formatting, this, sender, message);
 			if (this.getLocalRange() == -1) {
 				for (Player p : this.plugin.getServer().getOnlinePlayers()) {
 					if (!(this.getBanned().contains(p.getName()))
@@ -447,16 +456,24 @@ public class Channel {
 	}
 
 	public boolean playerIsInChannel(Player p) {
-		return players.contains(p.getName().toLowerCase());
+		return players.contains(p.getName());
 	}
 
 	public void removePlayer(Player p) {
-		this.players.remove(p.getName().toLowerCase());
+		this.players.remove(p.getName());
 		this.removeFocus(p);
+		if (this.plugin.getSettings().config.getBoolean("messages" + "." + "notify-on-leave", true) == true){
+			p.sendMessage(this.plugin.getMessageGetter()
+					.getMessageWithArgs(Messages.LEFT_CHANNEL, this.getName()));
+		}
 	}
 
 	public void addPlayer(Player p) {
 		this.players.add(p.getName());
+		if (this.plugin.getSettings().config.getBoolean("messages" + "." + "notify-on-join", true) == true){
+			p.sendMessage(this.plugin.getMessageGetter().
+					getMessageWithArgs(Messages.CHANGED_CHANNEL_TO, this.getName()));
+		}
 	}
 
 	public String getName() {

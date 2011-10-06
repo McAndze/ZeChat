@@ -99,11 +99,22 @@ public class Settings {
 	}
 	
 	public void initializeConf(){
+		/*
+		 * Set default properties for commands.
+		 */
 		config.setProperty("commands" +"."+ Commands.CH.toString().toLowerCase() +"."+ "enabled" , true);
 		config.setProperty("commands" +"."+ Commands.CHANNEL.toString().toLowerCase() +"."+ "enabled" , true);
 		config.setProperty("commands" +"."+ Commands.LEAVECHANNEL.toString().toLowerCase() +"."+ "enabled" , true);
 		config.setProperty("commands" +"."+ Commands.ME.toString().toLowerCase() +"."+ "enabled" , true);
 		config.setProperty("commands" +"."+ Commands.T.toString().toLowerCase() +"."+ "enabled" , true);
+		
+		/*
+		 * Set properties for messages. (In config)
+		 */
+		config.setProperty("messages" + "." + "notify-on-join", true);
+		config.setProperty("messages" + "." + "notify-on-leave", true);
+		config.setProperty("messages" + "." + "notify-on-focus", true);
+		config.setProperty("messages" + "." + "notify-on-unfocus", false);
 		
 		List<String> worlds = new ArrayList<String>();
 		for (World w: this.plugin.getServer().getWorlds()){

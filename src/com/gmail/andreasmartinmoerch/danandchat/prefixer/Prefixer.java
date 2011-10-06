@@ -20,10 +20,10 @@ public class Prefixer {
 		
 		prefix = this.plugin.getSettings().prefixConfig.getString("users." + player.getName().toLowerCase(), null);
 		
-		if (prefix == null){
+		if (prefix == null || prefix.equalsIgnoreCase("null")){
 			prefix = getGroupsPrefix(player);
 		}
-		if (prefix == null){
+		if (prefix == null || prefix.equalsIgnoreCase("null")){
 			return "";
 		}
 		prefix = prefix.replaceAll("&", "§");
@@ -57,10 +57,6 @@ public class Prefixer {
 			for (Group g: groups){
 				if (groupsPrefix.equalsIgnoreCase("")){
 					groupsPrefix = getGroupPrefix(g.getName());
-//					if (groups.size() == 1){
-//						player.sendMessage("groups size 1");
-//						return groupsPrefix;
-//					}
 				} else {
 					groupsPrefix += ChatColor.WHITE + "|" +  getGroupPrefix(g.getName());
 				}

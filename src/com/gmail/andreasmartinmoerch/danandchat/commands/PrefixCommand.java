@@ -1,7 +1,5 @@
 package com.gmail.andreasmartinmoerch.danandchat.commands;
 
-import java.util.logging.Logger;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,28 +21,41 @@ public class PrefixCommand implements CommandExecutor {
 				return true;
 			}
 		}
+		if (args == null || args.length < 3){
+			sender.sendMessage("told ya");
+			return false;
+		}
 		String subcmd =  args[0];
 		if (subcmd == null){
 			sender.sendMessage("subcmd is null");
 			return false;
 		}
-		Logger.getLogger("Minecraft").info(subcmd);
 		if (subcmd.equalsIgnoreCase("prefixgrp") || subcmd.equalsIgnoreCase("prgrp") || subcmd.equalsIgnoreCase("prefixgroup")){
-			Logger.getLogger("Minecraft").info("2");
-			String group = args[1];
-			String prefix = args[2];
-			if (group == null || prefix == null){
-				sender.sendMessage("group or prefix is null");
+			String group;
+			String prefix;
+			try {
+				group = args[1];
+				prefix = args[2];
+			} catch (ArrayIndexOutOfBoundsException e){
 				return false;
 			}
-			Logger.getLogger("Minecraft").info("3");
+			
+			if (group == null || prefix == null){
+				this.plugin.getDanandLogger().logMsg("group or prefix is null", "DEBUG");
+				return false;
+			}
 			sender.sendMessage(this.plugin.getPrefixer().setGroupPrefix(group, prefix));
-			Logger.getLogger("Minecraft").info("4");
 		} else if (subcmd.equalsIgnoreCase("prefix")){
-			String player = args[1];
-			String prefix = args[2];
+			String player;
+			String prefix;
+			try {
+				player = args[1];
+				prefix = args[2];
+			} catch (ArrayIndexOutOfBoundsException e){
+				return false;
+			}
 			if (player == null || prefix == null){
-				sender.sendMessage("player or prefix is null");
+				this.plugin.getDanandLogger().logMsg("player or prefix is null", "DEBUG");
 				return false;
 			}
 			

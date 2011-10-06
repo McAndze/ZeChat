@@ -22,11 +22,15 @@ public enum Messages {
 	COULD_NOT_FIND_CHANNEL_WITH_SHORTCUT ("&4Could not find channel with shortcut: &2%ARG0."),
 	COULD_NOT_REJOIN_FOCUSED_CHANNEL ("&4Could not re-join previously focused channel."),
 	UNKNOWN_ARG ("&4Unknown arg: &2%ARG0"),
-	YOU_HAVE_BEEN_MUTED ("&6You have been muted from the channel: &2%ARG0"),
-	YOU_HAVE_BEEN_UNMUTED ("&6You have been &2unmuted &4from the channel: &2%ARG0"),
-	YOU_HAVE_BEEN_BANNED ("&6You have been banned from the channel: &2%ARG0"),
-	YOU_HAVE_BEEN_UNBANNED ("&6You have been &2unbanned &4from the channel: &2%ARG0"),
+	YOU_HAVE_BEEN_MUTED ("&4You have been muted from the channel: &2%ARG0"),
+	YOU_HAVE_BEEN_UNMUTED ("&6You have been &2unmuted &6from the channel: &2%ARG0"),
+	YOU_HAVE_BEEN_BANNED ("&4You have been banned from the channel: &2%ARG0"),
+	YOU_HAVE_BEEN_UNBANNED ("&6You have been &2unbanned &6from the channel: &2%ARG0"),
 	COULD_NOT_FIND_CHANNEL ("Could not find channel: %ARG0"),
+	CHANGED_CHANNEL_TO ("&6Changed channel to: &2%ARG0"),
+	CHANGED_FOCUS_TO ("&6Changed focus to: &2%ARG0"),
+	LEFT_CHANNEL ("&4Left channel: &2%ARG0"),
+	UNFOCUS_CHANNEL ("&4Unfocused channel: &2%ARG0"),
 	;
 	
 	private final String fallback;

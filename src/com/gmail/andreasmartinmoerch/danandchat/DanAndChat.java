@@ -14,6 +14,7 @@ import com.gmail.andreasmartinmoerch.danandchat.channel.Channels;
 import com.gmail.andreasmartinmoerch.danandchat.channel.DanAndLogger;
 import com.gmail.andreasmartinmoerch.danandchat.channel.MessageHandler;
 import com.gmail.andreasmartinmoerch.danandchat.commands.CommandManager;
+import com.gmail.andreasmartinmoerch.danandchat.parsing.DanAndParser;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.ExtensionManager;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 import com.gmail.andreasmartinmoerch.danandchat.prefixer.Prefixer;
@@ -76,6 +77,7 @@ public class DanAndChat extends JavaPlugin {
 	private Prefixer prefixer;
 	private MessageGetter messageGetter;
 	private DanAndLogger danandLogger;
+	private DanAndParser danAndParser;
 
 	/**
 	 * Default method
@@ -129,13 +131,18 @@ public class DanAndChat extends JavaPlugin {
 		this.channels = new Channels(this);
 		this.permissionChecker = new PermissionChecker(this);
 		this.danandLogger = new DanAndLogger(this, "danand.log", null);
+		this.danAndParser = new DanAndParser(this);
 		
 		this.settings.initialize();
 		this.commandManager.initialize();
 		this.extensionManager.initialize();
-		this.channels.initialize();
 		this.messageGetter = this.settings.getNewMessageGetter();
+		this.channels.initialize();
 		this.danandLogger.initialize();
+	}
+	
+	public DanAndParser getDanAndParser(){
+		return this.danAndParser;
 	}
 	
 	public DanAndLogger getDanandLogger() {

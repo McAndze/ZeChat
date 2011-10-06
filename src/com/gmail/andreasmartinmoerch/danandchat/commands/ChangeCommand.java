@@ -53,7 +53,10 @@ public class ChangeCommand implements CommandExecutor {
 			}
 			return true;
 		}
-		c.addPlayer(player);
+		if (!c.playerIsInChannel(player)){
+			c.addPlayer(player);
+		}
+		
 		c.addFocus(player);
 		return true;
 	}
