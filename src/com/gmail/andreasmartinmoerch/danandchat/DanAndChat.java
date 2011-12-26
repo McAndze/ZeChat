@@ -66,6 +66,9 @@ public class DanAndChat extends JavaPlugin {
 	 */
 	public final DanAndChatPlayerListener playerListener = new DanAndChatPlayerListener(
 			this);
+	
+	public final DanAndChatServerListener serverListener = new DanAndChatServerListener(
+			this);
 
 	// Private variables to get. Not set.
 	private Channels channels;
@@ -94,6 +97,8 @@ public class DanAndChat extends JavaPlugin {
 		}
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener,
 				Priority.Monitor, this);
+		
+		pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Priority.Monitor, this);
 
 		CallHome.load(this);
 		PluginDescriptionFile pdfFile = getDescription();
@@ -135,7 +140,7 @@ public class DanAndChat extends JavaPlugin {
 		
 		this.settings.initialize();
 		this.commandManager.initialize();
-		this.extensionManager.initialize();
+//		this.extensionManager.initialize();
 		this.messageGetter = this.settings.getNewMessageGetter();
 		this.channels.initialize();
 		this.danandLogger.initialize();

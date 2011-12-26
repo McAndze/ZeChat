@@ -30,11 +30,21 @@ public class ChangeCommand implements CommandExecutor {
 			return true;
 		}
 		
-		if (args.length != 1){
+		if (args.length == 1){
+			return change(player, args);
+		} else if (args.length > 1){
+			return shortcut(player, args);
+		} else {
 			return false;
 		}
+		
+	}
+	
+	public boolean change(Player player, String[] args){
 		Channel c = null;
 		Channel oldFocus = null;
+		
+		
 		for (Channel ch: this.plugin.getChannels().channels){
 			if (ch.getShortCut().equalsIgnoreCase(args[0])){
 				c = ch;
@@ -58,6 +68,34 @@ public class ChangeCommand implements CommandExecutor {
 		}
 		
 		c.addFocus(player);
+		return true;
+	}
+	
+	public boolean shortcut(Player player, String[] args){
+		Channel c = null;
+		
+		for (Channel ch: this.plugin.getChannels().channels){
+			if (ch.getShortCut().equalsIgnoreCase(args[0])){
+				c = ch;
+			}
+		}
+		
+		if (c == null){
+			player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.COULD_NOT_FIND_CHANNEL_WITH_SHORTCUT, args[0]));
+			return true;
+		}
+		
+		if (!c.playerIsInChannel(player)){
+			c.addPlayer(player);
+		}
+		
+		String message  = "";
+		for (int i = 1; i <= args.length; i++){
+			message += args[i];
+		}
+		
+		c.sendMessage(message, player);
+		
 		return true;
 	}
 

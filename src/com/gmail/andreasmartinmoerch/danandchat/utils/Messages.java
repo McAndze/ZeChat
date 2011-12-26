@@ -31,6 +31,7 @@ public enum Messages {
 	CHANGED_FOCUS_TO ("&6Changed focus to: &2%ARG0"),
 	LEFT_CHANNEL ("&4Left channel: &2%ARG0"),
 	UNFOCUS_CHANNEL ("&4Unfocused channel: &2%ARG0"),
+	COULD_NOT_HOOK ("Found plugin %ARG0, but couldn't hook into it."),
 	;
 	
 	private final String fallback;

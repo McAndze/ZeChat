@@ -1,45 +1,49 @@
 package com.gmail.andreasmartinmoerch.danandchat.plugins;
 
+import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
+import com.gmail.andreasmartinmoerch.danandchat.utils.Messages;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 import com.sparkedia.valrix.ColorMe.ColorMe;
 
 public class ExtensionManager {
-	boolean usesrpg = false;
-	public ColorMe color;
-	public boolean isUsingNaviaChar = false;
-	private final DanAndChat plugin;
-	public PermissionsPlugin permissionsBukkit;
+	private DanAndChat plugin;
+	public ColorMe color = null;
+	public PermissionsPlugin permissionsBukkit = null;
 
 	public ExtensionManager(DanAndChat plugin) {
 		this.plugin = plugin;
-	}
-
-	public void initialize() {
-		loadColorMe();
-		initRPGWorld();
-		loadPermissions();
 	}
 
 	public boolean usesPermissionsBukkit() {
 		return permissionsBukkit != null;
 	}
 
-	public void loadPermissions() {
+	public void loadPermissions(PluginEnableEvent event) {
 		Plugin plugin;
-		if ((plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("PermissionsBukkit")) != null) {
-			this.permissionsBukkit = (PermissionsPlugin) plugin;
+		if ((plugin = event.getPlugin()) != null) {
+			try {
+				this.permissionsBukkit = (PermissionsPlugin) plugin;
+			} catch (Exception e) {
+				this.plugin.getDanandLogger().logMsg(Messages.COULD_NOT_HOOK, event.getPlugin().getDescription().getFullName());
+				this.permissionsBukkit = null;
+			}
+			
 		}
 	}
 
-	public void loadColorMe() {
+	public void loadColorMe(PluginEnableEvent event) {
 		Plugin plugin;
-		if ((plugin = this.plugin.getServer().getPluginManager()
-				.getPlugin("ColorMe")) != null) {
-			color = (ColorMe) plugin;
+		if ((plugin = event.getPlugin()) != null) {
+			try {
+				this.color = (ColorMe) plugin;
+			} catch (Exception e) {
+				this.plugin.getDanandLogger().logMsg(Messages.COULD_NOT_HOOK, event.getPlugin().getDescription().getFullName());
+				this.color = null;
+			}
+			
 		}
 	}
 
@@ -47,17 +51,11 @@ public class ExtensionManager {
 		return color != null;
 	}
 
-	public void loadNaviaChar() {
-		if (this.plugin.getServer().getPluginManager().getPlugin("NaviaChar") != null) {
-			isUsingNaviaChar = true;
-		}
-	}
-
 	public boolean usesRPGWorld() {
-		return usesrpg;
+		return false;
 	}
 
-	public void initRPGWorld() {
+	public void initRPGWorld(PluginEnableEvent event) {
 		// Plugin testPlugin = null;
 		// if ((testPlugin =
 		// this.plugin.getServer().getPluginManager().getPlugin("RPGWorld")) !=

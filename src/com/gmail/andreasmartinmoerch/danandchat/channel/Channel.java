@@ -297,17 +297,19 @@ public class Channel {
 	}
 
 	public void sendMessage(String message, Player sender) {
+		
 		boolean ic = false;
 		if (this.playerIsInChannel(sender)) {
 			this.chLogger.logMsg(sender.getName() + ": " + message, "MSG");
 			ArrayList<String> newMessage = this.plugin.getMessageHandler()
 					.formatMessage(this.formatting, this, sender, message);
+			
 			if (this.getLocalRange() == -1) {
 				for (Player p : this.plugin.getServer().getOnlinePlayers()) {
 					if (!(this.getBanned().contains(p.getName()))
 							&& !(this.getMuted().contains(p.getName()))
 							&& this.playerIsInChannel(p)
-							&& this.getWorlds().contains(sender.getWorld())) {
+							&& this.getWorlds().contains(sender.getWorld())) {						
 						for (String s : newMessage) {
 							p.sendMessage(s);
 						}
@@ -315,6 +317,7 @@ public class Channel {
 				}
 			} else {
 				Location loc = sender.getLocation();
+				
 				for (Player p : this.plugin.getServer().getOnlinePlayers()) {
 					if (!(this.getBanned().contains(p.getName()))
 							&& !(this.getMuted().contains(p.getName()))
