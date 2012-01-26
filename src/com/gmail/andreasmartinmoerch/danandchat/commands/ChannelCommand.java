@@ -12,6 +12,9 @@ import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 import com.gmail.andreasmartinmoerch.danandchat.utils.Messages;
 
 public class ChannelCommand implements CommandExecutor {
+	public enum ChannelArgs {
+		BAN, UNBAN, LIST, WRITE, RELOAD, MUTE, UNMUTE, RELOADCHANNEL;
+	}
 	private final DanAndChat plugin;
 
 	public ChannelCommand(DanAndChat plugin) {
@@ -81,7 +84,7 @@ public class ChannelCommand implements CommandExecutor {
 		if (args[2].toLowerCase().startsWith("prefix")) {
 			this.plugin.getSettings().prefixConfig.load();
 			sender.sendMessage(ChatColor.GREEN + "Reloaded " + ChatColor.GOLD
-					+ "prefixes.yml");
+					+ "databases.yml");
 			return true;
 		} else if (args[2].toLowerCase().startsWith("channe")) {
 			this.plugin.getSettings().prefixConfig.load();

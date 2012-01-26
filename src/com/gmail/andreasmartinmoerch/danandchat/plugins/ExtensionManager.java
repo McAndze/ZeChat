@@ -1,68 +1,60 @@
 package com.gmail.andreasmartinmoerch.danandchat.plugins;
 
-import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.plugin.Plugin;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
-import com.gmail.andreasmartinmoerch.danandchat.utils.Messages;
-import com.platymuus.bukkit.permissions.PermissionsPlugin;
-import com.sparkedia.valrix.ColorMe.ColorMe;
 
 public class ExtensionManager {
 	private DanAndChat plugin;
-	public ColorMe color = null;
-	public PermissionsPlugin permissionsBukkit = null;
+	public List<String> enabledPlugins = new ArrayList<String>();
+	
+	public static final String TOWNY = "Towny";
+	public static final String TOWNYCHAT = "TownyChat";
+	public static final String VAULT = "Vault";
+	public final List<String> usablePlugins = new ArrayList<String>(){{
+		add(TOWNY);
+		add(TOWNYCHAT);
+		add(VAULT);
+	}};
+	
+	
 
 	public ExtensionManager(DanAndChat plugin) {
 		this.plugin = plugin;
 	}
-
-	public boolean usesPermissionsBukkit() {
-		return permissionsBukkit != null;
-	}
-
-	public void loadPermissions(PluginEnableEvent event) {
-		Plugin plugin;
-		if ((plugin = event.getPlugin()) != null) {
-			try {
-				this.permissionsBukkit = (PermissionsPlugin) plugin;
-			} catch (Exception e) {
-				this.plugin.getDanandLogger().logMsg(Messages.COULD_NOT_HOOK, event.getPlugin().getDescription().getFullName());
-				this.permissionsBukkit = null;
-			}
-			
-		}
-	}
-
-	public void loadColorMe(PluginEnableEvent event) {
-		Plugin plugin;
-		if ((plugin = event.getPlugin()) != null) {
-			try {
-				this.color = (ColorMe) plugin;
-			} catch (Exception e) {
-				this.plugin.getDanandLogger().logMsg(Messages.COULD_NOT_HOOK, event.getPlugin().getDescription().getFullName());
-				this.color = null;
-			}
-			
-		}
-	}
-
-	public boolean isUsingColorMe() {
-		return color != null;
-	}
-
-	public boolean usesRPGWorld() {
-		return false;
-	}
-
-	public void initRPGWorld(PluginEnableEvent event) {
-		// Plugin testPlugin = null;
-		// if ((testPlugin =
-		// this.plugin.getServer().getPluginManager().getPlugin("RPGWorld")) !=
-		// null){
-		// RPGWorldPlugin rpg = (RPGWorldPlugin)testPlugin;
-		// this.plugin.log.info("[DanAndChat] Found RPGWorld! Hooking in!");
-		// rpg.chatPlugins.hookPlugin(new DanAndChatRPG(plugin));
-		// }
+	
+	public void initialize(){
+//		for (Plugin plugin: this.plugin.getServer().getPluginManager().getPlugins()){
+//			PluginDescriptionFile p = plugin.getDescription();
+//			if (usablePlugins.contains(p.getName())){
+//				enabledPlugins.add(p.getName());
+//			}
+//		}
+//		for (String s: this.enabledPlugins){
+//			if (s.equalsIgnoreCase(TOWNY)){
+//				Plugin test = this.plugin.getServer().getPluginManager().getPlugin(TOWNY);
+//				try {
+//					towny = (Towny)test;
+//				} catch (Exception e){
+//					towny = null;
+//					enabledPlugins.remove(TOWNY);
+//					enabledPlugins.remove(TOWNYCHAT);
+//				}
+//				continue;
+//			}
+//			if (s.equalsIgnoreCase(TOWNYCHAT) && enabledPlugins.contains(TOWNYCHAT)){
+//				Plugin test = this.plugin.getServer().getPluginManager().getPlugin(TOWNYCHAT);
+//				try {
+//					townyChat = (Chat)test;
+//				} catch (Exception e){
+//					towny = null;
+//					enabledPlugins.remove(TOWNYCHAT);
+//				}
+//			}
+//			
+//			
+//			
+//		}
 	}
 }

@@ -10,7 +10,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
-import com.gmail.andreasmartinmoerch.danandchat.channel.Channels;
+import com.gmail.andreasmartinmoerch.danandchat.channel.ChannelManager;
 import com.gmail.andreasmartinmoerch.danandchat.channel.DanAndLogger;
 import com.gmail.andreasmartinmoerch.danandchat.channel.MessageHandler;
 import com.gmail.andreasmartinmoerch.danandchat.commands.CommandManager;
@@ -66,12 +66,9 @@ public class DanAndChat extends JavaPlugin {
 	 */
 	public final DanAndChatPlayerListener playerListener = new DanAndChatPlayerListener(
 			this);
-	
-	public final DanAndChatServerListener serverListener = new DanAndChatServerListener(
-			this);
 
 	// Private variables to get. Not set.
-	private Channels channels;
+	private ChannelManager channels;
 	private Settings settings;
 	private PermissionChecker permissionChecker;
 	private ExtensionManager extensionManager;
@@ -87,20 +84,16 @@ public class DanAndChat extends JavaPlugin {
 	 */
 	public void onEnable() {
 		initializeFields();
+		// Get the default PluginManager
 		PluginManager pm = getServer().getPluginManager();
 
-		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.High,
-				this);
-		if (!this.extensionManager.usesRPGWorld()) {
-			pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener,
-					Priority.Monitor, this);
-		}
-		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener,
-				Priority.Monitor, this);
-		
-		pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Priority.Monitor, this);
+		// Register PLAYER.CHAT event with Priority.High
+		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Monitor, this);
+		// Monitor PLAYER.JOIN
+		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
+		// Monitor PLAYER.QUIT
+		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
 
-		CallHome.load(this);
 		PluginDescriptionFile pdfFile = getDescription();
 		
 		this.log.info("[DanAndChat] DanAndChat v" + pdfFile.getVersion()
@@ -128,22 +121,36 @@ public class DanAndChat extends JavaPlugin {
 	 * Initializes stuff in the correct order.
 	 */
 	public void initializeFields() {
+		// MessageHandler
 		this.messageHandler = new MessageHandler(this);
+		
+		// Settings
 		this.settings = new Settings(this);	
+		
+		// CommandManager
 		this.commandManager = new CommandManager(this);	
-		this.extensionManager = new ExtensionManager(this);	
+		
+		// Extensions manager
+		this.extensionManager = new ExtensionManager(this);
+		
+		// The prefixer TODO: Make Prefixer a separate plugin
 		this.prefixer = new Prefixer(this);
-		this.channels = new Channels(this);
-		this.permissionChecker = new PermissionChecker(this);
+		this.channels = new ChannelManager(this);
 		this.danandLogger = new DanAndLogger(this, "danand.log", null);
 		this.danAndParser = new DanAndParser(this);
 		
 		this.settings.initialize();
 		this.commandManager.initialize();
-//		this.extensionManager.initialize();
+		this.extensionManager.initialize();
 		this.messageGetter = this.settings.getNewMessageGetter();
 		this.channels.initialize();
 		this.danandLogger.initialize();
+		
+		// Check if Vault has been initialized correctly (just in case) and disable if not
+		if (!PermissionChecker.initialize(this)){
+			this.danandLogger.logMsg("Something went wrong when initializing Vault permissionmanager.", "SEVERE");
+			this.getPluginLoader().disablePlugin(this);
+		}
 	}
 	
 	public DanAndParser getDanAndParser(){
@@ -171,7 +178,7 @@ public class DanAndChat extends JavaPlugin {
 	}
 
 	@SuppressWarnings("javadoc")
-	public Channels getChannels() {
+	public ChannelManager getChannels() {
 		return channels;
 	}
 

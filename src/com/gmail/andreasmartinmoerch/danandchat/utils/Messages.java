@@ -32,6 +32,7 @@ public enum Messages {
 	LEFT_CHANNEL ("&4Left channel: &2%ARG0"),
 	UNFOCUS_CHANNEL ("&4Unfocused channel: &2%ARG0"),
 	COULD_NOT_HOOK ("Found plugin %ARG0, but couldn't hook into it."),
+	CHANNEL_NOT_ENABLED_IN_WORLD ("&4Then channel you're focused at is disabled in this world."),
 	;
 	
 	private final String fallback;

@@ -1,7 +1,8 @@
 name: DanAndChat
 main: com.gmail.andreasmartinmoerch.danandchat.DanAndChat
-version: 1.0.alpha2
-softdepend: [ColorMe, PermissionsBukkit]
+version: 1.0.0
+depend: [Vault]
+softdepend: [Towny, TownyChat]
 commands:
   ch:
     description: Used for changing channels.
@@ -34,6 +35,9 @@ commands:
   dac:
     description: Used for managing the plugin.
     usage: /dac <Args...>
+  ignore:
+    description: Ignoring players.  
+    usage: /ignore <Player>
 permissions:
     danandchat.*:
         description: 'Gives access to everything DanAndChat related.'
@@ -117,3 +121,6 @@ permissions:
     danandchat.channel.unmute:
         description: 'Gives permission to unmute.'
         default: op
+    danandchat.ignore:
+        description: 'Gives permission to ignore.'
+        default: true

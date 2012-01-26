@@ -3,7 +3,9 @@ package com.gmail.andreasmartinmoerch.danandchat.utils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.World;
 import org.bukkit.util.config.Configuration;
@@ -23,8 +25,8 @@ public class Settings {
 		public final String channelsDir = "plugins" + File.separator + "DanAndChat";
 		public final String channelsFile = "channels.yml";
 	public Configuration prefixConfig;
-		public final String prefixConfigDir = configDir;
-		public final String prefixFile = "prefixes.yml";
+		public final String databaseConfigDir = configDir;
+		public final String databaseFile = "prefixes.yml";
 	public Configuration messageConfig;
 		public final String messageConfigDir = configDir + File.separator + "advanced";
 		public final String messageFile = "messages.yml";
@@ -36,10 +38,12 @@ public class Settings {
 	}
 		
 	public void initialize(){
+		// Check if data folder exists, and creates it if not.
 		if (!this.plugin.getDataFolder().exists()){
 			this.plugin.getDataFolder().mkdirs();
 		}
 		
+		// Checks if 
 		File f = new File(messageConfigDir);
 		if (!f.exists()){
 			f.mkdirs();
@@ -47,7 +51,7 @@ public class Settings {
 		
 		File fConfig = new File(configDir, configFile);		
 		File fChannelsConfig = new File(channelsDir, channelsFile);
-		File fPrefixConfig = new File(prefixConfigDir, prefixFile);
+		File fPrefixConfig = new File(databaseConfigDir, databaseFile);
 		File fMessageConfig = new File(messageConfigDir, messageFile);
 		
 		try {
@@ -111,7 +115,7 @@ public class Settings {
 		/*
 		 * Set properties for messages. (In config)
 		 */
-		config.setProperty("messages" + "." + "notify-on-join", true);
+		config.setProperty("messages" + "." + "notify-on-join", false);
 		config.setProperty("messages" + "." + "notify-on-leave", true);
 		config.setProperty("messages" + "." + "notify-on-focus", true);
 		config.setProperty("messages" + "." + "notify-on-unfocus", false);
@@ -120,21 +124,28 @@ public class Settings {
 		for (World w: this.plugin.getServer().getWorlds()){
 			worlds.add(w.getName());
 		}
-		this.channelsConfig.setProperty("channels.Global.worlds", worlds);
-		this.channelsConfig.setProperty("channels.Global.short-name", "g");
 		this.channelsConfig.setProperty("channels.Global.shortcut", "g");
 		this.channelsConfig.setProperty("channels.Global.range", -1);
 		this.channelsConfig.setProperty("channels.Global.auto-join", true);
 		this.channelsConfig.setProperty("channels.Global.auto-focus", true);
-		this.channelsConfig.setProperty("channels.Global.formatting", "&COLOUR.YELLOW[&COLOUR.GREENg&COLOUR.YELLOW]&COLOUR.WHITE<&PLAYER.PREFIX&PLAYER.DISPLAYNAME&COLOUR.WHITE>: &MESSAGE");
+		this.channelsConfig.setProperty("channels.Global.formatting", "&f[&2g&f]<&PLAYER.PREFIX&PLAYER.NAME&f>: &MESSAGE");
 		
-		this.channelsConfig.setProperty("channels.local.worlds", worlds);
-		this.channelsConfig.setProperty("channels.local.short-name", "l");
+		List<String> list1 = new ArrayList<String>();
+		list1.add(null);
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		map.put("inChannel", list1);
+		List<Map<String, List<String>>> list2 = new ArrayList<Map<String, List<String>>>();
+		list2.add(map);
+		
+		this.channelsConfig.setProperty("channels.Global.filters.onWrite.include", list2);
+		
 		this.channelsConfig.setProperty("channels.local.shortcut", "l");
 		this.channelsConfig.setProperty("channels.local.range", 100);
 		this.channelsConfig.setProperty("channels.local.auto-join", true);
 		this.channelsConfig.setProperty("channels.local.auto-focus", false);
 		this.channelsConfig.setProperty("channels.local.formatting", "&PLAYER.DISPLAYNAME: &MESSAGE");
+		this.channelsConfig.setProperty("channels.local.filters.onWrite.include", list2);
+		
 		this.channelsConfig.save();
 		this.channelsConfig.load();
 		this.config.setProperty("plugin" + "." + "initialized", true);
@@ -148,15 +159,9 @@ public class Settings {
 		
 		for (String s: glNode.getKeys()){
 			Channel c = new Channel(s, this.plugin);
-			c.loadFromConfig();
+			c.initialize();
 			channels.add(c);
 		}
-		
-//		for (String s: channelsConfig.getKeys("local-channels")){
-//			LocalChannel l = new LocalChannel(s);
-//			l.loadFromConfig();
-//			channels.add(l);
-//		}
 		
 		refresh(channelsConfig);
 		return channels;

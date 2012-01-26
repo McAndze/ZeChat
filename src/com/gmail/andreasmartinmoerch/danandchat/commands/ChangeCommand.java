@@ -10,6 +10,9 @@ import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
 import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 import com.gmail.andreasmartinmoerch.danandchat.utils.Messages;
 
+/*
+ * This command is for changing channels. 
+ */
 public class ChangeCommand implements CommandExecutor {
 	
 	private DanAndChat plugin;
@@ -71,6 +74,12 @@ public class ChangeCommand implements CommandExecutor {
 		return true;
 	}
 	
+	/*
+	 * Example of how this works:
+	 * Command sent:
+	 * \ch g Hi everyone!
+	 * This sends the message 'Hi everyone!' to the channel with shortcut 'g'.
+	 */
 	public boolean shortcut(Player player, String[] args){
 		Channel c = null;
 		
@@ -90,8 +99,8 @@ public class ChangeCommand implements CommandExecutor {
 		}
 		
 		String message  = "";
-		for (int i = 1; i <= args.length; i++){
-			message += args[i];
+		for (int i = 1; i + 1 <= args.length; i++){
+			message += args[i] + " ";
 		}
 		
 		c.sendMessage(message, player);

@@ -1,11 +1,18 @@
 package com.gmail.andreasmartinmoerch.danandchat.plugins;
 
+import net.milkbowl.vault.permission.Permission;
+
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
+
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 
 public class PermissionChecker {
 	/**
 	 * Permission nodes
 	 */
+	
+	public static Permission permission = null;
 	
 	public static final String all = ".*";
 
@@ -24,11 +31,37 @@ public class PermissionChecker {
 		public static final String changeChannel = ".changechannel";
 		public static final String defaultChannel = ".defaultchannel";
 		public static final String focusedChannel = ".focusedchannel";
-	
-	private DanAndChat plugin;
-	//TODO: Write one function that covers all of these functions instead. (Move permission nodes to the CommandHandler, maybe)	
 		
-	public PermissionChecker(DanAndChat plugin){
-		this.plugin = plugin;
+	public static boolean initialize(DanAndChat plugin){
+		RegisteredServiceProvider<Permission> permissionProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+		if (permissionProvider != null){
+			permission = permissionProvider.getProvider();
+			return true;
+		} else {
+			return false;
+		}
+	}
+		
+	public static boolean hasPermission(Player player, String permission){
+		if (player.hasPermission(permission)){
+			return true;
+		}
+		String permWithWild = "";
+		String[] nodes = permission.split("\\.");
+		System.out.println(nodes.length);
+		for (int i = 0; i + 1 <= nodes.length; i++){
+			if (i + 1 == nodes.length){
+				permWithWild += "*";
+				if (player.hasPermission(permWithWild)){
+					return true;
+				}
+			} else {
+				permWithWild += nodes[i] + ".";
+				if (player.hasPermission(permWithWild + "*")){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

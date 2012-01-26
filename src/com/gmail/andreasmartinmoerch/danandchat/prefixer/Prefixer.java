@@ -1,12 +1,10 @@
 package com.gmail.andreasmartinmoerch.danandchat.prefixer;
 
-import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
-import com.platymuus.bukkit.permissions.Group;
+import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 
 public class Prefixer {
 	private DanAndChat plugin;
@@ -18,10 +16,25 @@ public class Prefixer {
 	public String getPrefix(Player player){
 		String prefix;
 		
+		// Player prefix! 
 		prefix = this.plugin.getSettings().prefixConfig.getString("users." + player.getName().toLowerCase(), null);
 		
+		// Try primary group prefix
 		if (prefix == null || prefix.equalsIgnoreCase("null")){
-			prefix = getGroupsPrefix(player);
+			try {
+				prefix = getGroupPrefix(PermissionChecker.permission.getPrimaryGroup(player));
+			} catch (UnsupportedOperationException u){
+				this.plugin.getDanandLogger().logMsg("[Vault] "+ u.getMessage(), "WARNING");
+				prefix = null;
+			}
+		}
+		// Try getting the first group, and the prefix
+		if (prefix == null || prefix.equalsIgnoreCase("null")){
+			try {
+				prefix = getGroupPrefix(PermissionChecker.permission.getPlayerGroups(player.getWorld(), player.getName())[0]);
+			} catch (UnsupportedOperationException u){
+				prefix = null;
+			}
 		}
 		if (prefix == null || prefix.equalsIgnoreCase("null")){
 			return "";
@@ -47,40 +60,16 @@ public class Prefixer {
 //			}
 //	}
 	
-	public String getGroupsPrefix(Player player){
-		String groupsPrefix = "";
-		if (this.plugin.getExtensionManager().usesPermissionsBukkit()){
-			List<Group> groups = this.plugin.getExtensionManager().permissionsBukkit.getGroups(player.getName());
-			if (groups == null || groups.isEmpty()){
-				return "";
-			}
-			for (Group g: groups){
-				if (groupsPrefix.equalsIgnoreCase("")){
-					groupsPrefix = getGroupPrefix(g.getName());
-				} else {
-					groupsPrefix += ChatColor.WHITE + "|" +  getGroupPrefix(g.getName());
-				}
-			}
-				
-			}
-		return groupsPrefix;
-	}
-	
 	public String getGroupPrefix(String group){
 		String groupPrefix = "";
-		if (this.plugin.getExtensionManager().usesPermissionsBukkit()){
-			String test = this.plugin.getSettings().prefixConfig.getString("groups." + group.toLowerCase(), null);
-			if (test != null){
-				groupPrefix = test;
-			}
+		String test = this.plugin.getSettings().prefixConfig.getString("groups." + group.toLowerCase(), null);
+		if (test != null){
+			groupPrefix = test;
 		}
 		return groupPrefix;
 	}
 	
 	public String setGroupPrefix(String group, String prefix){
-		if (!this.plugin.getExtensionManager().usesPermissionsBukkit()){
-			return ChatColor.RED + "No compatible group manager installed to set group prefix.";
-		}
 		this.plugin.getSettings().prefixConfig.load();
 		this.plugin.getSettings().prefixConfig.setProperty("groups." + group.toLowerCase(), prefix);
 		this.plugin.getSettings().prefixConfig.save();

@@ -1,0 +1,8 @@
+* Removed bugged support for RPGWorld
+* Removed CallHome
+* Added Vault dependency
+* Removed soft dependency of ColorMe and PermissionsBukkit (Replaced by Vault)
+* Added multiworld support for LOCAL channels.
+* Added TYPE option for channels. Currently: GLOBAL & LOCAL & TOWNY
+* Removed leftover code for in-character checks.
+* Removed support for ColorMe and RPGWorld, and remove direct support for PermissionsBukkit

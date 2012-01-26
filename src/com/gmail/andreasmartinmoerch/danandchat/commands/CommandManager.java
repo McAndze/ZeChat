@@ -43,6 +43,7 @@ public class CommandManager {
 		if(conf.getBoolean("commands." +  Commands.PREFIX.toString().toLowerCase(), true)){
 			prefixCommand();
 		}
+		ignoreCommand();
 	}
 	/**
 	 * I know the setAliases don't work this way. They will be changed soon.
@@ -88,5 +89,12 @@ public class CommandManager {
 		Command cmd = plugin.getCommand(Commands.PREFIX.toString());
 		cmd.setAliases(conf.getStringList("commands" +"."+ Commands.PREFIX.toString().toLowerCase() +"."+ "aliases:", new ArrayList<String>()));
 		((PluginCommand)cmd).setExecutor(new PrefixCommand(plugin));
+	}
+	
+	public void ignoreCommand(){
+		Configuration conf = this.plugin.getSettings().config;
+		Command cmd = plugin.getCommand("ignore");
+		cmd.setAliases(conf.getStringList("commands" +"."+ "ignore" +"."+ "aliases:", new ArrayList<String>()));
+		((PluginCommand)cmd).setExecutor(new IgnoreCommand(plugin));
 	}
 }

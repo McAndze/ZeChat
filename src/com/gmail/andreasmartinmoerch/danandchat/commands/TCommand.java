@@ -36,7 +36,7 @@ public class TCommand implements CommandExecutor {
 		}
 
 		Player p;
-		if ((p = this.plugin.getServer().getPlayer(args[0])) == null) {
+		if ((p = searchPlayer(args[0])) == null) {
 			player.sendMessage(ChatColor.RED + "Player does not exist.");
 			return true;
 		}
@@ -48,13 +48,30 @@ public class TCommand implements CommandExecutor {
 		int len = args.length;
 		String message = "";
 		for (int i = 1; i < len; i++) {
-			message = message + " " + args[i];
+			if (i == 1){
+				message = message + args[i];
+			} else {
+				message = message + " " + args[i];
+			}
+			
 		}
 		p.sendMessage(ChatColor.GREEN + "From " + player.getName() + ": "
 				+ ChatColor.WHITE + message);
 		player.sendMessage(ChatColor.YELLOW + "To " + p.getName() + ": "
-				+ message);
+				+ ChatColor.WHITE + message);
 		return true;
+	}
+	
+	public Player searchPlayer(String name){
+		for (Player p: this.plugin.getServer().getOnlinePlayers()){
+			if (p.getName().equalsIgnoreCase(name)){
+				return p;
+			}
+			if (p.getName().toLowerCase().startsWith(name.toLowerCase())){
+				return p;
+			}
+		}
+		return null;
 	}
 
 }

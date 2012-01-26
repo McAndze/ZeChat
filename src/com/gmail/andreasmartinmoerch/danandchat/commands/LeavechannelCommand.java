@@ -48,12 +48,8 @@ public class LeavechannelCommand implements CommandExecutor{
 		}
 		
 		c.removePlayer(player);
-		if(c.playerIsInChannel(player)){
-			player.sendMessage("DEBUG1");
-		}
 		for (Channel ch: this.plugin.getChannels().channels){
 			if (ch.isAutoFocus() && ch.playerIsInChannel(player)){
-				player.sendMessage("DEBUG");
 				ch.addFocus(player);
 			}
 		}

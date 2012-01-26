@@ -1,20 +1,22 @@
 package com.gmail.andreasmartinmoerch.danandchat.channel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 
-public class Channels {
+public class ChannelManager {
 	private DanAndChat plugin;
 	public List<Player> init = new ArrayList<Player>();
 	public List<Channel> channels;
+	public HashMap<String, List<String>> ignoring;
 	
-	public Channels(DanAndChat plugin){
+	public ChannelManager(DanAndChat plugin){
 		this.plugin = plugin;
-
+		this.ignoring = new HashMap<String, List<String>>();
 	}
 	
 	public void initialize(){
@@ -31,7 +33,7 @@ public class Channels {
 	 * @param p Player to initialize.
 	 */
 	public void initializePlayer(Player p){
-		List<Channel> channels = this.plugin.getChannels().channels;
+		List<Channel> channels = this.channels;
  		for (Channel c: channels){
  			if (c.isAutoJoin()){
  				c.addPlayer(p);
@@ -68,6 +70,7 @@ public class Channels {
 		for (Channel c: channels){
 			if (c.getFocused().contains(p.getName())){
 				if (found){
+					// Mainly for clean up. Haven't tested if it ever was needed.
 					c.removeFocus(p);
 				} else {
 					ch = c;
@@ -81,6 +84,15 @@ public class Channels {
 	public Channel getChannelWithShortcut(String shortcut){
 		for (Channel c: channels){
 			if (c.getShortCut().equalsIgnoreCase(shortcut)){
+				return c;
+			}
+		}
+		return null;
+	}
+	
+	public Channel getChannelWithName(String name){
+		for (Channel c: channels){
+			if (c.getName().equalsIgnoreCase(name)){
 				return c;
 			}
 		}

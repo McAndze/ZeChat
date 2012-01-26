@@ -1,14 +1,33 @@
 package com.gmail.andreasmartinmoerch.danandchat.parsing;
 
-import me.samkio.RPGWorld.RPGWorldPlugin;
-import me.samkio.RPGWorld.ranks.RankManager;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.gmail.andreasmartinmoerch.danandchat.DanAndChat;
 import com.gmail.andreasmartinmoerch.danandchat.channel.Channel;
+import com.gmail.andreasmartinmoerch.danandchat.plugins.PermissionChecker;
 public class DanAndParser {
+	/*
+	 * Parsing variables
+	 */
+	public enum ChannelParsingVariables {
+		COLOUR, NAME, SHORTNAME, SHORTCUT
+	}
+	public enum ParsingVariables {
+		CHANNEL,
+		COLOUR,
+		PLAYER;
+	}
+	public enum PlayerParsingVariables {
+		PREFIX,
+		GROUP,
+		NAME,
+		COLOUR,
+		DISPLAYNAME,
+		HEALTH,
+		RPGPREFIX,
+	}
+
 	
 	private Channel channel = null;
 	private Player player = null;
@@ -40,7 +59,10 @@ public class DanAndParser {
 		return format;
 	}
 	
-	public String parseMessage(String toParse, String message){
+	public String parseMessage(String toParse, String message, Player from){
+		if (!PermissionChecker.hasPermission(player, "danandchat.colours")){
+			message = message.replaceAll("§", "");
+		}
 		return toParse.replaceAll("&MESSAGE", message);
 	}
 	
@@ -52,7 +74,7 @@ public class DanAndParser {
 	 * @param parseMessage If it should parse the message contained in args.
 	 * @return the parsed string.
 	 */
-	public String fullParse(String format, boolean parseMessage, Object... args){
+	public String fullParse(String format, boolean parseMessage, String message, Object... args){
 		
 		if (format == null){
 			throw new NullPointerException();
@@ -66,13 +88,17 @@ public class DanAndParser {
 				this.player = (Player)o;
 			} else if (o instanceof Channel){
 				this.channel = (Channel)o;
-			} else if (o instanceof String){
-				this.message = (String)o;
 			}
 		}
+		boolean wait = false;
+		if (player != null && PermissionChecker.hasPermission(player, "danandchat.colours")){
+			wait = true;
+		} else {
+			wait = false;
+		}
 		
-		if (parseMessage && this.message != null){
-			format = parseMessage(format, message);
+		if (!(message == null)){
+			this.message = message;
 		}
 		
 		if (this.channel != null && format.contains("&" + ParsingVariables.CHANNEL.toString() + ".")){
@@ -82,10 +108,22 @@ public class DanAndParser {
 			format = parsePlayerInfo(format, player);
 		}
 		
+		if (!wait)
+			format = parseColours(format);
+		
 		format = parseAmpersands(format);
 		
-		if (!parseMessage && this.message != null){
-			format = parseMessage(format, message);
+		if (parseMessage && this.message != null){
+			this.message = this.message.replaceAll("\\$", "\\\\\\$");
+			if (!wait){
+				format = format.replaceAll("&MESSAGE", this.message);
+			}
+			
+		}
+		if (wait){
+			format = parseColours(format);
+			this.message = this.message.replaceAll("\\$", "\\\\\\$");
+			format = parseMessage(format, message, player);
 		}
 		
 		return format;
@@ -96,7 +134,7 @@ public class DanAndParser {
 	}
 	
 	/**
-	 * A function replace all "&" with "§", if the following character is a digit or is lowercase.
+	 * A function to replace all "&" with "§", if the following character is a digit or is lowercase.
 	 * @param toParse The string to parse.
 	 * @return Parsed String.
 	 */
@@ -113,12 +151,7 @@ public class DanAndParser {
 				}
 			}
 		}
-		String toReturn = "";
-		for (char c: chars){
-			toReturn += c;
-		}
-		
-		return toReturn;
+		return String.valueOf(chars);
 	}
 	
 	/**
@@ -175,32 +208,17 @@ public class DanAndParser {
 	}
 	public String parsePlayerInfo(String format, Player player){
 		// TODO: Add checks, so we don't have to call more than necessary.
-		if (this.plugin.getExtensionManager().usesPermissionsBukkit() && format.contains("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.GROUP.toString())){
-			String group = this.plugin.getExtensionManager().permissionsBukkit.getGroup(player.getName()).getName();
-			if (group == null){
-				group = "";
-			}
-			format = format.replaceAll("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.GROUP.toString(), group);
-		} else {
-			format = format.replaceAll("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.GROUP.toString(), "");
-		}
+//		if (this.plugin.getExtensionManager().usesPermissionsBukkit() && format.contains("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.GROUP.toString())){
+//			String group = this.plugin.getExtensionManager().permissionsBukkit.getGroup(player.getName()).getName();
+//			if (group == null){
+//				group = "";
+//			}
+//			format = format.replaceAll("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.GROUP.toString(), group);
+//		} else {
+//			format = format.replaceAll("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.GROUP.toString(), "");
+//		}
 		
 		format = format.replaceAll("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.NAME.toString(), player.getName());
-		
-		if (this.plugin.getExtensionManager().isUsingColorMe()){
-			format = format.replaceAll("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.COLOUR.toString(), this.plugin.getExtensionManager().color.findColor(this.plugin.getExtensionManager().color.getColor(player.getName())));
-		} else {
-			format = format.replaceAll("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.COLOUR.toString(), "");
-		}
-		if(this.plugin.getExtensionManager().usesRPGWorld()){
-			if (RPGWorldPlugin.useRanksAsPrefix()){
-				format = format.replaceAll("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.RPGPREFIX.toString(), RankManager.getPlayerRank(player.getName()));
-			} else {
-				format = format.replaceAll("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.RPGPREFIX.toString(), "");
-			}
-		} else {
-			format = format.replaceAll("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.RPGPREFIX.toString(), "");
-		}
 		
 		if (format.contains("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.HEALTH.toString())){
 			format = format.replaceAll("&" + ParsingVariables.PLAYER.toString() + "." + PlayerParsingVariables.HEALTH, healthToString(player)); 
@@ -213,33 +231,6 @@ public class DanAndParser {
 		
 		return format;
 	}
-	
-//	private String replace(String format, String sOld, Method method, Object... args){
-//	
-//	String toReturn = "";
-//	if (!format.contains(sOld)){
-//		return format;
-//	} else {
-//		try {
-//			// TODO: Find a better way to handle method args.
-//			String replace;
-//			if (args == null){
-//				replace = (String)method.invoke();
-//			} else {
-//			String replace = (String)method.invoke(args);
-//			toReturn = format.replaceAll(sOld, replace);
-//		} catch (IllegalArgumentException i){
-//			this.plugin.log.severe("[DanAndChat] Illegal arguments passed to " + method.getName() + "! Report to McAndze/Huliheaden.");
-//			i.printStackTrace();
-//		} catch (IllegalAccessException e) {
-//			this.plugin.log.severe("[DanAndChat] Illegal access from " + method.getName() + "! Report to McAndze/Huliheaden.");
-//			e.printStackTrace();
-//		} catch (InvocationTargetException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//	return toReturn;
-//}
 	
 	private String healthToString(Player player){
 		int health = 0;
