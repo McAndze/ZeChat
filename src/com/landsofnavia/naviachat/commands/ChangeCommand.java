@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.landsofnavia.naviachat.NaviaChat;
 import com.landsofnavia.naviachat.channel.Channel;
 import com.landsofnavia.naviachat.plugins.PermissionChecker;
-import com.landsofnavia.naviachat.utils.Messages;
+import com.landsofnavia.naviachat.utils.Message;
 
 /*
  * This command is for changing channels. 
@@ -29,7 +29,7 @@ public class ChangeCommand implements CommandExecutor {
 		}
 		Player player = (Player)sender;
 		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.changeChannel)){
-			player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.NO_PERMISSION_CHANGE_CHANNEL));
+			player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_CHANGE_CHANNEL));
 			return true;
 		}
 		
@@ -58,11 +58,11 @@ public class ChangeCommand implements CommandExecutor {
 			}
 		}
 		if (c == null){
-			player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.COULD_NOT_FIND_CHANNEL_WITH_SHORTCUT, args[0]));
+			player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.COULD_NOT_FIND_CHANNEL_WITH_SHORTCUT, args[0]));
 			if (oldFocus != null){
 				oldFocus.addFocus(player);
 			} else {
-				player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.COULD_NOT_REJOIN_FOCUSED_CHANNEL));				
+				player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.COULD_NOT_REJOIN_FOCUSED_CHANNEL));				
 			}
 			return true;
 		}
@@ -90,7 +90,7 @@ public class ChangeCommand implements CommandExecutor {
 		}
 		
 		if (c == null){
-			player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.COULD_NOT_FIND_CHANNEL_WITH_SHORTCUT, args[0]));
+			player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.COULD_NOT_FIND_CHANNEL_WITH_SHORTCUT, args[0]));
 			return true;
 		}
 		

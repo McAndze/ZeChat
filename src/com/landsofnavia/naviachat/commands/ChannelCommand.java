@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import com.landsofnavia.naviachat.NaviaChat;
 import com.landsofnavia.naviachat.channel.Channel;
 import com.landsofnavia.naviachat.plugins.PermissionChecker;
-import com.landsofnavia.naviachat.utils.Messages;
+import com.landsofnavia.naviachat.utils.Message;
 
 public class ChannelCommand implements CommandExecutor {
 	public enum ChannelArgs {
@@ -46,7 +46,7 @@ public class ChannelCommand implements CommandExecutor {
 			case RELOAD:
 				return reload(sender, args);
 			default:
-				sender.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.UNKNOWN_ARG, ca.toString()));
+				sender.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.UNKNOWN_ARG, ca.toString()));
 				return false;
 			}
 		} else {
@@ -77,7 +77,7 @@ public class ChannelCommand implements CommandExecutor {
 		}
 		if (sender instanceof Player) {
 			if (!((Player) sender).hasPermission("danandchat.channel.reload")) {
-				sender.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.NO_PERMISSION_CHANNEL_RELOAD));
+				sender.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_CHANNEL_RELOAD));
 				return true;
 			}
 		}
@@ -106,7 +106,7 @@ public class ChannelCommand implements CommandExecutor {
 	public boolean mutePlayer(Player player, String[] args) {
 		if (!player.hasPermission(PermissionChecker.prefix
 				+ PermissionChecker.channel + ".mute")) {
-			player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.NO_PERMISSION_CHANNEL_MUTE));
+			player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_CHANNEL_MUTE));
 			return true;
 		}
 
@@ -115,7 +115,7 @@ public class ChannelCommand implements CommandExecutor {
 			Channel c = this.plugin.getChannels().getFocusedChannel(player);
 			c.mutePlayer(args[1]);
 			if (victim != null && victim.isOnline()) {
-				victim.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.YOU_HAVE_BEEN_MUTED, c.getName()));
+				victim.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.YOU_HAVE_BEEN_MUTED, c.getName()));
 			}
 			return true;
 		} else {
@@ -126,7 +126,7 @@ public class ChannelCommand implements CommandExecutor {
 	public boolean unmutePlayer(Player player, String[] args) {
 		if (!player.hasPermission(PermissionChecker.prefix
 				+ PermissionChecker.channel + ".unmute")) {
-			player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.NO_PERMISSION_CHANNEL_UNMUTE));
+			player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_CHANNEL_UNMUTE));
 			return true;
 		}
 		if (args.length == 2) {
@@ -134,7 +134,7 @@ public class ChannelCommand implements CommandExecutor {
 			Channel c = this.plugin.getChannels().getFocusedChannel(victim);
 			c.unmutePlayer(args[1]);
 			if (victim.isOnline()) {
-				victim.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.YOU_HAVE_BEEN_UNMUTED, c.getName()));
+				victim.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.YOU_HAVE_BEEN_UNMUTED, c.getName()));
 			}
 			return true;
 		} else {
@@ -146,7 +146,7 @@ public class ChannelCommand implements CommandExecutor {
 	public boolean banPlayer(Player player, String[] args) {
 		if (!player.hasPermission(PermissionChecker.prefix
 				+ PermissionChecker.channel + PermissionChecker.ban)) {
-			player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.NO_PERMISSION_CHANNEL_BAN));
+			player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_CHANNEL_BAN));
 			return true;
 		}
 
@@ -155,7 +155,7 @@ public class ChannelCommand implements CommandExecutor {
 			Channel c = this.plugin.getChannels().getFocusedChannel(player);
 			c.banPlayer(args[1]);
 			if (victim != null && victim.isOnline()) {
-				victim.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.YOU_HAVE_BEEN_BANNED, c.getName()));
+				victim.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.YOU_HAVE_BEEN_BANNED, c.getName()));
 			}
 			return true;
 		} else {
@@ -177,7 +177,7 @@ public class ChannelCommand implements CommandExecutor {
 			Channel c = this.plugin.getChannels().getFocusedChannel(victim);
 			c.unbanPlayer(args[1]);
 			if (victim.isOnline()) {
-				victim.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.YOU_HAVE_BEEN_UNBANNED, c.getName()));
+				victim.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.YOU_HAVE_BEEN_UNBANNED, c.getName()));
 			}
 			return true;
 		} else {
@@ -193,7 +193,7 @@ public class ChannelCommand implements CommandExecutor {
 			if (!player.hasPermission(PermissionChecker.prefix
 					+ PermissionChecker.channel + PermissionChecker.list
 					+ PermissionChecker.available)) {
-				player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.NO_PERMISSION_CHANNEL_LIST_AVAILABLE));
+				player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_CHANNEL_LIST_AVAILABLE));
 				return true;
 			}
 			player.sendMessage(ChatColor.GREEN
@@ -214,7 +214,7 @@ public class ChannelCommand implements CommandExecutor {
 			if (!player.hasPermission(PermissionChecker.prefix
 					+ PermissionChecker.channel + PermissionChecker.list
 					+ PermissionChecker.in)) {
-				player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.NO_PERMISSION_CHANNEL_LIST_IN));
+				player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_CHANNEL_LIST_IN));
 				return true;
 			}
 			player.sendMessage(ChatColor.GREEN + "===Channels you're in===");
@@ -252,7 +252,7 @@ public class ChannelCommand implements CommandExecutor {
 				}
 			}
 		}
-		this.plugin.getDanandLogger().logMsg(Messages.COULD_NOT_FIND_CHANNEL, "WARNING", args[1]);
+		this.plugin.getDanandLogger().logMsg(Message.COULD_NOT_FIND_CHANNEL, "WARNING", args[1]);
 		return true;
 	}
 

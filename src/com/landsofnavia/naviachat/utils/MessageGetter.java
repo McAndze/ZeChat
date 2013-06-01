@@ -15,76 +15,26 @@ public class MessageGetter {
 	 * Fallback prefix.
 	 */
 	public static final String DEFAULT_PREFIX = "default";
-
-	private final NaviaChat plugin;
-	private final Configuration configuration;
-	private String prefix;
+	private final NaviaChat plugin;	
 	public static boolean debug = false;
 	
-	public static void writeDefaultMessagesToConfig(Configuration config, boolean overwrite){
-		for (Messages message: Messages.values()){
-			if (config.getString(DEFAULT_PREFIX + "." + message.toString(), null) == null || overwrite){
-				config.setProperty(DEFAULT_PREFIX + "." + message.toString(), message.getFallback());
-			}
-			
-		}
-		config.save();
-		config.load();
-	}
-
-	/**
-	 * Constructor with pre-defined prefix.
-	 * 
-	 * @param configuration
-	 * @param prefix
-	 */
-	public MessageGetter(NaviaChat plugin, Configuration configuration, String prefix) {
+	private MessageFile file;
+	
+	public MessageGetter(NaviaChat plugin) {
 		this.plugin = plugin;
-		this.configuration = configuration;
-		this.prefix = prefix;
+		this.file = new MessageFile("plugins/NaviaChat/messages/messages.nc");
+		this.file.createNewFile();
 	}
 	
-
-	/**
-	 * Uses fallback prefix.
-	 * 
-	 * @param configuration
-	 */
-	public MessageGetter(NaviaChat plugin, Configuration configuration) {
-		this.plugin = plugin;
-		this.configuration = configuration;
-		this.prefix = DEFAULT_PREFIX;
+	public void writeDefaultMessagesToConfig(boolean overwrite){
+		this.file.restoreDefaults();
 	}
 	
-	/**
-	 * 
-	 * @return used Configuration.
-	 */
-	public Configuration getConfiguration() {
-		return this.configuration;
-	}
-
-	/**
-	 * 
-	 * @return used prefix.
-	 */
-	public String getPrefix() {
-		return this.prefix;
-	}
-	
-	/**
-	 * 
-	 * @param prefix
-	 */
-	public void setPrefix(String prefix){
-		this.prefix = prefix;
-	}
-	
-	public String getMessageWithArgs(Messages message, String... args){
+	public String getMessageWithArgs(Message message, String... args){
 		String customMessage = getMessage(message);
 		int i = 0;
 		for (String s: args){
-			customMessage = customMessage.replaceFirst("%ARG" + String.valueOf(i), s);
+			customMessage = customMessage.replaceAll("%ARG" + String.valueOf(i), s);
 		}
 		
 		return customMessage;
@@ -95,7 +45,7 @@ public class MessageGetter {
 	 * @param message
 	 * @return
 	 */
-	public String getMessage(Messages message){
+	public String getMessage(Message message){
 		String customMessage = "";
 		
 		if ((customMessage = this.configuration.getString(this.prefix.toLowerCase() + "." + message.toString(), null)) == null){

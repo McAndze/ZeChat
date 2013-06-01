@@ -2,9 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/andreas/Skrivebord/DanAnd/TestEnvironment/Server/plugins/Vault.jar"/>
-	<classpathentry kind="lib" path="/home/andreas/Skrivebord/DanAnd/TestEnvironment/Server/plugins/TownyChat.jar"/>
-	<classpathentry kind="lib" path="/home/andreas/Skrivebord/DanAnd/TestEnvironment/Server/plugins/Towny.jar"/>
-	<classpathentry kind="lib" path="/home/andreas/Skrivebord/DanAnd/TestEnvironment/Server/bukkit.jar"/>
+	<classpathentry kind="lib" path="/home/andreas/Dokumenter - Navia/Dev/dependencies/bukkit-1.5.2-R0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

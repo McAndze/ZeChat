@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.landsofnavia.naviachat.NaviaChat;
 import com.landsofnavia.naviachat.channel.Channel;
 import com.landsofnavia.naviachat.plugins.PermissionChecker;
-import com.landsofnavia.naviachat.utils.Messages;
+import com.landsofnavia.naviachat.utils.Message;
 
 public class LeavechannelCommand implements CommandExecutor{
 	private NaviaChat plugin;
@@ -28,7 +28,7 @@ public class LeavechannelCommand implements CommandExecutor{
 		Player player = (Player)sender;
 		// Start validation
 		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.leaveChannel)){
-			player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.NO_PERMISSION_LEAVECHANNEL));
+			player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_LEAVECHANNEL));
 			return false;
 		}
 		
@@ -38,12 +38,12 @@ public class LeavechannelCommand implements CommandExecutor{
 		// End validation.
 		Channel c;
 		if ((c=plugin.getChannels().getChannelWithShortcut(args[0])) == null){
-			player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.COULD_NOT_FIND_CHANNEL_WITH_SHORTCUT, args[0]));
+			player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.COULD_NOT_FIND_CHANNEL_WITH_SHORTCUT, args[0]));
 			return true;
 		}
 		
 		if (!c.playerIsInChannel(player)){
-			player.sendMessage(this.plugin.getMessageGetter().getMessage(Messages.YOU_ARE_NOT_IN_CHANNEL));
+			player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.YOU_ARE_NOT_IN_CHANNEL));
 			return true;
 		}
 		

@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 import com.landsofnavia.naviachat.NaviaChat;
 import com.landsofnavia.naviachat.utils.MessageGetter;
-import com.landsofnavia.naviachat.utils.Messages;
+import com.landsofnavia.naviachat.utils.Message;
 
 
 public class NaviaLogger{
@@ -59,7 +59,7 @@ public class NaviaLogger{
 		this.toWrite = new Vector<String>();
 	}
 	
-	public void logMsg(Messages message, String type, String... args){
+	public void logMsg(Message message, String type, String... args){
 		String sMessage = this.plugin.getMessageGetter().getMessageWithArgs(message, args);
 		this.logMsg(sMessage, type);
 	}
@@ -93,7 +93,7 @@ public class NaviaLogger{
 		toWrite.add(toLog);
 	}
 	
-	public void logMsg(Messages message, String type){
+	public void logMsg(Message message, String type){
 		String sMessage = this.plugin.getMessageGetter().getMessage(message);
 		this.logMsg(sMessage, type);
 	}

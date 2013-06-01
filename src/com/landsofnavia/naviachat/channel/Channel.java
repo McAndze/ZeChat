@@ -16,7 +16,7 @@ import com.landsofnavia.naviachat.channel.filter.Filter;
 import com.landsofnavia.naviachat.channel.filter.FilterManager;
 import com.landsofnavia.naviachat.channel.filter.noargs.FilterWithoutArgs_inChannel;
 import com.landsofnavia.naviachat.parsing.ColourParsingVariables;
-import com.landsofnavia.naviachat.utils.Messages;
+import com.landsofnavia.naviachat.utils.Message;
 
 /**
  * This class represents a Channel.
@@ -148,7 +148,7 @@ public class Channel {
 		this.focused.remove(player.getName());
 		if (this.plugin.getSettings().config.getBoolean("messages" + "." + "notify-on-unfocus", true) == true){
 			Navia.getDACPlayer(player).sendMessage(this.plugin.getMessageGetter()
-					.getMessageWithArgs(Messages.UNFOCUS_CHANNEL, this.getName()));
+					.getMessageWithArgs(Message.UNFOCUS_CHANNEL, this.getName()));
 		}
 	}
 	
@@ -156,7 +156,7 @@ public class Channel {
 		this.focused.add(p.getName());
 		if (this.plugin.getSettings().config.getBoolean("messages" + "." + "notify-on-focus", true) == true){
 			Navia.getDACPlayer(p).sendMessage(this.plugin.getMessageGetter()
-					.getMessageWithArgs(Messages.CHANGED_FOCUS_TO, this.getName()));
+					.getMessageWithArgs(Message.CHANGED_FOCUS_TO, this.getName()));
 		}
 	}
 
@@ -167,7 +167,7 @@ public class Channel {
 	public void sendMessage(String message, Player sender, String formatting){
 		if (this.playerIsInChannel(sender)) {
 			if (this.muted.contains(sender.getName())){
-				Navia.getDACPlayer(sender).sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Messages.YOU_HAVE_BEEN_MUTED, this.getName()));
+				Navia.getDACPlayer(sender).sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.YOU_HAVE_BEEN_MUTED, this.getName()));
 				return;
 			}
 			this.danAndLogger.logMsg(sender.getName() + ": " + message, "MSG");
@@ -297,7 +297,7 @@ public class Channel {
 		this.removeFocus(p);
 		if (this.plugin.getSettings().config.getBoolean("messages" + "." + "notify-on-leave", true) == true){
 			p.sendMessage(this.plugin.getMessageGetter()
-					.getMessageWithArgs(Messages.LEFT_CHANNEL, this.getName()));
+					.getMessageWithArgs(Message.LEFT_CHANNEL, this.getName()));
 		}
 		this.filtered.remove(p);
 	}
@@ -306,7 +306,7 @@ public class Channel {
 		this.players.add(p.getName());
 		if (this.plugin.getSettings().config.getBoolean("messages" + "." + "notify-on-join", false) == true){
 			p.sendMessage(this.plugin.getMessageGetter().
-					getMessageWithArgs(Messages.CHANGED_CHANNEL_TO, this.getName()));
+					getMessageWithArgs(Message.CHANGED_CHANNEL_TO, this.getName()));
 		}
 		FilterManager filterManager = new FilterManager(this, this.getSendIncludeFilters(), true);
 		List<Player> filtered = filterManager.getFiltered(Arrays.asList(this.plugin.getServer().getOnlinePlayers()));

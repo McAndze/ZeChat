@@ -6,7 +6,7 @@ package com.landsofnavia.naviachat.utils;
 /**
  * @author Huliheaden Contains nicks for different messages.
  */
-public enum Messages {
+public enum Message {
 	NO_COMPATIBLE_GROUP_MANAGER ("&4No compatible group manager found."),
 	NO_PERMISSION_TO_TALK ("&4You are not allowed to chat. At all. You can chat with me though, but I'm quite shy."),
 	IN_INVALID_CHANNEL ("&4You're in an invalid channel. Try your luck with \"/ch g\" or \"/ch l\""),
@@ -32,12 +32,12 @@ public enum Messages {
 	LEFT_CHANNEL ("&4Left channel: &2%ARG0"),
 	UNFOCUS_CHANNEL ("&4Unfocused channel: &2%ARG0"),
 	COULD_NOT_HOOK ("Found plugin %ARG0, but couldn't hook into it."),
-	CHANNEL_NOT_ENABLED_IN_WORLD ("&4Then channel you're focused at is disabled in this world."),
+	CHANNEL_NOT_ENABLED_IN_WORLD ("&4The channel you're focused at is disabled in this world."),
 	;
 	
 	private final String fallback;
 	
-	private Messages(final String fallback){
+	private Message(final String fallback){
 		this.fallback = fallback;
 	}
 	

@@ -2,17 +2,12 @@ package com.landsofnavia.naviachat;
 
 import java.util.logging.Logger;
 
-import org.blockface.bukkitstats.CallHome;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.landsofnavia.naviachat.channel.Channel;
 import com.landsofnavia.naviachat.channel.ChannelManager;
-import com.landsofnavia.naviachat.channel.NaviaLogger;
 import com.landsofnavia.naviachat.channel.MessageHandler;
+import com.landsofnavia.naviachat.channel.NaviaLogger;
 import com.landsofnavia.naviachat.commands.CommandManager;
 import com.landsofnavia.naviachat.parsing.NaviaParser;
 import com.landsofnavia.naviachat.plugins.ExtensionManager;
@@ -84,20 +79,9 @@ public class NaviaChat extends JavaPlugin {
 	 */
 	public void onEnable() {
 		initializeFields();
-		// Get the default PluginManager
-		PluginManager pm = getServer().getPluginManager();
-
-		// Register PLAYER.CHAT event with Priority.High
-		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Monitor, this);
-		// Monitor PLAYER.JOIN
-		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-		// Monitor PLAYER.QUIT
-		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Monitor, this);
-
-		PluginDescriptionFile pdfFile = getDescription();
-		
-		this.log.info("[DanAndChat] DanAndChat v" + pdfFile.getVersion()
-				+ " enabled.");
+		getServer().getPluginManager().registerEvents(playerListener, this);
+		/* this.log.info("[DanAndChat] DanAndChat v" + pdfFile.getVersion()
+				+ " enabled."); */
 	}
 
 	/**
@@ -146,11 +130,6 @@ public class NaviaChat extends JavaPlugin {
 		this.channels.initialize();
 		this.danandLogger.initialize();
 		
-		// Check if Vault has been initialized correctly (just in case) and disable if not
-		if (!PermissionChecker.initialize(this)){
-			this.danandLogger.logMsg("Something went wrong when initializing Vault permissionmanager.", "SEVERE");
-			this.getPluginLoader().disablePlugin(this);
-		}
 	}
 	
 	public NaviaParser getDanAndParser(){

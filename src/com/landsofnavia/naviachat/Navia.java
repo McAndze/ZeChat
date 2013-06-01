@@ -7,6 +7,7 @@ import java.util.TreeSet;
 
 import org.bukkit.entity.Player;
 
+// TODO: Use meta-data instead.
 public class Navia {
 	public static Set<Navia> players = new TreeSet<Navia>();
 	public static Navia getDACPlayer(Player player){

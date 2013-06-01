@@ -1,8 +1,6 @@
-name: DanAndChat
-main: com.gmail.andreasmartinmoerch.danandchat.DanAndChat
+name: NaviaChat
+main: com.landsofnavia.naviachat.NaviaChat
 version: 1.0.0
-depend: [Vault]
-softdepend: [Towny, TownyChat]
 commands:
   ch:
     description: Used for changing channels.
