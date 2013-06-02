@@ -49,7 +49,7 @@ public class NaviaPlayerListener implements Listener {
 
 				if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.canTalk)) {
 					String returnMessage = plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_TO_TALK);
-					Navia.getDACPlayer(player).sendMessage(returnMessage);
+					player.sendMessage(returnMessage);
 					return;
 				}
 				message = event.getMessage();
@@ -58,7 +58,7 @@ public class NaviaPlayerListener implements Listener {
 					c.sendMessage(message, event.getPlayer());
 				} else {
 					String returnMessage = plugin.getMessageGetter().getMessage(Message.IN_INVALID_CHANNEL);
-					Navia.getDACPlayer(player).sendMessage(returnMessage);
+					player.sendMessage(returnMessage);
 				}
 			}
 		});
@@ -67,8 +67,6 @@ public class NaviaPlayerListener implements Listener {
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		Navia dPlayer = new Navia(player);
-		Navia.players.add(dPlayer);
 		if (!plugin.getChannels().init.contains(player)) {
 			plugin.getChannels().initializePlayer(player);
 		}
@@ -77,7 +75,6 @@ public class NaviaPlayerListener implements Listener {
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
-		Navia.players.remove(Navia.getDACPlayer(player));
 		for (Channel c : this.plugin.getChannels().channels) {
 			c.removePlayer(player);
 			c.getFocused().remove(player.getName());

@@ -1,5 +1,7 @@
 package com.landsofnavia.naviachat.utils;
 
+import java.io.File;
+
 import com.landsofnavia.naviachat.NaviaChat;
 import com.landsofnavia.naviachat.parsing.NaviaParser;
 
@@ -22,6 +24,7 @@ public class MessageGetter {
 		this.plugin = plugin;
 		this.file = new MessageFile("plugins/NaviaChat/messages/messages.nc");
 		try {
+			new File (this.file.getParent()){{mkdirs();}};
 			this.file.createNewFile();
 		} catch (Exception e){
 			e.printStackTrace();
@@ -30,6 +33,7 @@ public class MessageGetter {
 	
 	public void writeDefaultMessagesToConfig(boolean overwrite){
 		this.file.restoreDefaults();
+		this.file.reload();
 	}
 	
 	public String getMessageWithArgs(Message message, String... args){
@@ -49,6 +53,9 @@ public class MessageGetter {
 	 */
 	public String getMessage(Message message){
 		String customMessage = this.file.getMessage(message);
+		// debug
+		System.out.println(message.toString());
+		System.out.println(customMessage);
 		
 		if (debug){
 			customMessage += "(" + message.toString() + ")";

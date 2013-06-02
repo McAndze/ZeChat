@@ -10,7 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import com.landsofnavia.naviachat.Navia;
 import com.landsofnavia.naviachat.NaviaChat;
 import com.landsofnavia.naviachat.channel.filter.Filter;
 import com.landsofnavia.naviachat.channel.filter.FilterManager;
@@ -147,7 +146,7 @@ public class Channel {
 	public void removeFocus(Player player){
 		this.focused.remove(player.getName());
 		if (this.plugin.getConfig().getBoolean("messages" + "." + "notify-on-unfocus", true) == true){
-			Navia.getDACPlayer(player).sendMessage(this.plugin.getMessageGetter()
+			player.sendMessage(this.plugin.getMessageGetter()
 					.getMessageWithArgs(Message.UNFOCUS_CHANNEL, this.getName()));
 		}
 	}
@@ -155,7 +154,7 @@ public class Channel {
 	public void addFocus(Player p){
 		this.focused.add(p.getName());
 		if (this.plugin.getConfig().getBoolean("messages" + "." + "notify-on-focus", true) == true){
-			Navia.getDACPlayer(p).sendMessage(this.plugin.getMessageGetter()
+			p.sendMessage(this.plugin.getMessageGetter()
 					.getMessageWithArgs(Message.CHANGED_FOCUS_TO, this.getName()));
 		}
 	}
@@ -167,7 +166,7 @@ public class Channel {
 	public void sendMessage(String message, Player sender, String formatting){
 		if (this.playerIsInChannel(sender)) {
 			if (this.muted.contains(sender.getName())){
-				Navia.getDACPlayer(sender).sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.YOU_HAVE_BEEN_MUTED, this.getName()));
+				sender.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.YOU_HAVE_BEEN_MUTED, this.getName()));
 				return;
 			}
 			this.danAndLogger.logMsg(sender.getName() + ": " + message, "MSG");
@@ -180,7 +179,7 @@ public class Channel {
 					if (!(this.getBanned().contains(p.getName()))
 							&& this.filtered.contains(p)) {						
 						for (String s : newMessage) {
-							Navia.getDACPlayer(p).sendMessage(s);
+							p.sendMessage(s);
 						}
 					} else {
 						if (!this.filtered.contains(p)){
@@ -195,7 +194,7 @@ public class Channel {
 					if (!(this.getBanned().contains(p.getName()))
 							&& isInDistance(p, loc)) {
 						for (String s : newMessage) {
-							Navia.getDACPlayer(p).sendMessage(s);
+							p.sendMessage(s);
 						}
 					}
 				}
@@ -204,7 +203,7 @@ public class Channel {
 		} else {
 			
 			// TODO: Add to official messages.
-			Navia.getDACPlayer(sender).sendMessage(ChatColor.GREEN + "[DanAndChat] " + ChatColor.WHITE + "You're not in this channel: " + ChatColor.GOLD + this.getName());
+			sender.sendMessage(ChatColor.GREEN + "[DanAndChat] " + ChatColor.WHITE + "You're not in this channel: " + ChatColor.GOLD + this.getName());
 		}
 	}
 

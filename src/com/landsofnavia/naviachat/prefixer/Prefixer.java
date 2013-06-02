@@ -15,7 +15,8 @@ public class Prefixer {
 	}
 	
 	public String getPrefix(Player player){
-		return player.getMetadata("chatPrefix").get(0).asString();
+//		String prefix = player.getMetadata("chatPrefix").get(0).asString()
+		return "";
 	}
 	
 //	public String getGroupsPrefix(String... groups){

@@ -21,6 +21,7 @@ public class ChannelManager {
 	
 	public void initialize(){
 		channels = this.plugin.getSettings().getChannels();
+		NaviaLogger.log.info(String.valueOf(channels.size()));
 		this.plugin.getDanandLogger().logMsg("Loaded " + channels.size() + " channels.", null);
 	    
 		for (Player p: plugin.getServer().getOnlinePlayers()){
