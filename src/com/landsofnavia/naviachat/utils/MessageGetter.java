@@ -1,7 +1,5 @@
 package com.landsofnavia.naviachat.utils;
 
-import org.bukkit.util.config.Configuration;
-
 import com.landsofnavia.naviachat.NaviaChat;
 import com.landsofnavia.naviachat.parsing.NaviaParser;
 
@@ -23,7 +21,11 @@ public class MessageGetter {
 	public MessageGetter(NaviaChat plugin) {
 		this.plugin = plugin;
 		this.file = new MessageFile("plugins/NaviaChat/messages/messages.nc");
-		this.file.createNewFile();
+		try {
+			this.file.createNewFile();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	public void writeDefaultMessagesToConfig(boolean overwrite){
@@ -46,19 +48,15 @@ public class MessageGetter {
 	 * @return
 	 */
 	public String getMessage(Message message){
-		String customMessage = "";
-		
-		if ((customMessage = this.configuration.getString(this.prefix.toLowerCase() + "." + message.toString(), null)) == null){
-			customMessage = message.getFallback();
-		}
+		String customMessage = this.file.getMessage(message);
 		
 		if (debug){
 			customMessage += "(" + message.toString() + ")";
 		}
 		
-		NaviaParser dap = new NaviaParser(this.plugin);
-		customMessage = dap.parseColours(customMessage);
-		customMessage = dap.parseAmpersands(customMessage);
+		NaviaParser nap = new NaviaParser(this.plugin);
+		customMessage = nap.parseColours(customMessage);
+		customMessage = nap.parseAmpersands(customMessage);
 		
 		return customMessage;
 	}

@@ -72,7 +72,7 @@ public class ChannelCommand implements CommandExecutor {
 	}
 
 	public boolean reload(CommandSender sender, String[] args) {
-		if (args.length < 3) {
+		/*if (args.length < 3) {
 			return false;
 		}
 		if (sender instanceof Player) {
@@ -100,7 +100,10 @@ public class ChannelCommand implements CommandExecutor {
 
 		}
 
-		return false;
+		return false;*/
+		
+		sender.sendMessage("not supported");
+		return true;
 	}
 
 	public boolean mutePlayer(Player player, String[] args) {

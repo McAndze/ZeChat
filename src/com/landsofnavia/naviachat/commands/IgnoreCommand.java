@@ -34,7 +34,7 @@ public class IgnoreCommand implements CommandExecutor {
 	}
 	
 	public synchronized boolean ignore(Player player, String[] args){
-		List<String> strings = this.plugin.getSettings().prefixConfig.getStringList("database.players."+player.getName().toLowerCase()+".ignore", new ArrayList<String>());
+		/*List<String> strings = this.plugin.getConfig().getStringList("database.players."+player.getName().toLowerCase()+".ignore", new ArrayList<String>());
 		
 		boolean unIgnore = false;
 		for (String s: strings){
@@ -46,7 +46,8 @@ public class IgnoreCommand implements CommandExecutor {
 		if (!unIgnore){
 			strings.add(args[0]);
 		}
-		this.plugin.getSettings().prefixConfig.setProperty("database.players."+player.getName().toLowerCase()+".ignore", strings);
+		this.plugin.getSettings().prefixConfig.setProperty("database.players."+player.getName().toLowerCase()+".ignore", strings);*/
+		player.sendMessage("not supported atm");
 		return true;
 	}
 

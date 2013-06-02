@@ -94,7 +94,7 @@ public class FilterManager {
 	}};
 
 	// TODO: A fucking mess. Comment or make it easier to understand!
-	public static List<List<Filter>> makeFilterGroups(List<Object> list){
+	public static List<List<Filter>> makeFilterGroups(List<Map<?,?>> list){
 		List<List<Filter>> toReturn = new ArrayList<List<Filter>>(); 
 		// Filters with args
 		if (list == null){
@@ -103,9 +103,9 @@ public class FilterManager {
 		// The list should be like this: List<Map<String, List<String>>>
 		// First we check if the objects are maps. 
 		filtergroups:
-			for (Object filtergroup: list){
+			for (Map<?,?> filterGroup: list){
 				
-				// This is the map we'll test.
+				/*// This is the map we'll test.
 				Map<?, ?> testMap;
 				if (filtergroup instanceof Map<?, ?>){
 					// Object is a map!
@@ -113,14 +113,14 @@ public class FilterManager {
 				} else {
 					// Object is not a map, continue iterating filtergroups.
 					continue filtergroups;
-				}
+				}*/
 				
 				// Save this for later, we'll add filters to it, once we've found some valid ones.
 				List<Filter> filtersInFiltergroup = new ArrayList<Filter>();
 				
 				// So far so good, now we'll check if the keyset is containing Strings!
 				keys:
-					for (Object key: testMap.keySet()){
+					for (Object key: filterGroup.keySet()){
 						//Test String
 						String testString;
 						if (key instanceof String){
@@ -136,7 +136,7 @@ public class FilterManager {
 						//Test List<?>
 						List<?> testList;
 						// This is the value we'll test.
-						Object valueOfKey = testMap.get(testString);
+						Object valueOfKey = filterGroup.get(testString);
 						if (valueOfKey instanceof List<?>){
 							// It's a list! Parse it to testList.
 							testList = (List<?>)valueOfKey;

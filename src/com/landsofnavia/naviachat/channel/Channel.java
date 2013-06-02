@@ -7,8 +7,8 @@ import java.util.Random;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.ConfigurationNode;
 
 import com.landsofnavia.naviachat.Navia;
 import com.landsofnavia.naviachat.NaviaChat;
@@ -30,7 +30,8 @@ public class Channel {
 		// Main variables
 		private String name;
 		private String shortcut;
-		private ConfigurationNode chNode;
+//		private ConfigurationNode chNode;
+		private ConfigurationSection chNode;
 	
 		// DanAndChat plugin
 		public final NaviaChat plugin;
@@ -76,8 +77,7 @@ public class Channel {
 		this.name = name;
 		this.plugin = plugin;
 		this.banned = new ArrayList<String>();
-		this.chNode = plugin.getSettings().channelsConfig.getNode("channels"
-				+ "." + this.getName());
+		this.chNode = plugin.getConfig().getConfigurationSection("channels." + this.getName());
 		this.players = new ArrayList<String>();
 		this.focused = new ArrayList<String>();
 		this.filtered = new ArrayList<Player>();
@@ -91,7 +91,7 @@ public class Channel {
 		 * BANNED PLAYERS START
 		 */
 		List<String> banned = new ArrayList<String>();
-		for (String s : chNode.getStringList("banned-players", banned)) {
+		for (String s : chNode.getStringList("banned-players")) {
 			banned.add(s);
 		}
 		this.setBanned(banned);
@@ -102,7 +102,7 @@ public class Channel {
 		// Muted players
 		List<String> muted = new ArrayList<String>();
 
-		for (String s : chNode.getStringList("muted-players", muted)) {
+		for (String s : chNode.getStringList("muted-players")) {
 			muted.add(s);
 		}
 		this.setMuted(muted);
@@ -129,7 +129,7 @@ public class Channel {
 	}
 	
 	public void setupFilters(){
-		this.sendIncludeFilters = FilterManager.makeFilterGroups(chNode.getNode("filters.onWrite").getList("include"));
+		this.sendIncludeFilters = FilterManager.makeFilterGroups(chNode.getConfigurationSection("filters.onWrite").getMapList("include"));
 		if (this.sendIncludeFilters == null){
 			this.sendIncludeFilters = new ArrayList<List<Filter>>();
 			FilterWithoutArgs_inChannel filter = new FilterWithoutArgs_inChannel();
@@ -138,7 +138,7 @@ public class Channel {
 			this.sendIncludeFilters.add(filterList);
 		}
 		
-		this.sendExcludeFilters = FilterManager.makeFilterGroups(chNode.getNode("filters.onWrite").getList("exclude"));
+		this.sendExcludeFilters = FilterManager.makeFilterGroups(chNode.getConfigurationSection("filters.onWrite").getMapList("exclude"));
 		if (this.sendExcludeFilters == null){
 			this.sendExcludeFilters = new ArrayList<List<Filter>>();
 		}
@@ -146,7 +146,7 @@ public class Channel {
 	
 	public void removeFocus(Player player){
 		this.focused.remove(player.getName());
-		if (this.plugin.getSettings().config.getBoolean("messages" + "." + "notify-on-unfocus", true) == true){
+		if (this.plugin.getConfig().getBoolean("messages" + "." + "notify-on-unfocus", true) == true){
 			Navia.getDACPlayer(player).sendMessage(this.plugin.getMessageGetter()
 					.getMessageWithArgs(Message.UNFOCUS_CHANNEL, this.getName()));
 		}
@@ -154,7 +154,7 @@ public class Channel {
 	
 	public void addFocus(Player p){
 		this.focused.add(p.getName());
-		if (this.plugin.getSettings().config.getBoolean("messages" + "." + "notify-on-focus", true) == true){
+		if (this.plugin.getConfig().getBoolean("messages" + "." + "notify-on-focus", true) == true){
 			Navia.getDACPlayer(p).sendMessage(this.plugin.getMessageGetter()
 					.getMessageWithArgs(Message.CHANGED_FOCUS_TO, this.getName()));
 		}
@@ -216,9 +216,7 @@ public class Channel {
 
 	public void banPlayer(String s) {
 		this.banned.add(s);
-		this.chNode.setProperty("banned-players", banned);
-		this.plugin.getSettings().channelsConfig.save();
-		this.plugin.getSettings().channelsConfig.load();
+		this.chNode.set("banned-players", banned);
 	}
 	
 	public void banPlayer(Player player){
@@ -227,9 +225,7 @@ public class Channel {
 
 	public void unbanPlayer(String s) {
 		this.banned.remove(s);
-		this.chNode.setProperty("banned-players", banned);
-		this.plugin.getSettings().channelsConfig.save();
-		this.plugin.getSettings().channelsConfig.load();
+		this.chNode.set("banned-players", banned);
 	}
 	
 	public void unbanPlayer(Player player){
@@ -238,9 +234,7 @@ public class Channel {
 
 	public void mutePlayer(String s) {
 		this.muted.add(s);
-		this.chNode.setProperty("muted-players", muted);
-		this.plugin.getSettings().channelsConfig.save();
-		this.plugin.getSettings().channelsConfig.load();
+		this.chNode.set("muted-players", muted);
 	}
 	
 	public void mutePlayer(Player player){
@@ -249,9 +243,7 @@ public class Channel {
 
 	public void unmutePlayer(String s) {
 		this.muted.remove(s);
-		this.chNode.setProperty("muted-players", muted);
-		this.plugin.getSettings().channelsConfig.save();
-		this.plugin.getSettings().channelsConfig.load();
+		this.chNode.set("muted-players", muted);
 	}
 	
 	public void unmutePlayer(Player player){
@@ -295,7 +287,7 @@ public class Channel {
 	public void removePlayer(Player p) {
 		this.players.remove(p.getName());
 		this.removeFocus(p);
-		if (this.plugin.getSettings().config.getBoolean("messages" + "." + "notify-on-leave", true) == true){
+		if (this.plugin.getConfig().getBoolean("messages" + "." + "notify-on-leave", true) == true){
 			p.sendMessage(this.plugin.getMessageGetter()
 					.getMessageWithArgs(Message.LEFT_CHANNEL, this.getName()));
 		}
@@ -304,7 +296,7 @@ public class Channel {
 
 	public void addPlayer(Player p) {
 		this.players.add(p.getName());
-		if (this.plugin.getSettings().config.getBoolean("messages" + "." + "notify-on-join", false) == true){
+		if (this.plugin.getConfig().getBoolean("messages" + "." + "notify-on-join", false) == true){
 			p.sendMessage(this.plugin.getMessageGetter().
 					getMessageWithArgs(Message.CHANGED_CHANNEL_TO, this.getName()));
 		}
@@ -399,11 +391,11 @@ public class Channel {
 		this.formatting = formatting;
 	}
 
-	public ConfigurationNode getChNode() {
+	public ConfigurationSection getChNode() {
 		return chNode;
 	}
 
-	public void setChNode(ConfigurationNode chNode) {
+	public void setChNode(ConfigurationSection chNode) {
 		this.chNode = chNode;
 	}
 

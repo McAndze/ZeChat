@@ -1,9 +1,7 @@
 package com.landsofnavia.naviachat.plugins;
 
-import net.milkbowl.vault.permission.Permission;
-
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.permissions.Permission;
 
 import com.landsofnavia.naviachat.NaviaChat;
 
@@ -33,15 +31,17 @@ public class PermissionChecker {
 		public static final String focusedChannel = ".focusedchannel";
 		
 	public static boolean initialize(NaviaChat plugin){
-		RegisteredServiceProvider<Permission> permissionProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+		/*RegisteredServiceProvider<Permission> permissionProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
 		if (permissionProvider != null){
 			permission = permissionProvider.getProvider();
 			return true;
 		} else {
 			return false;
-		}
+		}*/
+		return true;
 	}
-		
+	
+	// TODO: I don't get it.
 	public static boolean hasPermission(Player player, String permission){
 		if (player.hasPermission(permission)){
 			return true;

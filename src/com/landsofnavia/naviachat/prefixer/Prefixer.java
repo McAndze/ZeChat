@@ -4,7 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.landsofnavia.naviachat.NaviaChat;
-import com.landsofnavia.naviachat.plugins.PermissionChecker;
+import com.landsofnavia.naviachat.channel.NaviaLogger;
+import com.sun.istack.internal.logging.Logger;
 
 public class Prefixer {
 	private NaviaChat plugin;
@@ -14,33 +15,7 @@ public class Prefixer {
 	}
 	
 	public String getPrefix(Player player){
-		String prefix;
-		
-		// Player prefix! 
-		prefix = this.plugin.getSettings().prefixConfig.getString("users." + player.getName().toLowerCase(), null);
-		
-		// Try primary group prefix
-		if (prefix == null || prefix.equalsIgnoreCase("null")){
-			try {
-				prefix = getGroupPrefix(PermissionChecker.permission.getPrimaryGroup(player));
-			} catch (UnsupportedOperationException u){
-				this.plugin.getDanandLogger().logMsg("[Vault] "+ u.getMessage(), "WARNING");
-				prefix = null;
-			}
-		}
-		// Try getting the first group, and the prefix
-		if (prefix == null || prefix.equalsIgnoreCase("null")){
-			try {
-				prefix = getGroupPrefix(PermissionChecker.permission.getPlayerGroups(player.getWorld(), player.getName())[0]);
-			} catch (UnsupportedOperationException u){
-				prefix = null;
-			}
-		}
-		if (prefix == null || prefix.equalsIgnoreCase("null")){
-			return "";
-		}
-		prefix = prefix.replaceAll("&", "§");
-		return prefix;
+		return player.getMetadata("chatPrefix").get(0).asString();
 	}
 	
 //	public String getGroupsPrefix(String... groups){
@@ -61,25 +36,31 @@ public class Prefixer {
 //	}
 	
 	public String getGroupPrefix(String group){
-		String groupPrefix = "";
+		/*String groupPrefix = "";
 		String test = this.plugin.getSettings().prefixConfig.getString("groups." + group.toLowerCase(), null);
 		if (test != null){
 			groupPrefix = test;
 		}
-		return groupPrefix;
+		return groupPrefix;*/
+		return "";
 	}
 	
+	
 	public String setGroupPrefix(String group, String prefix){
-		this.plugin.getSettings().prefixConfig.load();
+		/*this.plugin.getSettings().prefixConfig.load();
 		this.plugin.getSettings().prefixConfig.setProperty("groups." + group.toLowerCase(), prefix);
 		this.plugin.getSettings().prefixConfig.save();
-		return ChatColor.GREEN + "Set prefix: " + ChatColor.GOLD + prefix + ChatColor.GREEN + " to group: " + ChatColor.GOLD + group + ChatColor.GREEN + ".";
+		return ChatColor.GREEN + "Set prefix: " + ChatColor.GOLD + prefix + ChatColor.GREEN + " to group: " + ChatColor.GOLD + group + ChatColor.GREEN + ".";*/
+		NaviaLogger.log.info("setgroupprefix is not implemented");
+		return "";
 	}
 	
 	public String setPrefix(String player, String prefix){
-		this.plugin.getSettings().prefixConfig.load();
+		/*this.plugin.getSettings().prefixConfig.load();
 		this.plugin.getSettings().prefixConfig.setProperty("users." + player.toLowerCase(), prefix);
 		this.plugin.getSettings().prefixConfig.save();
-		return ChatColor.GREEN + "Set prefix: " + ChatColor.GOLD + prefix + ChatColor.GREEN + " to player: " + ChatColor.GOLD + player + ChatColor.GREEN + ".";
+		return ChatColor.GREEN + "Set prefix: " + ChatColor.GOLD + prefix + ChatColor.GREEN + " to player: " + ChatColor.GOLD + player + ChatColor.GREEN + ".";*/
+		NaviaLogger.log.info("setrefix is not implemented");
+		return "";
 	}
 }

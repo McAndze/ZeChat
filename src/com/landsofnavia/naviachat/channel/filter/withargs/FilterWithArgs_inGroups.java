@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.landsofnavia.naviachat.plugins.PermissionChecker;
 
 public class FilterWithArgs_inGroups extends FilterWithArgs {
-	@Override
+	/*@Override
 	public boolean filterPlayer(Player player) {
 		List<String> groups = Arrays.asList(PermissionChecker.permission.getPlayerGroups(player));
 		boolean passAll = true;
@@ -19,5 +19,9 @@ public class FilterWithArgs_inGroups extends FilterWithArgs {
 			if (!passAll) break;
 		}
 		return passAll;
+	}*/
+	
+	public boolean filterPlayer(Player player){
+		return true;
 	}
 }

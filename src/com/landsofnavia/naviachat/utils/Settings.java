@@ -1,19 +1,12 @@
 package com.landsofnavia.naviachat.utils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.bukkit.World;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 
 import com.landsofnavia.naviachat.NaviaChat;
 import com.landsofnavia.naviachat.channel.Channel;
-import com.landsofnavia.naviachat.commands.Commands;
 public class Settings {
 	private NaviaChat plugin;
 	
@@ -27,12 +20,9 @@ public class Settings {
 	
 	public MessageGetter getNewMessageGetter(){
 		String prefix = null;
-		MessageGetter msgGetter;
-		if ((prefix = this.config.getString("plugin.message-set", null)) == null){
-			msgGetter = new MessageGetter(this.plugin, this.messageConfig);
-		} else { msgGetter = new MessageGetter(this.plugin, this.messageConfig, prefix); }
-		MessageGetter.writeDefaultMessagesToConfig(this.messageConfig, false);
-		MessageGetter.debug = this.config.getBoolean("plugin.debug", false);
+		MessageGetter msgGetter = new MessageGetter(plugin);
+		msgGetter.writeDefaultMessagesToConfig(false);
+		MessageGetter.debug = this.plugin.getConfig().getBoolean("plugin.debug", false);
 		return msgGetter;
 	}
 	
@@ -42,20 +32,14 @@ public class Settings {
 	
 	public List<Channel> getChannels(){
 		List<Channel> channels = new ArrayList<Channel>();
-		ConfigurationNode glNode = this.channelsConfig.getNode("channels");
+		ConfigurationSection  node = plugin.getConfig().getConfigurationSection("channels");
+//		List<String> node = plugin.getConfig().getStringList("channels");
 		
-		for (String s: glNode.getKeys()){
+		for (String s: node.getKeys(false)){
 			Channel c = new Channel(s, this.plugin);
 			c.initialize();
 			channels.add(c);
 		}
-		
-		refresh(channelsConfig);
 		return channels;
-	}
-	
-	public void refresh(Configuration c){
-		c.save();
-		c.load();
 	}
 }

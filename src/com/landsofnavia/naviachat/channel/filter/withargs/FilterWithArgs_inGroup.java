@@ -10,7 +10,7 @@ import com.landsofnavia.naviachat.plugins.PermissionChecker;
 
 public class FilterWithArgs_inGroup extends FilterWithArgs{
 
-	@Override
+	/* @Override
 	public boolean filterPlayer(Player player) {
 		List<String> groups = Arrays.asList(PermissionChecker.permission.getPlayerGroups(player));
 		for (String s: this.getValues()){
@@ -19,6 +19,10 @@ public class FilterWithArgs_inGroup extends FilterWithArgs{
 			}
 		}
 		return false;
+	}*/
+	
+	public boolean filterPlayer(Player player){
+		return true;
 	}
 	
 }
