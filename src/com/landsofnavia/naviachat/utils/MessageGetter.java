@@ -37,6 +37,8 @@ public class MessageGetter {
 	}
 	
 	public String getMessageWithArgs(Message message, String... args){
+		System.out.println(message.toString());
+		System.out.println(message.getFallback());
 		String customMessage = getMessage(message);
 		int i = 0;
 		for (String s: args){

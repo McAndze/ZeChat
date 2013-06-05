@@ -177,13 +177,14 @@ public class Channel {
 				for (Player p : this.plugin.getServer().getOnlinePlayers()) {
 					
 					if (!(this.getBanned().contains(p.getName()))
-							&& this.filtered.contains(p)) {						
+							&& this.playerIsInChannel(p)) {						
 						for (String s : newMessage) {
 							p.sendMessage(s);
 						}
 					} else {
 						if (!this.filtered.contains(p)){
 							// Old debug code.
+							System.out.println(p.getName());
 						}
 					}
 				}

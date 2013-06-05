@@ -32,26 +32,27 @@ public class NaviaPlayerListener implements Listener {
 		if (event.isCancelled()) {
 			return;
 		}
+		event.setCancelled(true);
 		
 		this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new BukkitRunnable() {
 			
 			@Override
 			public void run() {
+				System.out.println("Sending message");
 				Player player = event.getPlayer();
 				String message;
 				event.setCancelled(true);
 				if (event.getMessage().startsWith("@")){
 					new AShortCut(plugin).shoot(player, event.getMessage());
-					event.setCancelled(true);
 					return;
 				}
 				Channel c = plugin.getChannels().getFocusedChannel(player);
 
-				if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.canTalk)) {
+				/*if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.canTalk)) {
 					String returnMessage = plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_TO_TALK);
 					player.sendMessage(returnMessage);
 					return;
-				}
+				}*/
 				message = event.getMessage();
 
 				if (c != null) {
