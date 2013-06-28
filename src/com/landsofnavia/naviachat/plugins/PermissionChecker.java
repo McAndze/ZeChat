@@ -15,20 +15,20 @@ public class PermissionChecker {
 	public static final String all = ".*";
 
 	
-	public static final String prefix = "danandchat";
-		public static final String channel = ".channel";
-			public static final String ban = ".ban";
-			public static final String unban = ".unban";
-			public static final String list = ".list";
-				public static final String in = ".in";
-				public static final String available = ".available";
-		public static final String leaveChannel = ".leavechannel";
-		public static final String canTalk = ".cantalk";
-		public static final String tell = ".tell";
-		public static final String me = ".me";
-		public static final String changeChannel = ".changechannel";
-		public static final String defaultChannel = ".defaultchannel";
-		public static final String focusedChannel = ".focusedchannel";
+	public static final String prefix = "naviachat.";
+		public static final String channel = "channel";
+			public static final String ban = "ban";
+			public static final String unban = "unban";
+			public static final String list = "list";
+				public static final String in = "in";
+				public static final String available = "available";
+		public static final String leaveChannel = "leavechannel";
+		public static final String canTalk = "cantalk";
+		public static final String tell = "tell";
+		public static final String me = "me";
+		public static final String changeChannel = "changechannel";
+		public static final String defaultChannel = "defaultchannel";
+		public static final String focusedChannel = "focusedchannel";
 		
 	public static boolean initialize(NaviaChat plugin){
 		/*RegisteredServiceProvider<Permission> permissionProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
