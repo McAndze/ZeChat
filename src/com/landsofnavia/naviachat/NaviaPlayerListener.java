@@ -48,11 +48,10 @@ public class NaviaPlayerListener implements Listener {
 				}
 				Channel c = plugin.getChannels().getFocusedChannel(player);
 
-				/*if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.canTalk)) {
-					String returnMessage = plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_TO_TALK);
-					player.sendMessage(returnMessage);
+				if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.canTalk + "." + c.getName().toLowerCase())){
+					player.sendMessage(plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_CHANGE_CHANNEL));
 					return;
-				}*/
+				}
 				message = event.getMessage();
 
 				if (c != null) {

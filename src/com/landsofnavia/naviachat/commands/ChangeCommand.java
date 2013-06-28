@@ -28,10 +28,6 @@ public class ChangeCommand implements CommandExecutor {
 			return true;
 		}
 		Player player = (Player)sender;
-		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.changeChannel)){
-			player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_CHANGE_CHANNEL));
-			return true;
-		}
 		
 		if (args.length == 1){
 			return change(player, args);
@@ -66,6 +62,11 @@ public class ChangeCommand implements CommandExecutor {
 			}
 			return true;
 		}
+		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.changeChannel + "." + c.getName().toLowerCase())){
+			player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_CHANGE_CHANNEL));
+			return true;
+		}
+		
 		if (!c.playerIsInChannel(player)){
 			c.addPlayer(player);
 		}
@@ -91,6 +92,10 @@ public class ChangeCommand implements CommandExecutor {
 		
 		if (c == null){
 			player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.COULD_NOT_FIND_CHANNEL_WITH_SHORTCUT, args[0]));
+			return true;
+		}
+		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.changeChannel + "." + c.getName().toLowerCase())){
+			player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_CHANGE_CHANNEL));
 			return true;
 		}
 		

@@ -26,11 +26,6 @@ public class LeavechannelCommand implements CommandExecutor{
 			return true;
 		}
 		Player player = (Player)sender;
-		// Start validation
-		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.leaveChannel)){
-			player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_LEAVECHANNEL));
-			return false;
-		}
 		
 		if (args.length == 0){
 			return false;
@@ -41,7 +36,10 @@ public class LeavechannelCommand implements CommandExecutor{
 			player.sendMessage(this.plugin.getMessageGetter().getMessageWithArgs(Message.COULD_NOT_FIND_CHANNEL_WITH_SHORTCUT, args[0]));
 			return true;
 		}
-		
+		if (!player.hasPermission(PermissionChecker.prefix + PermissionChecker.leaveChannel + "." + c.getName().toLowerCase())){
+			player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.NO_PERMISSION_CHANGE_CHANNEL));
+			return true;
+		}
 		if (!c.playerIsInChannel(player)){
 			player.sendMessage(this.plugin.getMessageGetter().getMessage(Message.YOU_ARE_NOT_IN_CHANNEL));
 			return true;
